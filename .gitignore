@@ -15,3 +15,8 @@ hands.js
 theme.js
 
 .DS_Store
+
+# stray working files that should never have been committed
+.claude/
+index.html.bak*
+screenshot-*.png
