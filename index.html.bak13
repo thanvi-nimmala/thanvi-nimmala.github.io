@@ -1,0 +1,779 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics=""><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,300..700;1,300..700&amp;family=DM+Mono:wght@300;400;500&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box}
+:root{
+  --paper:#f0efec; --paper-rgb:240,239,236;
+  --ink:#16150f;   --ink-rgb:22,21,15;
+  --ink-soft:#6b6857;
+  --accent:#A81F2D; --accent-rgb:168,31,45;
+  --tint-a:#f6f2e6; --tint-a-rgb:246,242,230;
+  --tint-b:#f3eee2; --tint-b-rgb:243,238,226;
+  --tint-c:#efece6;
+  --tint-pay:#181327;
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Archivo,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:var(--accent)}
+::selection{background:var(--accent);color:var(--paper)}
+@keyframes tnRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tnWipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.pgframe{margin-top:34px;border:1px solid rgba(var(--ink-rgb),.22);overflow:hidden;background:var(--tint-c)}
+.pgframe .bar{display:flex;align-items:center;gap:7px;padding:10px 13px;background:rgba(var(--ink-rgb),.05);border-bottom:1px solid rgba(var(--ink-rgb),.12)}
+.pgframe .bar i{width:8px;height:8px;border-radius:50%;background:rgba(var(--ink-rgb),.18)}
+.pgframe .bar span{margin-left:10px;font:400 10px/1 'DM Mono',monospace;letter-spacing:.08em;color:rgba(var(--ink-rgb),.45)}
+.pgscroll{height:clamp(400px,62vh,640px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(var(--ink-rgb),.28) transparent}
+.pgscroll::-webkit-scrollbar{width:9px}
+.pgscroll::-webkit-scrollbar-track{background:transparent}
+.pgscroll::-webkit-scrollbar-thumb{background:rgba(var(--ink-rgb),.24);border-radius:9px;border:2px solid var(--paper)}
+.pgscroll img{display:block;width:100%}
+.pghint{display:flex;justify-content:space-between;gap:20px;margin-top:12px;font:400 10px/1.6 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.45)}
+.pghint b{font-weight:500;color:var(--accent)}
+.play-masonry{columns:3;column-gap:18px}
+@media (max-width:900px){.play-masonry{columns:2}}
+@media (max-width:560px){.play-masonry{columns:1}}
+.play-item{break-inside:avoid;-webkit-column-break-inside:avoid;page-break-inside:avoid;display:inline-block;width:100%;margin:0 0 30px}
+.play-cap{margin-top:9px;font:400 11px/1.15 'DM Mono',monospace;letter-spacing:-.01em;text-transform:uppercase;color:rgba(var(--ink-rgb),.62)}
+</style><script src="./image-slot.js"></script><script src="./bust.js"></script><script src="./bust-control.js"></script></helmet>
+
+<div style="min-height:100vh;background:var(--paper)">
+
+<div style="position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:20px 32px;background:rgba(var(--paper-rgb),.82);backdrop-filter:blur(10px)">
+<a href="#top" onClick="{{ goHome }}" style="font:500 13px/1 'DM Mono',monospace;letter-spacing:.02em">THANVI NIMMALA</a>
+<div style="display:flex;align-items:center;gap:26px;font:400 12px/1 'DM Mono',monospace;letter-spacing:.08em">
+<a href="#work" style="color:rgba(var(--ink-rgb),.65)">WORK</a>
+<a href="#play" onClick="{{ goPlay }}" style="color:rgba(var(--ink-rgb),.65)">PLAY</a>
+<a href="#about" onClick="{{ goAbout }}" style="color:rgba(var(--ink-rgb),.65)">ABOUT</a>
+<a href="#about" onClick="{{ goContact }}" style="color:rgba(var(--ink-rgb),.65)">CONTACT</a>
+</div>
+</div>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div id="top">
+
+<div style="padding:150px 32px 60px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;min-height:88vh">
+<div style="animation:tnRise .8s cubic-bezier(.2,.7,.2,1) both">
+
+<h1 style="margin:0;font:400 clamp(46px,7.6vw,116px)/0.92 Archivo;letter-spacing:-.045em;max-width:14ch">Product designer, making design&nbsp;<span style="font-family: &quot;Instrument Serif&quot;, serif; font-style: italic; letter-spacing: -0.01em;">fun &amp; useful</span>.</h1><div style="display:flex;gap:44px;margin-top:56px;font:400 13px/1.7 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">
+<div style="max-width:34ch">Recently graduated. Four projects I can talk about for an hour each, and a folder of things I made because I felt like it.</div>
+<div style="display:flex;flex-direction:column;gap:4px"><span>NYC METROPOLITAN AREA</span><span>OPEN TO FULL-TIME</span></div>
+</div>
+</div>
+<pre style="margin:0 clamp(16px,6vw,120px) 0 0;-webkit-mask-image:linear-gradient(to bottom,#000 0 74%,rgba(0,0,0,.35) 88%,transparent 97%);mask-image:linear-gradient(to bottom,#000 0 74%,rgba(0,0,0,.35) 88%,transparent 97%);font:300 10px/1.05 'DM Mono',monospace;color:rgba(var(--ink-rgb),.34);white-space:pre;user-select:none;cursor:grab;touch-action:none" data-bust>{{ ascii }}</pre>
+</div>
+
+<div id="work" style="padding:0 32px;display:flex;justify-content:space-between;align-items:baseline;height:52px;font:400 11px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.5);padding-top:18px">
+<span><span style="color:var(--accent)">■</span> (WORK)</span><span>SELECTED — 2024/2026</span>
+</div>
+
+<a href="#ncs" onClick="{{ openNcs }}" style="display:block;padding:26px 32px 52px;transition:opacity .45s ease" style-hover="opacity:.88">
+<div style="position:relative;width:100%;aspect-ratio:1676/940;overflow:hidden;background:var(--tint-c)">
+<img src="./deck/ncs-cover.webp" alt="New Craft Society — the capture tool" style="width:100%;height:100%;object-fit:cover;display:block" />
+</div>
+<div style="display:grid;grid-template-columns:90px minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start;padding-top:28px">
+<div style="font:400 12px/1.4 'DM Mono',monospace;color:var(--accent)">(001)</div>
+<div>
+<div style="font:400 clamp(34px,5vw,74px)/0.95 Archivo;letter-spacing:-.04em">New Craft Society</div>
+<div style="margin-top:14px;font:400 11px/1 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.5)">COCREATE &mdash; MACOS + WEB &mdash; 2026</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;max-width:46ch;padding-top:8px">
+<div style="font:400 clamp(15px,1.6vw,17px)/1.75 Archivo;color:rgba(var(--ink-rgb),.75)">A capture tool that gives your design process memory. I led design 0&#8594;1 at CoCreate &mdash; the macOS capture tool, the product it feeds, and the site that explains it &mdash; with 30+ user testing sessions behind it.</div>
+<div style="font:500 11px/1 'DM Mono',monospace;letter-spacing:.12em;color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:7px;align-self:flex-start">READ THE CASE STUDY &#8594;</div>
+</div>
+</div>
+</a>
+
+<div>
+
+
+<a href="#eco" onClick="{{ openEco }}" style="display:grid;grid-template-columns:90px minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start;border-top:1px solid rgba(var(--ink-rgb),.28);padding:38px 32px 46px;transition:background .4s ease" style-hover="background:rgba(var(--ink-rgb),.045)">
+<div style="font:400 12px/1.4 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">(002)</div>
+<div style="font:400 clamp(30px,4.4vw,62px)/0.95 Archivo;letter-spacing:-.04em">EcoBites</div>
+<div style="display:flex;gap:14px;max-width:46ch;padding-top:8px"><span style="font-size:8px;line-height:2.2;color:var(--accent)">■</span><span style="font:400 14px/1.75 Archivo;color:rgba(var(--ink-rgb),.72)">A food-delivery model pointed at food insecurity in New Jersey. A client site for people who need food, a driver app for the volunteers who bring it.</span></div>
+</a>
+
+<a href="#cat" onClick="{{ openCat }}" style="display:grid;grid-template-columns:90px minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start;border-top:1px solid rgba(var(--ink-rgb),.28);padding:38px 32px 46px;transition:background .4s ease" style-hover="background:rgba(var(--ink-rgb),.045)">
+<div style="font:400 12px/1.4 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">(003)</div>
+<div style="font:400 clamp(30px,4.4vw,62px)/0.95 Archivo;letter-spacing:-.04em">Catalogue</div>
+<div style="display:flex;gap:14px;max-width:46ch;padding-top:8px"><span style="font-size:8px;line-height:2.2;color:var(--accent)">■</span><span style="font:400 14px/1.75 Archivo;color:rgba(var(--ink-rgb),.72)">Online shopping as editorial storytelling. Save products from anywhere on the web, then compose them into magazine-like issues.</span></div>
+</a>
+
+<a href="#pay" onClick="{{ openPay }}" style="display:grid;grid-template-columns:90px minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start;border-top:1px solid rgba(var(--ink-rgb),.28);padding:38px 32px 46px;transition:background .4s ease" style-hover="background:rgba(var(--ink-rgb),.045)">
+<div style="font:400 12px/1.4 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">(004)</div>
+<div style="font:400 clamp(30px,4.4vw,62px)/0.95 Archivo;letter-spacing:-.04em">TruePay</div>
+<div style="display:flex;gap:14px;max-width:46ch;padding-top:8px"><span style="font-size:8px;line-height:2.2;color:var(--accent)">■</span><span style="font:400 14px/1.75 Archivo;color:rgba(var(--ink-rgb),.72)">An AI fraud layer that stays invisible when you are safe and explains itself when it stops you. A payments app built on three trust states.</span></div>
+</a>
+
+
+</div>
+
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding:80px 32px 90px;display:grid;grid-template-columns:90px 1fr;gap:24px">
+<div aria-hidden="true"></div>
+<div>
+<div style="font:400 clamp(26px,3.4vw,46px)/1.15 Archivo;letter-spacing:-.03em;max-width:22ch">Currently looking for product design roles!</div>
+<a href="mailto:thanvi.nimmala@gmail.com" style="display:inline-block;margin-top:40px;font:400 12px/1 'DM Mono',monospace;letter-spacing:.1em;border-bottom:1px solid rgba(var(--ink-rgb),.5);padding-bottom:6px">THANVI.NIMMALA@GMAIL.COM</a>
+</div>
+</div>
+
+</div>
+</sc-if>
+
+<sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+<div style="padding:150px 32px 0">
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.18em;color:rgba(var(--ink-rgb),.5)">(ABOUT)</div>
+<div style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:64px;margin-top:40px;align-items:start">
+<div>
+<h2 style="margin:0;font:400 clamp(34px,4.8vw,68px)/1.02 Archivo;letter-spacing:-.04em">I've always been a&nbsp;<span style="font-family: &quot;Instrument Serif&quot;, serif; font-style: italic;">creative.</span></h2>
+<div style="margin-top:44px;display:flex;flex-direction:column;gap:20px;max-width:56ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">
+<div style="margin:0"><div>I approach design with a sense of quiet intention. My work lives at the intersection of structure and softness, where clarity is not forced but carefully shaped.&nbsp;</div><div><br></div><div>I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, with a minor in Digital Communication, Information, &amp; Media (DCIM). Since then I've been working as the Product Design Lead for New Craft Society at CoCreate. I'm currently looking for full-time work in design roles. When I'm not designing, I'm usually painting, reading, or chasing a good playlist.</div></div>
+
+
+</div>
+</div>
+<div style="width: 100%; aspect-ratio: 4/5; background-image: repeating-linear-gradient(45deg,rgba(var(--ink-rgb),.07) 0 6px,transparent 6px 12px); border: 1px solid rgba(var(--ink-rgb),.3); display: flex; align-items: flex-end; padding: 16px; position: sticky; top: 110px; background: url(&quot;./img_1745-msjrkwek-nt2k.jpeg&quot;) center / cover no-repeat"></div>
+</div>
+
+<div id="elsewhere" style="scroll-margin-top:100px;margin-top:110px;border-top:1px solid rgba(var(--ink-rgb),.28);display:grid;grid-template-columns:90px repeat(3,minmax(0,1fr));gap:24px;padding:30px 0 90px">
+<div aria-hidden="true"></div>
+<div>
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.12em;color:rgba(var(--ink-rgb),.5);margin-bottom:18px">DOING</div>
+<div style="display:flex;flex-direction:column;gap:9px;font:400 15px/1.5 Archivo"><span>End-to-end product design</span><span>User research &amp; interviews</span><span>Prototyping</span><span>Design systems</span><span>Visual &amp; brand identity</span></div>
+</div>
+<div>
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.12em;color:rgba(var(--ink-rgb),.5);margin-bottom:18px">USING</div>
+<div style="display:flex;flex-direction:column;gap:9px;font:400 15px/1.5 Archivo"><span>Figma</span><span>Framer</span><span>HTML / CSS</span><span>After Effects</span><span>An easel, occasionally</span></div>
+</div>
+<div>
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.12em;color:rgba(var(--ink-rgb),.5);margin-bottom:18px">ELSEWHERE</div>
+<div style="display:flex;flex-direction:column;gap:9px;font:400 15px/1.5 Archivo"><a href="mailto:thanvi.nimmala@gmail.com">Email ↗</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlay }}" hint-placeholder-val="{{ false }}">
+<div style="padding:150px 32px 0">
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.18em;color:rgba(var(--ink-rgb),.5)">(PLAY)</div>
+<h2 style="margin:34px 0 0;font:400 clamp(34px,5.4vw,76px)/1 Archivo;letter-spacing:-.045em;max-width:16ch">Things I made because I felt like it.</h2>
+<div style="margin-top:28px;max-width:52ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.72)">No brief, no stakeholder, no research plan. Updated whenever.</div>
+<div class="play-masonry" style="margin-top:56px;padding-bottom:90px">
+<div class="play-item">
+<img src="./play/wayfinder.webp" alt="Wayfinder / TEDx / Booklet cover" style="width:100%;height:auto;display:block" />
+<div class="play-cap">Wayfinder / TEDx / Booklet cover</div>
+</div>
+<div class="play-item">
+<img src="./play/sunlit.webp" alt="Sunlit / Poster / Floral" style="width:100%;height:auto;display:block" />
+<div class="play-cap">Sunlit / Poster / Floral</div>
+</div>
+<div class="play-item">
+<img src="./play/mesh.webp" alt="Mesh / Type experiment" style="width:100%;height:auto;display:block" />
+<div class="play-cap">Mesh / Type experiment</div>
+</div>
+<div class="play-item">
+<video src="./play/nodal-arms.mov" poster="./play/nodal-arms.webp" autoplay muted loop playsinline style="width:100%;height:auto;display:block;background:#0b0b0b"></video>
+<div class="play-cap">Nodal arms / ASCII motion study</div>
+</div>
+<div class="play-item">
+<img src="./play/twilight.webp" alt="Twilight / Oil &amp; acrylic" style="width:100%;height:auto;display:block" />
+<div class="play-cap">Twilight / Oil &amp; acrylic</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isNcs }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;top:72px;left:0;height:2px;background:var(--ink);z-index:45;{{ progressStyle }}"></div>
+
+<div style="position:relative;height:78vh;min-height:460px;margin-top:73px;background-image:url('./deck/ncs-cover.webp');background-size:cover;background-position:50% 34%;background-color:var(--tint-c);border-bottom:1px solid rgba(var(--ink-rgb),.28);display:flex;align-items:flex-end;padding:44px 32px">
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(var(--paper-rgb),.96) 0%,rgba(var(--paper-rgb),.8) 40%,rgba(var(--paper-rgb),.1) 78%);pointer-events:none"></div>
+<div style="position:relative;animation:tnRise .9s cubic-bezier(.2,.7,.2,1) both">
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.18em;color:rgba(var(--ink-rgb),.55);margin-bottom:22px">(001) &mdash; COCREATE &mdash; MACOS + WEB</div>
+<h1 style="margin:0;font:400 clamp(44px,8vw,120px)/0.9 Archivo;letter-spacing:-.05em">New Craft Society</h1>
+<div style="margin-top:22px;font:400 clamp(16px,2vw,22px)/1.5 Archivo;color:rgba(var(--ink-rgb),.72);max-width:40ch">A capture tool that gives your design process memory. I led design 0&#8594;1 at CoCreate.</div>
+<div style="margin-top:28px"><a href="https://newcraftsociety.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font:500 12px/1 'DM Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:14px 20px;border:1px solid var(--ink)" style-hover="background:transparent;color:var(--ink)">NEWCRAFTSOCIETY.COM &#8599;</a></div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:210px minmax(0,1fr);gap:0;align-items:start">
+<div style="position:sticky;top:110px;padding:56px 24px 56px 32px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.4);margin-bottom:18px">INDEX</div>
+<div style="position:relative">
+<div style="position:absolute;left:-14px;top:0;width:5px;height:5px;background:var(--accent);transition:transform .35s cubic-bezier(.2,.7,.2,1);{{ markerStyle }}"></div>
+<div style="display:flex;flex-direction:column">
+<a href="#s1" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">001 Overview</a>
+<a href="#s2" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">002 The product</a>
+<a href="#s3" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">003 Capture</a>
+<a href="#s4" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">004 Onboarding</a>
+<a href="#s5" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">005 Sharing</a>
+<a href="#s6" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">006 Landing page</a>
+<a href="#s7" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">007 Why this</a>
+<a href="#s8" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">008 Validation</a>
+<a href="#s9" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">009 Insights</a>
+<a href="#s10" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">010 What we cut</a>
+<a href="#s11" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">011 Where it landed</a>
+</div>
+</div>
+<a href="#top" onClick="{{ goHome }}" style="display:inline-block;margin-top:32px;font:400 11px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45)">&#8592; ALL WORK</a>
+</div>
+
+<div style="border-left:1px solid rgba(var(--ink-rgb),.18);padding:0 32px 0 44px">
+<section id="s1" data-screen-label="001 Overview" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(001) OVERVIEW</div><div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin-top:36px"><div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">ROLE</div><div style="font:400 15px/1.6 Archivo">Design Lead. A design team of four, working with a product owner, a UXR/testing lead and two engineers.</div></div><div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">SCOPE</div><div style="font:400 15px/1.6 Archivo">Concept through a dogfooded, publicly tested beta.</div></div><div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">WHAT I DID</div><div style="font:400 15px/1.6 Archivo">Primary UXR, the capture tool, the product it feeds, onboarding, sharing, landing and the design system.</div></div><div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">PLATFORM</div><div style="font:400 15px/1.6 Archivo">A macOS capture tool and a companion web app.</div></div></div><div style="margin-top:48px;max-width:62ch;font:400 clamp(18px,2.2vw,26px)/1.5 Archivo;letter-spacing:-.01em">Your design process finally has memory.</div><div style="margin-top:24px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">CoCreate is a design platform providing education and products to early-career designers. New Craft Society is its new vertical: build tools that help top junior designers land jobs.</div><div style="margin-top:28px"><a href="https://newcraftsociety.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font:500 12px/1 'DM Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:14px 20px;border:1px solid var(--ink)" style-hover="background:transparent;color:var(--ink)">VISIT THE LIVE SITE &#8599;</a></div></section><section id="s2" data-screen-label="002 The product" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(002) INSIDE THE PRODUCT</div><h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">Capture is the easy half. The return trip is the product.</h2><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">Everything captured has to come back as something you would actually scroll. That meant one unit of content, a timeline that reads chronologically, and enough structure that a project can be told as a story later.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:36px"><image-slot id="ncs-app-inthewild" shape="rect" src="./deck/app-inthewild.webp" fit="contain" placeholder="A REAL PROJECT INSIDE THE PRODUCT"></image-slot></div><div style="margin-top:12px;display:flex;justify-content:space-between;gap:24px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)"><span style="max-width:72ch">A trail-companion app carried in the product &mdash; the brief, the photography, the iteration history and the change log, in one place.</span><span>FIG. 01</span></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">BLOCKS &mdash; ONE UNIT FOR EVERY CAPTURE</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">We unified every capture into a single block element so it stays universal across timeline, canvas and moodboard. A screenshot, a link, a quote and a note are all the same object, which is what lets one capture appear in three places without being rebuilt three times.</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:28px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-product-blocks" shape="rect" src="./deck/product-blocks.webp" fit="contain" placeholder="BLOCKS"></image-slot></div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-product-blocks-detail" shape="rect" src="./deck/product-blocks-detail.webp" fit="contain" placeholder="BLOCK ANATOMY"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">EACH BLOCK FADES AT THE FOOT TO SHOW HIERARCHY</div></div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">THREE VIEWS OF THE SAME MATERIAL</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Timeline, moodboard and canvas are not three features. They are three readings of one set of blocks.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:28px"><image-slot id="ncs-product-views" shape="rect" src="./deck/product-views.webp" fit="contain" placeholder="TIMELINE / MOODBOARD / CANVAS"></image-slot></div><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:28px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-app-full" shape="rect" src="./deck/app-full.webp" fit="contain" placeholder="ITERATION HISTORY"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">TIMELINE &mdash; 20 ITERATIONS, 3 SESSIONS</div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-app-canvas" shape="rect" src="./deck/app-canvas.webp" fit="contain" placeholder="CANVAS"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">CANVAS &mdash; REFERENCES AT SCALE</div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-app-social" shape="rect" src="./deck/app-social.webp" fit="contain" placeholder="A PUBLISHED PROJECT"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">THE STORY SOMEONE ELSE RECEIVES</div></div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">TRACKING WHAT CHANGED</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Between two captures there is usually one real decision &mdash; a typeface swapped, a weight changed, grain added. Surfacing that difference is what turns a folder of screenshots into a record you can write from.</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:28px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-product-timeline" shape="rect" src="./deck/product-timeline.webp" fit="contain" placeholder="TIMELINE DETAIL"></image-slot></div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-product-changes" shape="rect" src="./deck/product-changes.webp" fit="contain" placeholder="TRACKED CHANGES"></image-slot></div></div></div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:20px"><image-slot id="ncs-product-palette" shape="rect" src="./deck/product-palette.webp" fit="contain" placeholder="PALETTE AND TYPE CHANGES"></image-slot></div></div></section><section id="s3" data-screen-label="003 Capture" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(003) THE CAPTURE TOOL</div><h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">We built something beautiful, then cut it for being in the way.</h2><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">The capture tool is the surface someone may see fifty times a day, so it got the most craft &mdash; and the most ruthless editing. Every version that asked the user for something at the moment of capture lost.</div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">WHAT WE PROTOTYPED</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Before settling on a single mechanic we built the alternatives rough and fast &mdash; solid enough to put in front of somebody, cheap enough to throw away. Each one was a different answer to the same question: how little can we ask for at the moment of capture?</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:28px"><image-slot id="ncs-cap-prototypes" shape="rect" src="./deck/cap-prototypes.webp" fit="contain" placeholder="RAPID PROTOTYPES"></image-slot></div><div style="margin-top:12px;display:flex;justify-content:space-between;gap:24px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)"><span style="max-width:72ch">The prototypes we built to test the concept, before any of them had a shape worth defending.</span><span>FIG. 02</span></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">EARLY CONCEPTS</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">The first pass gave the capture a thumbnail, a filed process, an optional note, and save-and-assign options &mdash; every decision available right there in the moment.</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:28px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-cap-concepts" shape="rect" src="./deck/cap-concepts.webp" fit="contain" placeholder="EARLY CAPTURE CONCEPTS"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">ANNOTATED &mdash; EVERY OPTION IN THE MOMENT</div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-cap-wireframes" shape="rect" src="./deck/cap-wireframes.webp" fit="contain" placeholder="WIREFRAMING IN FIGMA"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">THE VARIANTS BEHIND IT</div></div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">THE DOGFOOD VERDICT</div><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">Four words in the review, and they ended it: <em>too intrusive, too complex.</em></div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:28px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-cap-dogfood" shape="rect" src="./deck/cap-dogfood.webp" fit="contain" placeholder="TOO INTRUSIVE, TOO COMPLEX"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">WHAT THE TEAM SAID</div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-cap-final" shape="rect" src="./deck/cap-final.webp" fit="contain" placeholder="FINAL DESIGNS"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">WHAT REPLACED IT &mdash; STEPS BROKEN ACROSS SCREENS</div></div></div><div style="margin-top:28px;max-width:62ch;display:flex;flex-direction:column;gap:18px;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)"><p style="margin:0">The card had grown into a form parked in the middle of someone&rsquo;s work, waiting for input. The fix was to stop asking: break the steps across screens, store the capture the instant the trigger fires, and let the confirmation state what happened rather than request what to do about it.</p><p style="margin:0">Organisation did not disappear &mdash; it moved to a moment when the person has attention to spare.</p></div></div></section><section id="s4" data-screen-label="004 Onboarding" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(004) ONBOARDING</div><h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">Get people set up quickly, and confidently.</h2><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">A capture tool asks for permissions before it does anything useful, which is the worst possible first impression. Onboarding had to earn trust before it asked for access.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:36px"><image-slot id="ncs-onb-goal" shape="rect" src="./deck/onb-goal.webp" fit="contain" placeholder="ONBOARDING GOAL"></image-slot></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">ITERATING THE FLOW</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Challenge, then permission, then explain the product &mdash; the order matters, because a permission dialog with no context reads as a demand.</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:28px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-onb-iterating" shape="rect" src="./deck/onb-iterating.webp" fit="contain" placeholder="FLOW ITERATIONS"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">THE FLOWS, MAPPED AND REWORKED</div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-onb-solution" shape="rect" src="./deck/onb-solution.webp" fit="contain" placeholder="LANDING ON A SOLUTION"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">THE SEQUENCE WE SETTLED ON</div></div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">SKETCHING, THEN ITERATING WITH AI</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Sketched by hand to find the shape, then run through an AI pass to pressure-test the copy and the branching before anything was drawn properly.</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:28px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-onb-sketch" shape="rect" src="./deck/onb-sketch.webp" fit="contain" placeholder="SKETCHING THE FLOW"></image-slot></div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-onb-ai" shape="rect" src="./deck/onb-ai.webp" fit="contain" placeholder="ITERATING WITH AI"></image-slot></div></div></div></div></section><section id="s5" data-screen-label="005 Sharing" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(005) SHARING WITHOUT BUILDING A FEED</div><h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">Uploading an iteration notifies nobody.</h2><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">That refusal is where this feature comes from. We had already decided to build a tool and not a social media, so the hard part was holding that line once sharing entered the product.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:36px"><image-slot id="ncs-share-collabflow" shape="rect" src="./deck/share-collabflow.webp" fit="contain" placeholder="COLLAB FLOW"></image-slot></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">WHO OWNS THE BYLINE</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Two ways a story gets its author. These are not two personas &mdash; the recipient is the same designer both times. What differs is where the story came from, and therefore who owns the byline at the end.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:0px"><image-slot id="ncs-share-authorship" shape="rect" src="./deck/share-authorship.webp" fit="contain" placeholder="TWO WAYS A STORY GETS ITS AUTHOR"></image-slot></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">THE PLANS WE TURNED DOWN</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Every version we rejected put the tool back in charge of the moment. Writing them down next to the reason is how the shipped answer stayed defensible: you publish, manually, numbered.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:0px"><image-slot id="ncs-share-who-when" shape="rect" src="./deck/share-who-when.webp" fit="contain" placeholder="WHO TELLS PEOPLE, AND WHEN"></image-slot></div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:20px"><image-slot id="ncs-share-recipient" shape="rect" src="./deck/share-recipient.webp" fit="contain" placeholder="WHAT THE RECIPIENT RECEIVES"></image-slot></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">THE FLOW UNDERNEATH</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:8px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-share-flow" shape="rect" src="./deck/share-flow.webp" fit="contain" placeholder="SHARE UPDATE FLOW"></image-slot></div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-share-doc" shape="rect" src="./deck/share-doc.webp" fit="contain" placeholder="THE SHARED ARTEFACT"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">WHAT ARRIVES &mdash; A FROZEN NOTE, ONE ROW PER ITERATION</div></div></div></div></section><section id="s6" data-screen-label="006 Landing page" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(006) LANDING PAGE</div><h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">The landing page had to explain capture in terms they already understand.</h2><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">Users download and are thrown directly into the work, which means the page carries all of the explaining. So the capture section demonstrates the tool instead of describing it.</div><div style="margin-top:28px"><a href="https://newcraftsociety.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font:500 12px/1 'DM Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:14px 20px;border:1px solid var(--ink)" style-hover="background:transparent;color:var(--ink)">SEE IT LIVE &mdash; NEWCRAFTSOCIETY.COM &#8599;</a></div>
+<div class="pgframe">
+<div class="bar"><i></i><i></i><i></i><span>newcraftsociety.com</span></div>
+<div class="pgscroll"><img src="./deck/landing-fullpage.webp" alt="The New Craft Society landing page, full length" /></div>
+</div>
+<div class="pghint"><span><b>SCROLL INSIDE THE WINDOW &#8595;</b> &nbsp;THE PAGE AS IT SHIPPED, TOP TO BOTTOM</span><span>FIG. 02</span></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">SHOW BEFORE TELL</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">The product is hard to describe and instant to understand, so the page opens by demonstrating a capture rather than explaining one.</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:28px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-landing-hero" shape="rect" src="./deck/landing-hero.webp" fit="contain" placeholder="LANDING HERO"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">&ldquo;YOUR CREATIVE PROCESS HAS A MEMORY NOW&rdquo;</div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-landing-demo" shape="rect" src="./deck/landing-demo.webp" fit="contain" placeholder="DEMO SECTION"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">THE CAPTURE, PLAYED OUT IN PLACE</div></div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">THE MECHANIC IN THREE PLAIN VERBS</div><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:8px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-landing-capture" shape="rect" src="./deck/landing-capture.webp" fit="contain" placeholder="CAPTURE SORT OBSERVE"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">THE SHORTCUT AS THE WHOLE INTERFACE</div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-capture-types" shape="rect" src="./deck/capture-types.webp" fit="contain" placeholder="PROACTIVE &amp; AMBIENT"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">INTENTIONAL AND HANDS-OFF CAPTURE</div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-handoff" shape="rect" src="./deck/handoff.webp" fit="contain" placeholder="USE CASES"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">PROCESS YOU CAN HAND TO SOMEONE ELSE</div></div></div></div></section><section id="s7" data-screen-label="007 Why this" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(007) WHY DO CREATIVES NEED THIS?</div><h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:22ch">The finished piece gets saved. Everything that led to it gets lost.</h2><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">Where does your work actually live? Figma, Claude chats, a hundred tabs. By the time the case study is due you are doing archaeology on your own work.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:36px"><image-slot id="ncs-why-scattered" shape="rect" src="./deck/why-scattered.webp" fit="contain" placeholder="WORK SCATTERED EVERYWHERE"></image-slot></div><div style="margin-top:44px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px"><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(30px,4vw,48px)/1 Archivo;letter-spacing:-.03em">10+</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Designers interviewed, across skill levels.</div></div><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(30px,4vw,48px)/1 Archivo;letter-spacing:-.03em">6</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Project classes juggled by one student.</div></div><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(30px,4vw,48px)/1 Archivo;letter-spacing:-.03em">1</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Solid case study, when two were needed.</div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">A KEY EXAMPLE &mdash; WE HAVE TO BUILD FOR REAL DESIGNERS DAILY</div><div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:44px;margin-top:20px;align-items:start">
+<div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-why-hana" shape="rect" src="./deck/why-hana.webp" fit="contain" placeholder="HANA KIM"></image-slot></div>
+<div style="margin-top:14px;font:400 12px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.55)">JUNIOR IN INTERACTION DESIGN @ ARTCENTER</div></div>
+<div>
+<div style="padding-bottom:28px;border-bottom:1px solid rgba(var(--ink-rgb),.18)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">I ASKED HER</div>
+<div style="font:400 clamp(20px,2.6vw,28px)/1.4 Archivo;letter-spacing:-.02em">How would you feel about a tool that lets you show your work-in-progress projects to others?</div></div>
+<div style="padding-top:28px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">SHE SAID</div>
+<div style="font:400 clamp(22px,3vw,34px)/1.35 'Instrument Serif',serif;font-style:italic;letter-spacing:-.01em">&ldquo;I already do that in Medium. I write blogs and upload screenshots to document my process. I don&rsquo;t think I&rsquo;ll need it.&rdquo;</div></div>
+<div style="margin-top:40px;padding-top:28px;border-top:1px solid rgba(var(--ink-rgb),.18)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">THE INSIGHT</div>
+<div style="font:400 clamp(20px,2.6vw,30px)/1.35 Archivo;letter-spacing:-.025em">Designers are missing a dedicated, lightweight WIP layer between raw files and polished portfolio.</div></div>
+</div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">THE OPPORTUNITY</div><div style="font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:20ch">Build a tool, not a social media.</div><div style="margin-top:36px;padding:32px 0;border-top:1px solid rgba(var(--ink-rgb),.18);border-bottom:1px solid rgba(var(--ink-rgb),.18)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">CORE PROBLEM STATEMENT</div>
+<div style="font:400 clamp(20px,2.8vw,32px)/1.4 Archivo;letter-spacing:-.025em;max-width:30ch">How might we give designers a low-friction way to capture work in progress so that a future case study almost &ldquo;writes itself&rdquo;?</div></div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:28px"><image-slot id="ncs-why-insight" shape="rect" src="./deck/why-insight.webp" fit="contain" placeholder="DOCUMENTING THE PROCESS AUTOMATICALLY"></image-slot></div><div style="margin-top:14px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">My pitch: a web app that tracks and organises a designer&rsquo;s work in progress. It had to feel faster than writing a doc or a blog post, make progress visible over time, and be useful even if only the designer ever sees it.</div></div></section><section id="s8" data-screen-label="008 Validation" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(008) HOW DID WE VALIDATE</div><h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:26ch">Build rough, dogfood it, then put it in front of thirty strangers.</h2><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:40px"><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 11px/1 'DM Mono',monospace;color:var(--accent);margin-bottom:12px">01</div><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Build</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Vibe-coded artefacts against a process roadmap, fast enough to be thrown away.</div></div><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 11px/1 'DM Mono',monospace;color:var(--accent);margin-bottom:12px">02</div><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Dogfood</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">The team ran their own design work through those artefacts for weeks.</div></div><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 11px/1 'DM Mono',monospace;color:var(--accent);margin-bottom:12px">03</div><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Deploy</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Shipped to 30+ real user tests, gathering feedback session by session.</div></div></div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:36px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-val-roadmap" shape="rect" src="./deck/val-roadmap.webp" fit="contain" placeholder="PROCESS ROADMAP"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">START OF CONCEPT &#8594; GATHER FEEDBACK</div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-val-board" shape="rect" src="./deck/val-board.webp" fit="contain" placeholder="THE ROADMAP IN FULL"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">SCOPED AND SEQUENCED</div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">WHAT WE BUILT TO TEST WITH</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">The team put its own design work through those artefacts for weeks. The point was never the artefact &mdash; it was watching somebody use it.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:28px"><image-slot id="ncs-val-dogfood" shape="rect" src="./deck/val-dogfood.webp" fit="contain" placeholder="TEAM DOGFOOD BOARD"></image-slot></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">WHAT A DOGFOOD DAY LOOKED LIKE</div><div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:44px;margin-top:20px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:10px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.75)">
+<span>A user works inside their own design process</span><span>They keep the tool open</span><span>They take screenshots</span>
+<span>Screenshots are sorted</span><span>Other design activity is logged via MCP</span></div>
+<div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-val-steps" shape="rect" src="./deck/val-steps.webp" fit="contain" placeholder="DOGFOOD STEPS"></image-slot></div></div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">VIBECODING IS NOT THE ABSENCE OF PROCESS</div><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">There is just now an AI-native one: <b style="font-weight:500">Flow &#8594; Sketch &#8594; Shape &#8594; Prototype.</b></div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:28px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-val-process" shape="rect" src="./deck/val-process.webp" fit="contain" placeholder="FLOW SKETCH SHAPE PROTOTYPE"></image-slot></div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-val-workshop" shape="rect" src="./deck/val-workshop.webp" fit="contain" placeholder="WORKSHOP PROCESS"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">THE BOARD IT ALL RAN ON</div></div></div></div></section><section id="s9" data-screen-label="009 Insights" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(009) ACTIONABLE INSIGHTS</div><h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">30+ sessions, turned into a report someone could act on.</h2><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">We documented issues from 30+ user testing sessions across different prototypes into a UXR study report &mdash; prioritised findings, clear design recommendations, bugs separated from feature gaps, and open questions turned into next steps.</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:36px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-ins-docs" shape="rect" src="./deck/ins-docs.webp" fit="contain" placeholder="THE STUDY REPORT"></image-slot></div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-ins-report" shape="rect" src="./deck/ins-report.webp" fit="contain" placeholder="SESSIONS AND SYNTHESIS"></image-slot></div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">WHAT THE INSIGHTS TURNED INTO</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:24px">
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Invisible</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">The capture and documentation process should be ambient and invisible.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Reflect</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">The tool should feel like insurance. When you do want to revisit something, none of the process is lost.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Earn trust</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Familiar instructions and mental models that build trust with users.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Visual</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Uniquely visual ways to interact with and refine captures for accuracy.</div></div></div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:28px"><image-slot id="ncs-ins-principles" shape="rect" src="./deck/ins-principles.webp" fit="contain" placeholder="GUIDING PRINCIPLES"></image-slot></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">AND INTO THE IA</div><div style="display:flex;gap:40px;flex-wrap:wrap;font:400 clamp(20px,2.4vw,28px)/1.3 Archivo;letter-spacing:-.02em"><span>Onboarding</span><span style="color:rgba(var(--ink-rgb),.3)">/</span><span>Share &amp; collab</span><span style="color:rgba(var(--ink-rgb),.3)">/</span><span>Edit, refine &amp; canvas</span></div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:28px"><image-slot id="ncs-ia-diagram" shape="rect" src="./deck/ia-diagram.webp" fit="contain" placeholder="IA DIAGRAM"></image-slot></div></div></section><section id="s10" data-screen-label="010 What we cut" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(010) FROM RESEARCH TO PRIORITIES</div><h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">Research only mattered if it changed what we built.</h2><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">Thirty-plus sessions are just a pile of notes until someone decides what they cost. So we sat down with the product owner and the engineering lead and turned findings into P0, P1 and cut.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:36px"><image-slot id="ncs-pri-sessions" shape="rect" src="./deck/pri-sessions.webp" fit="contain" placeholder="SESSIONS TO DECISIONS"></image-slot></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">SCOPE IT. SEQUENCE IT. CUT IT.</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Every feature had to earn its place through demonstrated user value and a realistic build cost. Plotting them against each other is what made the argument unavoidable.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:28px"><image-slot id="ncs-pri-matrix" shape="rect" src="./deck/pri-matrix.webp" fit="contain" placeholder="PRIORITISATION MATRIX"></image-slot></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">A HARD PRODUCT DECISION</div><h3 style="margin:0;font:400 clamp(22px,2.8vw,34px)/1.15 Archivo;letter-spacing:-.03em;max-width:26ch">Auto capture started as a P0. It was the most ambitious feature we had.</h3><div style="margin-top:20px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">The internal assumption was clean: remove documentation friction entirely and the feature becomes the product&rsquo;s killer advantage. Across 30+ sessions, UX logic exposed four gaps we could not answer.</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:34px"><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:18px;font:400 clamp(17px,2vw,21px)/1.4 Archivo;letter-spacing:-.02em">What would it capture?</div><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:18px;font:400 clamp(17px,2vw,21px)/1.4 Archivo;letter-spacing:-.02em">When would it start?</div><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:18px;font:400 clamp(17px,2vw,21px)/1.4 Archivo;letter-spacing:-.02em">Who stays in control?</div><div style="border-top:1px solid var(--accent);padding-top:18px;font:400 clamp(17px,2vw,21px)/1.4 Archivo;letter-spacing:-.02em;color:var(--accent)">Is it actually useful?</div></div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:32px"><image-slot id="ncs-pri-gaps" shape="rect" src="./deck/pri-gaps.webp" fit="contain" placeholder="FOUR GAPS"></image-slot></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">RESEARCH CHANGED THE ROADMAP</div><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">The most ambitious feature was not the most valuable. Auto capture came off P0 and went back to exploration; trust and onboarding took its place.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:28px"><image-slot id="ncs-pri-beforeafter" shape="rect" src="./deck/pri-beforeafter.webp" fit="contain" placeholder="BEFORE AND AFTER P0"></image-slot></div><div style="margin-top:12px;display:flex;justify-content:space-between;gap:24px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)"><span style="max-width:72ch">The roadmap before and after the research.</span><span>FIG. 03</span></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">THE NEW SEQUENCE</div><div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:8px"><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 11px/1 'DM Mono',monospace;color:var(--accent);margin-bottom:12px">01</div><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Build trust</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Explain what is captured, what is not, and how the user stays in control.</div></div><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 11px/1 'DM Mono',monospace;color:var(--accent);margin-bottom:12px">02</div><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Make work useful</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Organise and edit captures into a coherent process.</div></div><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 11px/1 'DM Mono',monospace;color:var(--accent);margin-bottom:12px">03</div><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Share meaningfully</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Save, share and hand process to somebody else.</div></div></div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:32px"><image-slot id="ncs-pri-sequence" shape="rect" src="./deck/pri-sequence.webp" fit="contain" placeholder="BUILD TRUST FIRST"></image-slot></div></div></section><section id="s11" data-screen-label="011 Where it landed" style="padding:56px 0 80px;scroll-margin-top:100px"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(011) WHERE IT LANDED</div><h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:26ch">Success is understanding how the work actually gets used.</h2><div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">Two things had to be true: that we could see how the product was being used, and that what we saw pointed at a next step. Everything we measured was built to answer one of those.</div><div style="margin-top:44px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px"><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(30px,4vw,48px)/1 Archivo;letter-spacing:-.03em">30+</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Desktop app sessions, run and documented.</div></div><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(30px,4vw,48px)/1 Archivo;letter-spacing:-.03em">~50</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Live tests in total across the prototypes.</div></div><div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(30px,4vw,48px)/1 Archivo;letter-spacing:-.03em">~50</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Async tests alongside the live ones.</div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">HOW THE TESTING ESCALATED</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Small user tests to shake out the obvious, guided sessions to watch the real path, then flight tests to see what happens when nobody is in the room.</div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:28px"><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-m-progression" shape="rect" src="./deck/m-progression.webp" fit="contain" placeholder="TESTING PROGRESSION"></image-slot></div></div><div><div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-m-quantqual" shape="rect" src="./deck/m-quantqual.webp" fit="contain" placeholder="QUANT AND QUAL"></image-slot></div></div></div><div style="margin-top:12px;display:flex;justify-content:space-between;gap:24px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)"><span style="max-width:72ch">Usage data tells us what users did; interviews tell us why.</span><span>FIG. 04</span></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">A METRIC WITH A TARGET ON IT</div><div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:44px;align-items:center;margin-top:8px">
+<div><div style="display:flex;align-items:baseline;gap:18px"><span style="font:400 clamp(38px,6vw,72px)/1 Archivo;letter-spacing:-.04em">30%</span>
+<span style="font:400 22px/1 'DM Mono',monospace;color:rgba(var(--ink-rgb),.4)">&#8594;</span>
+<span style="font:400 clamp(38px,6vw,72px)/1 Archivo;letter-spacing:-.04em;color:var(--accent)">50%</span></div>
+<div style="margin-top:18px;max-width:44ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Share was used by 30% of users in V1. Raising that to 50% is the goal the redesign is being measured against &mdash; the number is a target, not a result yet.</div></div>
+<div style="position:relative;aspect-ratio:16/9"><image-slot id="ncs-m-kpi" shape="rect" src="./deck/m-kpi.webp" fit="contain" placeholder="SHARE KPI"></image-slot></div></div></div><div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">WHEN A NUMBER IS NOT THE WHOLE STORY</div><div style="margin-top:0px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">The node graph had low usage but strong visual appeal, and it drove downloads. Feature-level metrics decided whether something was landing, needed a redesign, or should be deprioritised &mdash; and usage alone was never enough to make that call.</div><div style="position:relative;width:100%;aspect-ratio:16/9;margin-top:28px"><image-slot id="ncs-m-volume" shape="rect" src="./deck/m-volume.webp" fit="contain" placeholder="TESTING VOLUME"></image-slot></div></div><div style="margin-top:56px;padding:36px 0;border-top:1px solid rgba(var(--ink-rgb),.18);border-bottom:1px solid rgba(var(--ink-rgb),.18)"><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">THE METRIC I ARGUED FOR</div>
+<div style="font:400 clamp(20px,2.8vw,32px)/1.4 Archivo;letter-spacing:-.025em;max-width:32ch">How many times has someone scrolled to the bottom &mdash; not just how long they stayed on the page.</div></div><div style="margin-top:48px;max-width:62ch;display:flex;flex-direction:column;gap:18px;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)"><p style="margin:0">The half still being tested is the return trip &mdash; making a timeline you would actually scroll to the bottom of, and turning that scroll into the case study it promised to write for you. The honest version of this page is that the capture problem is solved and the memory problem is not, yet.</p></div><div style="margin-top:28px"><a href="https://newcraftsociety.com/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font:500 12px/1 'DM Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:14px 20px;border:1px solid var(--ink)" style-hover="background:transparent;color:var(--ink)">SEE IT LIVE &mdash; NEWCRAFTSOCIETY.COM &#8599;</a></div></section>
+</div>
+</div>
+
+<a href="#eco" onClick="{{ openEco }}" style="display:grid;grid-template-columns:210px minmax(0,1fr);border-top:1px solid rgba(var(--ink-rgb),.28);padding:44px 32px;align-items:baseline;transition:background .4s ease" style-hover="background:rgba(var(--ink-rgb),.045)">
+<span style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.5)">NEXT (002)</span>
+<span style="font:400 clamp(30px,4.4vw,62px)/0.95 Archivo;letter-spacing:-.04em">EcoBites &#8594;</span>
+</a>
+</sc-if>
+
+<sc-if value="{{ isEco }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;top:72px;left:0;height:2px;background:var(--ink);z-index:45;{{ progressStyle }}"></div>
+
+<div style="position:relative;height:74vh;min-height:440px;margin-top:73px;background-image:url('./eco/cover-mockup.webp');background-size:cover;background-position:100% 50%;background-color:var(--tint-b);border-bottom:1px solid rgba(var(--ink-rgb),.28);display:flex;align-items:flex-end;padding:44px 32px">
+<div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(var(--tint-b-rgb),.92) 0%,rgba(var(--tint-b-rgb),.55) 34%,rgba(var(--tint-b-rgb),0) 58%);pointer-events:none"></div>
+<div style="position:relative;animation:tnRise .9s cubic-bezier(.2,.7,.2,1) both">
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.18em;color:rgba(var(--ink-rgb),.55);margin-bottom:22px">(002) &mdash; ACADEMIC &mdash; WEB + iOS</div>
+<h1 style="margin:0;font:400 clamp(44px,8vw,120px)/0.9 Archivo;letter-spacing:-.05em">EcoBites</h1>
+<div style="margin-top:22px;font:400 clamp(16px,2vw,22px)/1.5 Archivo;color:rgba(var(--ink-rgb),.72);max-width:42ch">A food-delivery model pointed at food insecurity &mdash; connecting New Jersey&rsquo;s food banks, pantries and kitchens to the people who need them.</div>
+<div style="margin-top:28px"><a href="https://claude.ai/design/p/53d19d47-ef25-4fe8-8919-8329204628bb?file=EcoBites+-+Prototype.html&amp;present=1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font:500 12px/1 'DM Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:14px 20px;border:1px solid var(--ink)" style-hover="background:transparent;color:var(--ink)">LAUNCH THE PROTOTYPE &#8599;</a></div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:210px minmax(0,1fr);gap:0;align-items:start">
+
+<div style="position:sticky;top:110px;padding:56px 24px 56px 32px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.4);margin-bottom:18px">INDEX</div>
+<div style="position:relative">
+<div style="position:absolute;left:-14px;top:0;width:5px;height:5px;background:var(--accent);transition:transform .35s cubic-bezier(.2,.7,.2,1);{{ markerStyle }}"></div>
+<div style="display:flex;flex-direction:column">
+<a href="#e1" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">001 Overview</a>
+<a href="#e2" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">002 Client flow</a>
+<a href="#e3" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">003 The handoff</a>
+<a href="#e4" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">004 Driver flow</a>
+<a href="#e5" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">005 The system</a>
+<a href="#e6" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">006 The problem</a>
+<a href="#e7" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">007 What changed</a>
+<a href="#e8" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">008 Where it landed</a>
+</div>
+</div>
+<a href="#top" onClick="{{ goHome }}" style="display:inline-block;margin-top:32px;font:400 11px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45)">&#8592; ALL WORK</a>
+</div>
+
+<div style="border-left:1px solid rgba(var(--ink-rgb),.18);padding:0 32px 0 44px">
+
+<section id="e1" data-screen-label="001 Overview" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(001) OVERVIEW</div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin-top:36px">
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">ROLE</div><div style="font:400 15px/1.6 Archivo">UI/UX design and research, on a project team.</div></div>
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">TIMELINE</div><div style="font:400 15px/1.6 Archivo">2024 &mdash; one semester.</div></div>
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">PLATFORM</div><div style="font:400 15px/1.6 Archivo">A client website and an iOS driver app.</div></div>
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">CONTEXT</div><div style="font:400 15px/1.6 Archivo">Academic, with the Community Food Bank of New Jersey as stakeholder.</div></div>
+</div>
+<div style="margin-top:48px;max-width:62ch;font:400 clamp(18px,2.2vw,26px)/1.5 Archivo;letter-spacing:-.01em">Getting good food to people shouldn&rsquo;t depend on knowing where to look, having a car, or arriving before the shelves empty.</div>
+<div style="margin-top:24px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">EcoBites borrows the most familiar pattern in modern life &mdash; the food-delivery app &mdash; and points it at that gap. The same ease people expect when ordering takeout, redirected toward dignity and nourishment.</div>
+</section>
+
+<section id="e2" data-screen-label="002 Client flow" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(002) THE CLIENT FLOW</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">Request food in a few taps. No payment, no paperwork.</h2>
+<div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">Open the site and see what is available nearby, right now. Browse by category, open a listing, reserve it &mdash; free &mdash; then choose delivery or pickup.</div>
+<div style="position:relative;width:100%;aspect-ratio:23/18;margin-top:36px"><image-slot id="eco-client-home" shape="rect" src="./eco/client-home.webp" fit="contain" placeholder="CLIENT HOME"></image-slot></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:20px">
+<div style="position:relative;aspect-ratio:23/18"><image-slot id="eco-client-browse" shape="rect" src="./eco/client-browse.webp" fit="contain" placeholder="BROWSE"></image-slot></div>
+<div style="position:relative;aspect-ratio:23/18"><image-slot id="eco-client-detail" shape="rect" src="./eco/client-detail.webp" fit="contain" placeholder="LISTING DETAIL"></image-slot></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:20px">
+<div style="position:relative;aspect-ratio:23/18"><image-slot id="eco-client-checkout" shape="rect" src="./eco/client-checkout.webp" fit="contain" placeholder="CHECKOUT"></image-slot></div>
+<div style="position:relative;aspect-ratio:23/18"><image-slot id="eco-client-confirm" shape="rect" src="./eco/client-confirm.webp" fit="contain" placeholder="CONFIRMED"></image-slot></div>
+</div>
+<div style="margin-top:12px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">BROWSE &rarr; RESERVE &rarr; CHOOSE DELIVERY OR PICKUP &rarr; CONFIRM</div>
+</section>
+
+<section id="e3" data-screen-label="003 The handoff" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(003) WHERE THE TWO APPS MEET</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:26ch">One shared order, two live views.</h2>
+<div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">EcoBites is really two products sharing one order. The instant a request is placed it surfaces as an open route in every nearby driver&rsquo;s app, and every step the driver takes flows straight back to the person waiting at home.</div>
+<div style="display:grid;grid-template-columns:minmax(0,1.7fr) 96px minmax(0,.6fr);gap:20px;align-items:center;margin-top:40px">
+<div style="position:relative;aspect-ratio:23/18"><image-slot id="eco-client-track" shape="rect" src="./eco/client-track.webp" fit="contain" placeholder="CLIENT — FINDING A DRIVER"></image-slot></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;font:400 10px/1.4 'DM Mono',monospace;letter-spacing:.08em;color:rgba(var(--ink-rgb),.5);text-align:center"><span style="font-size:24px;line-height:1">&rarr;</span><span>SAME<br>ORDER</span></div>
+<div style="position:relative;aspect-ratio:402/874"><image-slot id="eco-driver-routes-pair" shape="rect" src="./eco/driver-routes.webp" fit="contain" placeholder="DRIVER — OPEN ROUTE"></image-slot></div>
+</div>
+<div style="margin-top:12px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">FIG. 04 &mdash; THE HANDOFF</div>
+</section>
+
+<section id="e4" data-screen-label="004 Driver flow" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(004) THE DRIVER FLOW</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:26ch">Claim a route, verify the items, drive it to the door.</h2>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:40px">
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="eco-driver-routes" shape="rect" src="./eco/driver-routes.webp" fit="contain" placeholder="ROUTES"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">01 ROUTES</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="eco-driver-detail" shape="rect" src="./eco/driver-detail.webp" fit="contain" placeholder="DETAIL"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">02 DETAIL</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="eco-driver-pickup" shape="rect" src="./eco/driver-pickup.webp" fit="contain" placeholder="PICKUP"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">03 PICKUP</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="eco-driver-enroute" shape="rect" src="./eco/driver-enroute.webp" fit="contain" placeholder="EN ROUTE"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">04 EN ROUTE</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="eco-driver-done" shape="rect" src="./eco/driver-done.webp" fit="contain" placeholder="DELIVERED"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">05 DELIVERED</div></div>
+</div>
+<div style="margin-top:56px;padding-top:40px;border-top:1px solid rgba(var(--ink-rgb),.28)">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:14px">&hellip;AND BACK TO THE CLIENT</div>
+<div style="max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">Every status the driver sets lands back on the client&rsquo;s tracker in real time &mdash; here, marked delivered.</div>
+<div style="position:relative;width:100%;aspect-ratio:23/18;margin-top:28px"><image-slot id="eco-client-track-delivered" shape="rect" src="./eco/client-track-delivered.webp" fit="contain" placeholder="DELIVERED"></image-slot></div>
+</div>
+</section>
+
+<section id="e5" data-screen-label="005 The system" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(005) MAPPING THE SYSTEM</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">Four moves, from a messy problem to a calm flow.</h2>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:40px">
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Map the network</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Catalogued the real organisations &mdash; banks, pantries, kitchens &mdash; and the routes food already travels between them.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Define the model</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Reframed delivery as a two-sided service: recipients request, and volunteers or partners fulfil.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Design the flows</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Prioritised first-run, browse-by-need and order-tracking so a stressed first-time user could move without friction.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Build the system</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">A warm, legible component set &mdash; large tap targets, plain language, reassurance on every screen.</div></div>
+</div>
+
+<div style="margin-top:56px">
+<div style="position:relative;width:100%;aspect-ratio:1374/1056"><image-slot id="eco-diagram-context" shape="rect" src="./eco/diagram-context.webp" fit="contain" placeholder="CONTEXT DIAGRAM"></image-slot></div>
+<div style="margin-top:12px;display:flex;justify-content:space-between;gap:24px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)"><span style="max-width:70ch">Context diagram &mdash; EcoBites sits in the middle, brokering what each party gives and gets: logistics with pantries, delivery info with drivers, food and status with clients.</span><span>FIG. 01</span></div>
+</div>
+<div style="margin-top:44px">
+<div style="position:relative;width:100%;aspect-ratio:1500/910"><image-slot id="eco-diagram-crossfunctional" shape="rect" src="./eco/diagram-crossfunctional.webp" fit="contain" placeholder="CROSS-FUNCTIONAL FLOW"></image-slot></div>
+<div style="margin-top:12px;display:flex;justify-content:space-between;gap:24px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)"><span style="max-width:70ch">Cross-functional flow &mdash; the same order traced across all four actors, from account creation and eligibility through pickup, delivery and feedback.</span><span>FIG. 02</span></div>
+</div>
+<div style="margin-top:44px">
+<div style="position:relative;width:100%;aspect-ratio:1/1"><image-slot id="eco-diagram-processflows" shape="rect" src="./eco/diagram-processflows.webp" fit="contain" placeholder="PROCESS FLOWS"></image-slot></div>
+<div style="margin-top:12px;display:flex;justify-content:space-between;gap:24px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)"><span style="max-width:70ch">Process flows &mdash; every screen and decision mapped per role, client above and driver below, down to onboarding, verification and each tab.</span><span>FIG. 03</span></div>
+</div>
+</section>
+
+<section id="e6" data-screen-label="006 The problem" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(006) THE PROBLEM</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:22ch">Food insecurity is rarely a lack of food. It is a lack of access.</h2>
+<div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">Pantries, soup kitchens and food banks already hold what people need, but the network around them is fragmented, hard to navigate, and easy to fall through.</div>
+<div style="display:flex;gap:56px;margin-top:52px;align-items:baseline;flex-wrap:wrap">
+<div><div style="font:400 clamp(38px,6vw,76px)/1 Archivo;letter-spacing:-.04em">17M</div><div style="font:400 11px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5);margin-top:8px">PEOPLE FACING FOOD INSECURITY</div></div>
+<div><div style="font:400 clamp(38px,6vw,76px)/1 Archivo;letter-spacing:-.04em">4</div><div style="font:400 11px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5);margin-top:8px">ACTORS IN ONE ORDER</div></div>
+<div><div style="font:400 clamp(38px,6vw,76px)/1 Archivo;letter-spacing:-.04em">2</div><div style="font:400 11px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5);margin-top:8px">APPS SHARING ONE LIVE ORDER</div></div>
+</div>
+<div style="margin-top:40px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">We worked with the Community Food Bank of New Jersey as our stakeholder, and grounded the market research in existing relief programmes &mdash; among them the White House Conference on Hunger, Nutrition and Health, and Project DASH.</div>
+</section>
+
+<section id="e7" data-screen-label="007 What changed" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(007) WHAT CHANGED</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">It started as a waitlist. It became a delivery network.</h2>
+<div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">The first version of EcoBites let people register on waitlists at participating pantries and food banks, and coordinated surplus food out to them. The version here replaces the waitlist with a live request.</div>
+<div style="margin-top:40px">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.1fr);gap:20px;padding:14px 0;border-bottom:1px solid rgba(var(--ink-rgb),.28);font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45)"><span></span><span>ORIGINAL CONCEPT</span><span>WHERE IT LANDED</span></div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.1fr);gap:20px;padding:18px 0;border-bottom:1px solid rgba(var(--ink-rgb),.14);font:400 14px/1.65 Archivo;color:rgba(var(--ink-rgb),.75)"><span style="color:rgba(var(--ink-rgb),.5);font:400 11px/1.6 'DM Mono',monospace">HOW YOU GET FOOD</span><span>Register on a waitlist at a participating provider</span><span>Reserve what is on the shelf right now</span></div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.1fr);gap:20px;padding:18px 0;border-bottom:1px solid rgba(var(--ink-rgb),.14);font:400 14px/1.65 Archivo;color:rgba(var(--ink-rgb),.75)"><span style="color:rgba(var(--ink-rgb),.5);font:400 11px/1.6 'DM Mono',monospace">WHEN YOU FIND OUT</span><span>When your turn comes up</span><span>Immediately, with live tracking</span></div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.1fr);gap:20px;padding:18px 0;border-bottom:1px solid rgba(var(--ink-rgb),.14);font:400 14px/1.65 Archivo;color:rgba(var(--ink-rgb),.75)"><span style="color:rgba(var(--ink-rgb),.5);font:400 11px/1.6 'DM Mono',monospace">WHO MOVES IT</span><span>Coordinated distribution</span><span>A nearby volunteer claims the route</span></div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.1fr);gap:20px;padding:18px 0;border-bottom:1px solid rgba(var(--ink-rgb),.14);font:400 14px/1.65 Archivo;color:rgba(var(--ink-rgb),.75)"><span style="color:rgba(var(--ink-rgb),.5);font:400 11px/1.6 'DM Mono',monospace">WHAT YOU SEE</span><span>A list of providers</span><span>One order, two live views</span></div>
+</div>
+<div style="margin-top:40px;max-width:62ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">The waitlist made the provider the unit of the product &mdash; you joined a queue at a place. The reservation makes the meal the unit, and that is what forced the second app: once someone can claim a specific bag of food, someone has to move it.</div>
+</section>
+
+<section id="e8" data-screen-label="008 Where it landed" style="padding:56px 0 80px;scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(008) WHERE IT LANDED</div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:32px;align-items:end;margin-top:28px">
+<h2 style="margin:0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:26ch">Dignity is a design requirement.</h2>
+<img src="./eco/mascot-burger.gif" alt="EcoBites mascot" style="width:100%;max-width:145px;height:auto;display:block;margin-left:auto;image-rendering:auto" />
+</div>
+<div style="margin-top:40px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px">
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(28px,3.4vw,40px)/1 Archivo;letter-spacing:-.03em">3</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Resource types unified into one request flow.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(28px,3.4vw,40px)/1 Archivo;letter-spacing:-.03em">1 tap</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">From opening the site to the nearest open pantry.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(28px,3.4vw,40px)/1 Archivo;letter-spacing:-.03em">WCAG AA</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Large targets, plain language, high contrast.</div></div>
+</div>
+<div style="margin-top:48px;max-width:62ch;display:flex;flex-direction:column;gap:20px;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">
+<p style="margin:0">EcoBites reframed a heavy, bureaucratic experience as something gentle and immediate. The biggest lesson was not visual &mdash; it was that dignity is a design requirement. Every word, every wait state, every empty screen had to reassure rather than gatekeep.</p>
+<p style="margin:0">If I took it further, I would pilot it with a single county&rsquo;s pantry network and design the volunteer-side tooling that makes the model actually run.</p>
+</div>
+<div style="margin-top:36px"><a href="https://claude.ai/design/p/53d19d47-ef25-4fe8-8919-8329204628bb?file=EcoBites+-+Prototype.html&amp;present=1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font:500 12px/1 'DM Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:14px 20px;border:1px solid var(--ink)" style-hover="background:transparent;color:var(--ink)">OPEN THE WORKING PROTOTYPE &#8599;</a></div>
+</section>
+
+</div>
+</div>
+
+<a href="#cat" onClick="{{ openCat }}" style="display:grid;grid-template-columns:210px minmax(0,1fr);border-top:1px solid rgba(var(--ink-rgb),.28);padding:44px 32px;align-items:baseline;transition:background .4s ease" style-hover="background:rgba(var(--ink-rgb),.045)">
+<span style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.5)">NEXT (003)</span>
+<span style="font:400 clamp(30px,4.4vw,62px)/0.95 Archivo;letter-spacing:-.04em">Catalogue &#8594;</span>
+</a>
+</sc-if>
+
+<sc-if value="{{ isCat }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;top:72px;left:0;height:2px;background:var(--ink);z-index:45;{{ progressStyle }}"></div>
+
+<div style="position:relative;height:74vh;min-height:440px;margin-top:73px;background-image:url('./cat/magazines.webp');background-size:cover;background-position:50% 12%;background-color:var(--tint-c);border-bottom:1px solid rgba(var(--ink-rgb),.28);display:flex;align-items:flex-end;padding:44px 32px">
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(var(--paper-rgb),.98) 0%,rgba(var(--paper-rgb),.9) 30%,rgba(var(--paper-rgb),.1) 70%);pointer-events:none"></div>
+<div style="position:relative;animation:tnRise .9s cubic-bezier(.2,.7,.2,1) both">
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.18em;color:rgba(var(--ink-rgb),.55);margin-bottom:22px">(003) &mdash; SELF-DIRECTED &mdash; WEB + EXTENSION</div>
+<h1 style="margin:0;font:400 clamp(44px,8vw,120px)/0.9 Archivo;letter-spacing:-.05em">Catalogue</h1>
+<div style="margin-top:22px;font:400 clamp(16px,2vw,22px)/1.5 Archivo;color:rgba(var(--ink-rgb),.72);max-width:42ch">Online shopping reimagined as editorial storytelling &mdash; save products from across the web and assemble them into magazine-like collections.</div>
+<div style="margin-top:28px"><a href="https://claude.ai/design/p/339882d1-e205-4682-92cc-978717c78bcf?file=work%2Fcatalogue-prototype%2Findex.html&amp;present=1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font:500 12px/1 'DM Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:14px 20px;border:1px solid var(--ink)" style-hover="background:transparent;color:var(--ink)">LAUNCH THE PROTOTYPE &#8599;</a></div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:210px minmax(0,1fr);gap:0;align-items:start">
+<div style="position:sticky;top:110px;padding:56px 24px 56px 32px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.4);margin-bottom:18px">INDEX</div>
+<div style="position:relative">
+<div style="position:absolute;left:-14px;top:0;width:5px;height:5px;background:var(--accent);transition:transform .35s cubic-bezier(.2,.7,.2,1);{{ markerStyle }}"></div>
+<div style="display:flex;flex-direction:column">
+<a href="#c1" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">001 Overview</a>
+<a href="#c2" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">002 The product</a>
+<a href="#c3" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">003 The approach</a>
+<a href="#c4" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">004 The problem</a>
+<a href="#c5" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">005 Where it landed</a>
+</div>
+</div>
+<a href="#top" onClick="{{ goHome }}" style="display:inline-block;margin-top:32px;font:400 11px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45)">&#8592; ALL WORK</a>
+</div>
+
+<div style="border-left:1px solid rgba(var(--ink-rgb),.18);padding:0 32px 0 44px">
+
+<section id="c1" data-screen-label="001 Overview" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(001) OVERVIEW</div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin-top:36px">
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">ROLE</div><div style="font:400 15px/1.6 Archivo">Product design &mdash; UX, UI and systems.</div></div>
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">TIMELINE</div><div style="font:400 15px/1.6 Archivo">2024 &mdash; 10 weeks.</div></div>
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">PLATFORM</div><div style="font:400 15px/1.6 Archivo">Desktop web and a browser extension.</div></div>
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">CONTEXT</div><div style="font:400 15px/1.6 Archivo">Self-directed concept.</div></div>
+</div>
+<div style="margin-top:48px;max-width:62ch;font:400 clamp(18px,2.2vw,26px)/1.5 Archivo;letter-spacing:-.01em">The whole web is a shop &mdash; but saving things to it feels like dropping them into a junk drawer.</div>
+<div style="margin-top:24px;max-width:62ch;display:flex;flex-direction:column;gap:18px;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">
+<p style="margin:0">Wishlists, screenshots, open tabs, &ldquo;saved&rdquo; folders that never get reopened. The way we collect things to buy is messy, context-less and joyless &mdash; the opposite of how it feels to flip through a beautiful magazine.</p>
+<p style="margin:0">Catalogue treats every saved product as a clipping you can compose with. Save from anywhere, then arrange your finds into editorial spreads &mdash; typography, layout and white space included.</p>
+</div>
+</section>
+
+<section id="c2" data-screen-label="002 The product" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(002) THE PRODUCT</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">A canvas that behaves like a page.</h2>
+<div style="position:relative;width:100%;aspect-ratio:2334/1456;margin-top:36px"><image-slot id="cat-editor" shape="rect" src="./cat/editor.webp" fit="contain" placeholder="EDITORIAL CANVAS"></image-slot></div>
+<div style="margin-top:12px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">FIG. 04 &mdash; THE EDITORIAL CANVAS, WITH AN AI CAPTION CO-PILOT</div>
+<div style="position:relative;width:100%;aspect-ratio:2334/1456;margin-top:36px"><image-slot id="cat-editor-theme" shape="rect" src="./cat/editor-theme.webp" fit="contain" placeholder="THEME & PALETTE"></image-slot></div>
+<div style="margin-top:12px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">FIG. 05 &mdash; AI PROPOSES A PALETTE AND FLAGS CONTRAST FAILURES INLINE</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:36px">
+<div style="position:relative;aspect-ratio:2334/1456"><image-slot id="cat-library" shape="rect" src="./cat/library.webp" fit="contain" placeholder="LIBRARY"></image-slot></div>
+<div style="position:relative;aspect-ratio:2334/1456"><image-slot id="cat-viewer" shape="rect" src="./cat/viewer.webp" fit="contain" placeholder="PUBLISHED ISSUE"></image-slot></div>
+</div>
+<div style="margin-top:12px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">FIG. 06 &mdash; THE CURATED LIBRARY, AND A COLLECTION PUBLISHED AS A SHOPPABLE ISSUE</div>
+</section>
+
+<section id="c3" data-screen-label="003 The approach" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(003) THE APPROACH</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">From clipping to composition.</h2>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:40px">
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Capture anywhere</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">A browser extension that pulls the image, title, price and source into a clean, consistent product card.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">A flexible card system</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">One product, many sizes &mdash; a component scale that lets a card be a hero, a thumbnail or a footnote without redrawing it.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">The editorial canvas</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">A grid that snaps but bends &mdash; drag, resize and caption products into spreads that feel printed, not pasted.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Share the issue</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Collections publish as scrollable issues &mdash; sendable, followable, shoppable.</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:40px">
+<div style="position:relative;aspect-ratio:2422/1456"><image-slot id="cat-ext-import" shape="rect" src="./cat/ext-import.webp" fit="contain" placeholder="IMPORT EDITOR"></image-slot></div>
+<div style="position:relative;aspect-ratio:2422/1456"><image-slot id="cat-ext-settings" shape="rect" src="./cat/ext-settings.webp" fit="contain" placeholder="EXTENSION PREFERENCES"></image-slot></div>
+</div>
+<div style="margin-top:12px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">FIG. 02 &mdash; THE IMPORT EDITOR REFINES EACH CAPTURE; PREFERENCES TUNE WHAT THE ENGINE EXTRACTS</div>
+<div style="position:relative;width:100%;aspect-ratio:2334/1456;margin-top:36px"><image-slot id="cat-picker" shape="rect" src="./cat/picker.webp" fit="contain" placeholder="PAGE TEMPLATES"></image-slot></div>
+<div style="margin-top:12px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">FIG. 03 &mdash; EVERY SPREAD STARTS FROM A FLEXIBLE PAGE TEMPLATE</div>
+</section>
+
+<section id="c4" data-screen-label="004 The problem" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(004) THE TENSION</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:22ch">Saving should feel like curating, not hoarding.</h2>
+<div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">Existing tools force a choice: structured but sterile, like spreadsheets and wishlists, or beautiful but shallow, like image boards that lose the price, the link, the why. Catalogue had to hold real product data and still feel like design.</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:36px">
+<div style="position:relative;aspect-ratio:2422/1456"><image-slot id="cat-ext-onboarding" shape="rect" src="./cat/ext-onboarding.webp" fit="contain" placeholder="EXTENSION ONBOARDING"></image-slot></div>
+<div style="position:relative;aspect-ratio:1954/1456"><image-slot id="cat-ext-overlay" shape="rect" src="./cat/ext-overlay.webp" fit="contain" placeholder="IN-CONTEXT CAPTURE"></image-slot></div>
+<div style="position:relative;aspect-ratio:1776/1456"><image-slot id="cat-ext-popup" shape="rect" src="./cat/ext-popup.webp" fit="contain" placeholder="CAPTURE POPUP"></image-slot></div>
+</div>
+<div style="margin-top:12px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">FIG. 01 &mdash; ONBOARD ONCE, THEN CAPTURE FROM ANY SITE WITH A RIGHT-CLICK OR THE POPUP</div>
+</section>
+
+<section id="c5" data-screen-label="005 Where it landed" style="padding:56px 0 80px;scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(005) WHERE IT LANDED</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:26ch">One card and one grid carried the whole thing.</h2>
+<div style="margin-top:40px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px">
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(28px,3.4vw,40px)/1 Archivo;letter-spacing:-.03em">1</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Card component that flexes across every layout.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(28px,3.4vw,40px)/1 Archivo;letter-spacing:-.03em">3</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Surfaces &mdash; extension, canvas, published issue.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(28px,3.4vw,40px)/1 Archivo;letter-spacing:-.03em">&infin;</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Spreads from one snapping-but-bending grid.</div></div>
+</div>
+<div style="margin-top:48px;max-width:62ch;display:flex;flex-direction:column;gap:20px;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">
+<p style="margin:0">Catalogue taught me how much a single, well-built component can carry. Most of the design effort went into one card and one grid &mdash; and once those were right, the editorial feeling came almost for free.</p>
+<p style="margin:0">The open question I would tackle next: how do you keep a feed of other people&rsquo;s issues inspiring without turning it into another endless scroll?</p>
+</div>
+<div style="margin-top:36px"><a href="https://claude.ai/design/p/339882d1-e205-4682-92cc-978717c78bcf?file=work%2Fcatalogue-prototype%2Findex.html&amp;present=1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font:500 12px/1 'DM Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:14px 20px;border:1px solid var(--ink)" style-hover="background:transparent;color:var(--ink)">OPEN THE WORKING PROTOTYPE &#8599;</a></div>
+</section>
+
+</div>
+</div>
+
+<a href="#pay" onClick="{{ openPay }}" style="display:grid;grid-template-columns:210px minmax(0,1fr);border-top:1px solid rgba(var(--ink-rgb),.28);padding:44px 32px;align-items:baseline;transition:background .4s ease" style-hover="background:rgba(var(--ink-rgb),.045)">
+<span style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.5)">NEXT (004)</span>
+<span style="font:400 clamp(30px,4.4vw,62px)/0.95 Archivo;letter-spacing:-.04em">TruePay &#8594;</span>
+</a>
+</sc-if>
+
+
+<sc-if value="{{ isPay }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;top:72px;left:0;height:2px;background:var(--ink);z-index:45;{{ progressStyle }}"></div>
+
+<div style="position:relative;height:74vh;min-height:440px;margin-top:73px;background-image:url('./pay/cover-card.webp');background-size:cover;background-position:50% 8%;background-color:var(--tint-pay);border-bottom:1px solid rgba(var(--ink-rgb),.28);display:flex;align-items:flex-end;padding:44px 32px">
+<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(var(--paper-rgb),.99) 0%,rgba(var(--paper-rgb),.95) 30%,rgba(var(--paper-rgb),.55) 52%,rgba(var(--paper-rgb),.02) 78%);pointer-events:none"></div>
+<div style="position:relative;animation:tnRise .9s cubic-bezier(.2,.7,.2,1) both">
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.18em;color:rgba(var(--ink-rgb),.55);margin-bottom:22px">(004) &mdash; FINTECH CONCEPT &mdash; iOS + ANDROID</div>
+<h1 style="margin:0;font:400 clamp(44px,8vw,120px)/0.9 Archivo;letter-spacing:-.05em">TruePay</h1>
+<div style="margin-top:22px;font:400 clamp(16px,2vw,22px)/1.5 Archivo;color:rgba(var(--ink-rgb),.72);max-width:42ch">A secure, AI-powered payments app that mitigates fraud risk in a shifting cybersecurity landscape &mdash; without slowing people down.</div>
+<div style="margin-top:28px"><a href="https://claude.ai/design/p/339882d1-e205-4682-92cc-978717c78bcf?file=work%2Ftruepay-prototype%2Findex.html&amp;present=1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font:500 12px/1 'DM Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:14px 20px;border:1px solid var(--ink)" style-hover="background:transparent;color:var(--ink)">LAUNCH THE PROTOTYPE &#8599;</a></div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:210px minmax(0,1fr);gap:0;align-items:start">
+<div style="position:sticky;top:110px;padding:56px 24px 56px 32px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.4);margin-bottom:18px">INDEX</div>
+<div style="position:relative">
+<div style="position:absolute;left:-14px;top:0;width:5px;height:5px;background:var(--accent);transition:transform .35s cubic-bezier(.2,.7,.2,1);{{ markerStyle }}"></div>
+<div style="display:flex;flex-direction:column">
+<a href="#p1" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">001 Overview</a>
+<a href="#p2" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">002 The app</a>
+<a href="#p3" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">003 The approach</a>
+<a href="#p4" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">004 The problem</a>
+<a href="#p5" style="font:400 11px/24px 'DM Mono',monospace;color:rgba(var(--ink-rgb),.6)">005 Where it landed</a>
+</div>
+</div>
+<a href="#top" onClick="{{ goHome }}" style="display:inline-block;margin-top:32px;font:400 11px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45)">&#8592; ALL WORK</a>
+</div>
+
+<div style="border-left:1px solid rgba(var(--ink-rgb),.18);padding:0 32px 0 44px">
+
+<section id="p1" data-screen-label="001 Overview" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(001) OVERVIEW</div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin-top:36px">
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">ROLE</div><div style="font:400 15px/1.6 Archivo">Product design &mdash; UX, UI and flows.</div></div>
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">TIMELINE</div><div style="font:400 15px/1.6 Archivo">2023 &mdash; 6 weeks.</div></div>
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">PLATFORM</div><div style="font:400 15px/1.6 Archivo">Mobile, iOS and Android.</div></div>
+<div><div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45);margin-bottom:12px">CONTEXT</div><div style="font:400 15px/1.6 Archivo">Fintech concept.</div></div>
+</div>
+<div style="margin-top:48px;max-width:62ch;font:400 clamp(18px,2.2vw,26px)/1.5 Archivo;letter-spacing:-.01em">Security usually shows up as friction. TruePay had to make it feel like care.</div>
+<div style="margin-top:24px;max-width:62ch;display:flex;flex-direction:column;gap:18px;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">
+<p style="margin:0">Fraud detection has grown smarter, but the experience around it has not. People hit blocked transactions, cryptic verification steps and anxious &ldquo;is this me?&rdquo; moments with no explanation &mdash; and they blame the app, not the attacker.</p>
+<p style="margin:0">TruePay puts an AI risk layer quietly behind every payment, and turns the moments it does surface into something legible, calm and reassuring rather than alarming.</p>
+</div>
+</section>
+
+<section id="p2" data-screen-label="002 The app" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(002) THE APP</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">The whole app, end to end.</h2>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:40px">
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-onboarding" shape="rect" src="./pay/onboarding.webp" fit="contain" placeholder="ONBOARDING"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">ONBOARDING</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-home" shape="rect" src="./pay/home.webp" fit="contain" placeholder="HOME"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">HOME</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-security" shape="rect" src="./pay/security.webp" fit="contain" placeholder="SECURITY CENTER"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">SECURITY CENTER</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-activity" shape="rect" src="./pay/activity.webp" fit="contain" placeholder="ACTIVITY"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">ACTIVITY FEED</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-profile" shape="rect" src="./pay/profile.webp" fit="contain" placeholder="PROFILE"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">PROFILE</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-confirm" shape="rect" src="./pay/confirm.webp" fit="contain" placeholder="BIOMETRIC CONFIRM"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">ONE-TAP APPROVAL</div></div>
+</div>
+<div style="margin-top:16px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">FIG. 03 &mdash; AN AI-SCREENED FEED, A PROFILE THAT FLIPS BETWEEN PERSONAL AND BUSINESS, AND BIOMETRIC APPROVAL</div>
+</section>
+
+<section id="p3" data-screen-label="003 The approach" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(003) THE APPROACH</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:24ch">Designing the calm, and the alarm.</h2>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:40px">
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Three trust states</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Clear, watch and hold &mdash; a simple model mapping the AI&rsquo;s confidence to exactly how much the interface intervenes.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">Explain the score</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Plain-language reasons &mdash; new device, unusual amount &mdash; replace red walls, so a flagged payment teaches instead of blocks.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">One-tap verification</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">When a hold is needed, biometric confirmation keeps the friction to a single familiar gesture.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 21px/1.2 Archivo;letter-spacing:-.02em">A reassurance system</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Micro-copy, motion and a confident accent that signals &ldquo;handled&rdquo; rather than &ldquo;danger&rdquo;.</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:44px;max-width:760px">
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-amount" shape="rect" src="./pay/amount.webp" fit="contain" placeholder="AMOUNT"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">01 ENTER</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-screening" shape="rect" src="./pay/screening.webp" fit="contain" placeholder="SCREENING"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">02 SCREENED</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-success" shape="rect" src="./pay/success.webp" fit="contain" placeholder="SENT"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">03 SENT &amp; VERIFIED</div></div>
+</div>
+<div style="margin-top:16px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">FIG. 02 &mdash; THE EVERYDAY PATH STAYS CALM</div>
+</section>
+
+<section id="p4" data-screen-label="004 The problem" style="padding:56px 0 76px;border-bottom:1px solid rgba(var(--ink-rgb),.18);scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(004) THE TENSION</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:22ch">Invisible when safe. Clear when it matters.</h2>
+<div style="margin-top:28px;max-width:62ch;font:400 clamp(17px,2vw,21px)/1.7 Archivo;color:rgba(var(--ink-rgb),.78)">The hard part was not the model &mdash; it was the choreography. When should the app stay out of the way, when should it pause you, and how do you explain a risk score to someone mid-checkout without scaring them off?</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:40px;max-width:620px">
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-fraud" shape="rect" src="./pay/fraud.webp" fit="contain" placeholder="AI FRAUD REVIEW"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">HELD &mdash; AND EXPLAINED</div></div>
+<div><div style="position:relative;aspect-ratio:402/874"><image-slot id="pay-txn" shape="rect" src="./pay/txn.webp" fit="contain" placeholder="TRANSACTION DETAIL"></image-slot></div><div style="margin-top:10px;font:400 10px/1.5 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">CLEARED &mdash; WITH THE PROOF</div></div>
+</div>
+<div style="margin-top:16px;font:400 11px/1.6 'DM Mono',monospace;color:rgba(var(--ink-rgb),.5)">FIG. 01 &mdash; WHEN THE AI HOLDS A PAYMENT IT SAYS WHY; WHEN IT CLEARS ONE, THE RECEIPT SHOWS THE PROOF</div>
+</section>
+
+<section id="p5" data-screen-label="005 Where it landed" style="padding:56px 0 80px;scroll-margin-top:100px">
+<div style="font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)">(005) WHERE IT LANDED</div>
+<h2 style="margin:28px 0 0;font:400 clamp(26px,3.6vw,46px)/1.06 Archivo;letter-spacing:-.035em;max-width:26ch">Security as a relationship, not a gauntlet.</h2>
+<div style="margin-top:40px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px">
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(28px,3.4vw,40px)/1 Archivo;letter-spacing:-.03em">3</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Trust states driving the entire experience.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(28px,3.4vw,40px)/1 Archivo;letter-spacing:-.03em">1 tap</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">To clear a flagged payment with biometrics.</div></div>
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding-top:20px"><div style="font:400 clamp(28px,3.4vw,40px)/1 Archivo;letter-spacing:-.03em">0</div><div style="margin-top:14px;font:400 14px/1.7 Archivo;color:rgba(var(--ink-rgb),.72)">Red walls &mdash; every block comes with a reason.</div></div>
+</div>
+<div style="margin-top:48px;max-width:62ch;display:flex;flex-direction:column;gap:20px;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">
+<p style="margin:0">TruePay reframed security as a relationship of trust rather than a gauntlet. The design insight that stuck with me: people will accept almost any safeguard if you tell them why it is there &mdash; and resent the smallest one if you do not.</p>
+<p style="margin:0">Next, I would usability-test the hold state specifically, since that anxious in-between moment is where the whole experience is won or lost.</p>
+</div>
+<div style="margin-top:36px"><a href="https://claude.ai/design/p/339882d1-e205-4682-92cc-978717c78bcf?file=work%2Ftruepay-prototype%2Findex.html&amp;present=1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font:500 12px/1 'DM Mono',monospace;letter-spacing:.1em;background:var(--ink);color:var(--paper);padding:14px 20px;border:1px solid var(--ink)" style-hover="background:transparent;color:var(--ink)">OPEN THE WORKING PROTOTYPE &#8599;</a></div>
+</section>
+
+</div>
+</div>
+
+<a href="#top" onClick="{{ goHome }}" style="display:grid;grid-template-columns:210px minmax(0,1fr);border-top:1px solid rgba(var(--ink-rgb),.28);padding:44px 32px;align-items:baseline;transition:background .4s ease" style-hover="background:rgba(var(--ink-rgb),.045)">
+<span style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.5)">BACK</span>
+<span style="font:400 clamp(30px,4.4vw,62px)/0.95 Archivo;letter-spacing:-.04em">All work &#8594;</span>
+</a>
+</sc-if>
+
+
+
+<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding:22px 32px;display:flex;justify-content:space-between;font:400 11px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45)">
+<span>THANVI NIMMALA © 2026</span><span>{{ clock }}</span>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAscii&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;previewWidth&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:260,&quot;min&quot;:160,&quot;max&quot;:400,&quot;step&quot;:10,&quot;unit&quot;:&quot;px&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Work list&quot;},&quot;p1Label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;NEW CRAFT SOCIETY — key screen&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Work list&quot;},&quot;p2Label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;ECOBITES — key screen&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Work list&quot;}}">
+class Component extends DCLogic {
+  state = { page: 'home', ascii: '', t: 0, clock: '', progress: 0, active: 0 };
+
+  componentDidMount() {
+    this._alive = true;
+    this._last = 0;
+    const loop = (ts) => {
+      if (!this._alive) return;
+      if (ts - this._last > 55) {
+        this._last = ts;
+        this.setState(s => ({ t: s.t + 1, ascii: this.field(s.t), clock: this.now() }));
+      }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+    this.setState({ ascii: this.field(0), clock: this.now() });
+    this.onHash = () => {
+      const h = (location.hash || '').replace('#', '');
+      if (h === 'about') this.setState({ page: 'about' });
+      else if (h === 'play') this.setState({ page: 'play' });
+      else if (h === 'ncs') this.setState({ page: 'ncs' });
+      else if (h === 'eco') this.setState({ page: 'eco' });
+      else if (h === 'cat') this.setState({ page: 'cat' });
+      else if (h === 'pay') this.setState({ page: 'pay' });
+      else if (h === '' || h === 'top' || h === 'work') this.setState({ page: 'home' });
+    };
+    window.addEventListener('hashchange', this.onHash);
+    this.onHash();
+    this.onScroll = () => {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+      let active = 0;
+      const spy = { ncs: ['s', 11], eco: ['e', 8], cat: ['c', 5], pay: ['p', 5] };
+      const [pfx, cnt] = spy[this.state.page] || ['s', 9];
+      for (let i = 1; i <= cnt; i++) {
+        const el = document.getElementById(pfx + i);
+        if (el && el.getBoundingClientRect().top <= 160) active = i - 1;
+      }
+      this.setState({ progress: pct, active });
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+  }
+  componentWillUnmount() { this._alive = false; window.removeEventListener('hashchange', this.onHash); window.removeEventListener('scroll', this.onScroll); }
+
+  go(page) {
+    this.setState({ page, progress: 0, active: 0 });
+    const h = page === 'home' ? 'top' : page;
+    if (location.hash !== '#' + h) location.hash = h;
+    window.scrollTo(0, 0);
+  }
+
+  now() {
+    const d = new Date();
+    return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'America/New_York' }) + ' ET';
+  }
+
+  field(t) {
+    // bust-control.js owns rotation: drifts when idle, scrubs when dragged
+    if (window.bustFrame) return window.bustFrame();
+    const f = window.BUST_FRAMES;
+    return (f && f.length) ? f[t % f.length] : '';
+  }
+
+  renderVals() {
+    const p = this.props;
+    const labels = {
+      ncs: p.p1Label ?? 'NEW CRAFT SOCIETY — key screen',
+      eco: p.p2Label ?? 'ECOBITES — key screen',
+      play: 'PLAY — riso poster'
+    };
+    return {
+      isHome: this.state.page === 'home',
+      isAbout: this.state.page === 'about',
+      isNcs: this.state.page === 'ncs',
+      isEco: this.state.page === 'eco',
+      isCat: this.state.page === 'cat',
+      isPay: this.state.page === 'pay',
+      isPlay: this.state.page === 'play',
+      goPlay: (e) => { if (e) e.preventDefault(); this.go('play'); },
+      progressStyle: 'width:' + ((this.state.progress || 0) * 100).toFixed(2) + '%;',
+      markerStyle: 'transform:translateY(' + ((this.state.active || 0) * 24 + 9) + 'px);',
+      ascii: p.showAscii === false ? '' : this.state.ascii,
+      clock: this.state.clock,
+      goHome: (e) => { if (e) e.preventDefault(); this.go('home'); },
+      goAbout: (e) => { if (e) e.preventDefault(); this.go('about'); },
+      goContact: (e) => {
+        if (e) e.preventDefault();
+        this.go('about');
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          const el = document.getElementById('elsewhere');
+          if (el) el.scrollIntoView({ block: 'start' });
+        }));
+      },
+      openNcs: (e) => { e.preventDefault(); this.go('ncs'); },
+      openEco: (e) => { e.preventDefault(); this.go('eco'); },
+      openCat: (e) => { e.preventDefault(); this.go('cat'); },
+      openPay: (e) => { e.preventDefault(); this.go('pay'); }
+    };
+  }
+}
+</script>
+<script src="./motion.js" defer></script>
+</body>
+</html>
+

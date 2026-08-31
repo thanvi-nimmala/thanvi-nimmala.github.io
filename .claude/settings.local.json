@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.figma.com)",
+      "Bash(mkdir -p /private/tmp/claude-501/-Users-thanv-thanvi-portfolio/285b9ea3-10ff-4b8c-a4b5-9e7b5c71e0fa/scratchpad/ncs-deck)",
+      "Bash(curl -L -o /private/tmp/claude-501/-Users-thanv-thanvi-portfolio/285b9ea3-10ff-4b8c-a4b5-9e7b5c71e0fa/scratchpad/ncs-deck/overview.png \"https://www.figma.com/api/mcp/asset/78077895-16be-4705-b411-d99795bed056.png\")"
+    ]
+  }
+}

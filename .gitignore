@@ -1,0 +1,17 @@
+# working history — kept locally, not published
+_backups/
+_superseded/
+_removed/
+
+# scratch comparison pages, not part of the site
+accent-options.html
+accents.html
+landing-options.html
+layout-options.html
+landing-frame.html
+
+# built but no longer loaded by index.html
+hands.js
+theme.js
+
+.DS_Store
