@@ -196,6 +196,8 @@ a:hover{color:var(--accent)}
   .cs-main [style*="repeat(4,"],
   .cs-main [style*="repeat(3,"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
+/* About: bio and photo stack, and the three lists stack, on phones. */
+@media (max-width:700px){.about-grid,.about-lists{grid-template-columns:minmax(0,1fr)!important}}
 @media (max-width:600px){
   /* Everything goes to one column at phone width. Matching every column spec by
      text is unreliable — the runtime rewrites inline styles into a normalised form
@@ -411,11 +413,21 @@ a:hover{color:var(--accent)}
 
 <div style="padding:150px 32px 0">
 <div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.18em;color:rgba(var(--ink-rgb),.5)">(ABOUT)</div>
-<div style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:64px;margin-top:40px;align-items:start">
+<div class="about-grid" style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:64px;margin-top:40px;align-items:start">
 <div>
 <h2 style="margin:0;font:400 clamp(34px,4.8vw,68px)/1.02 Archivo;letter-spacing:-.04em">I've always been a&nbsp;<span style="font-family: &quot;Instrument Serif&quot;, serif; font-style: italic;">creative.</span></h2>
 <div style="margin-top:44px;display:flex;flex-direction:column;gap:20px;max-width:56ch;font:400 15px/1.8 Archivo;color:rgba(var(--ink-rgb),.75)">
 <div style="margin:0"><div>I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, with a minor in Digital Communication, Information, &amp; Media (DCIM). Since then I've been working as the Product Design Lead for New Craft Society at CoCreate. I'm currently looking for full-time work in design roles. When I'm not designing, I'm usually painting, reading, or chasing a good playlist.</div></div>
+<div id="elsewhere" class="about-lists" style="scroll-margin-top:100px;margin-top:44px;padding-top:28px;border-top:1px solid rgba(var(--ink-rgb),.28);display:grid;grid-template-columns:1.45fr 1.15fr .7fr;gap:14px"><div>
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.12em;color:rgba(var(--ink-rgb),.5);margin-bottom:18px">DOING</div>
+<div style="display:flex;flex-direction:column;gap:9px;font:400 15px/1.5 Archivo"><span>End-to-end product design</span><span>User research &amp; testing</span><span>Prototyping in code</span><span>Design systems &amp; specs</span><span>Accessibility (WCAG)</span><span>AI-assisted workflows</span></div>
+</div><div>
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.12em;color:rgba(var(--ink-rgb),.5);margin-bottom:18px">USING</div>
+<div style="display:flex;flex-direction:column;gap:9px;font:400 15px/1.5 Archivo"><span>Figma</span><span>React &amp; SwiftUI</span><span>HTML / CSS / Tailwind</span><span>Illustrator &amp; Photoshop</span><span>An easel, occasionally</span></div>
+</div><div>
+<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.12em;color:rgba(var(--ink-rgb),.5);margin-bottom:18px">ELSEWHERE</div>
+<div style="display:flex;flex-direction:column;gap:9px;font:400 15px/1.5 Archivo"><a href="mailto:thanvi.nimmala@gmail.com">Email ↗</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
+</div></div>
 
 
 </div>
@@ -423,21 +435,7 @@ a:hover{color:var(--accent)}
 <div style="width: 100%; aspect-ratio: 4/5; background-image: repeating-linear-gradient(45deg,rgba(var(--ink-rgb),.07) 0 6px,transparent 6px 12px); border: 1px solid rgba(var(--ink-rgb),.3); display: flex; align-items: flex-end; padding: 16px; position: sticky; top: 110px; background: url(&quot;./img_1745-msjrkwek-nt2k.jpeg&quot;) center / cover no-repeat"></div>
 </div>
 
-<div id="elsewhere" style="scroll-margin-top:100px;margin-top:110px;border-top:1px solid rgba(var(--ink-rgb),.28);display:grid;grid-template-columns:90px repeat(3,minmax(0,1fr));gap:24px;padding:30px 0 90px">
-<div aria-hidden="true"></div>
-<div>
-<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.12em;color:rgba(var(--ink-rgb),.5);margin-bottom:18px">DOING</div>
-<div style="display:flex;flex-direction:column;gap:9px;font:400 15px/1.5 Archivo"><span>End-to-end product design</span><span>User research &amp; interviews</span><span>Prototyping</span><span>Design systems</span><span>Visual &amp; brand identity</span></div>
-</div>
-<div>
-<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.12em;color:rgba(var(--ink-rgb),.5);margin-bottom:18px">USING</div>
-<div style="display:flex;flex-direction:column;gap:9px;font:400 15px/1.5 Archivo"><span>Figma</span><span>Framer</span><span>HTML / CSS</span><span>After Effects</span><span>An easel, occasionally</span></div>
-</div>
-<div>
-<div style="font:400 11px/1 'DM Mono',monospace;letter-spacing:.12em;color:rgba(var(--ink-rgb),.5);margin-bottom:18px">ELSEWHERE</div>
-<div style="display:flex;flex-direction:column;gap:9px;font:400 15px/1.5 Archivo"><a href="mailto:thanvi.nimmala@gmail.com">Email ↗</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn ↗</a></div>
-</div>
-</div>
+
 </div>
 </sc-if>
 
