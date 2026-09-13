@@ -210,6 +210,8 @@ a:hover{color:var(--accent)}
 }
 /* About: bio and photo stack, and the three lists stack, on phones. */
 @media (max-width:700px){.about-grid,.about-lists{grid-template-columns:minmax(0,1fr)!important}}
+@media (max-width:700px){.site-foot{flex-direction:column;gap:18px;align-items:flex-start}
+  .site-foot .sf-sig{flex-direction:column;gap:10px}}
 @media (max-width:600px){
   /* Everything goes to one column at phone width. Matching every column spec by
      text is unreliable — the runtime rewrites inline styles into a normalised form
@@ -792,8 +794,10 @@ a:hover{color:var(--accent)}
 
 
 
-<div style="border-top:1px solid rgba(var(--ink-rgb),.28);padding:22px 32px;display:flex;justify-content:space-between;font:400 11px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45)">
-<span>THANVI NIMMALA © 2026</span><span>{{ clock }}</span>
+<div class="site-foot" style="border-top:1px solid rgba(var(--ink-rgb),.28);padding:26px 32px 30px;display:flex;justify-content:space-between;align-items:baseline;gap:24px;flex-wrap:wrap;font:400 11px/1 'DM Mono',monospace;letter-spacing:.1em;color:rgba(var(--ink-rgb),.45)">
+<span class="sf-nav" style="display:flex;gap:26px"><a href="#top" onClick="{{ goHome }}" style="color:rgba(var(--ink-rgb),.65);text-decoration:none">WORK</a><a href="#about" onClick="{{ goAbout }}" style="color:rgba(var(--ink-rgb),.65);text-decoration:none">ABOUT</a></span>
+<span class="sf-contact" style="display:flex;gap:26px"><a href="mailto:thanvi.nimmala@gmail.com" style="color:rgba(var(--ink-rgb),.65);text-decoration:none">EMAIL &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener" style="color:rgba(var(--ink-rgb),.65);text-decoration:none">LINKEDIN &#8599;</a></span>
+<span class="sf-sig" style="display:flex;gap:26px"><span>THANVI NIMMALA © 2026</span><span>{{ clock }}</span></span>
 </div>
 
 </div>
