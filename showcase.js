@@ -386,6 +386,92 @@
 
   window.addEventListener('hashchange', sync);
 
+  // ---- shared-element transition into and out of a case study ---------------
+  // The cover you click and the hero of the case study you land on are the same
+  // image, so the browser is told they are the same element (view-transition-name)
+  // and morphs one into the other — the cover grows out of its slot to become
+  // the hero, and shrinks back into it on the way out. Rendering is paused while
+  // the case study mounts, so the morph starts from the exact frame you clicked.
+  // Browsers without the API, and anyone with reduced motion set, just navigate.
+  const PAGES = new Set(PROJECTS.map((p) => p.page));
+  const noMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canMorph = () => !!document.startViewTransition && !noMotion;
+
+  // resolve once `test` returns something truthy, or give up after `ms`
+  const until = (test, ms) => new Promise((res) => {
+    const t0 = performance.now();
+    (function poll() {
+      const v = test();
+      if (v || performance.now() - t0 > ms) return res(v);
+      setTimeout(poll, 16);
+    })();
+  });
+  const waitFor = (sel, ms) => until(() => document.querySelector(sel), ms);
+  // only one element may carry the name at a time, so the old view must be gone
+  const waitGone = (sel, ms) => until(() => !document.querySelector(sel), ms);
+
+  function morphTo(visual, hash) {
+    if (!canMorph() || !visual) { location.hash = hash; return; }
+    // a hero from the case study we just left can still be unmounting; two
+    // elements with one name abort the transition, so take its name away first
+    document.querySelectorAll('.cs-hero').forEach((h) => { h.style.viewTransitionName = 'none'; });
+    visual.style.viewTransitionName = 'cover';
+    const vt = document.startViewTransition(async () => {
+      location.hash = hash;
+      sync();
+      window.scrollTo(0, 0);
+      await waitFor('.cs-hero', 1500);
+      // The old snapshot is already taken by now. The cover sits inside the hidden
+      // stage, but Chromium still counts its name in the new state and aborts on
+      // the duplicate — so hand the name over to the hero before that capture.
+      visual.style.viewTransitionName = '';
+    });
+    vt.finished.finally(() => { visual.style.viewTransitionName = ''; });
+  }
+
+  // landing -> case study: any project link on the stage
+  const stageRoot = document.getElementById('stage-root');
+  stageRoot.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const hash = a.getAttribute('href');
+    if (!PAGES.has(hash.slice(1))) return;
+    e.preventDefault();
+    const visual = a.classList.contains('col-item') ? a
+      : a.querySelector('.gi-cover') || stageRoot.querySelector('.col-item.on');
+    morphTo(visual, hash);
+  });
+
+  // case study -> landing: WORK in the masthead, "<- ALL WORK", the footer
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href="#top"]');
+    if (!a || !document.querySelector('.cs-hero') || !canMorph()) return;
+    e.preventDefault();
+    e.stopPropagation();   // the runtime's own handler would navigate a second time
+    // sync() rewinds the column to the first project whenever the landing returns;
+    // for the morph to land on the cover we came from, put that project in the slot
+    const from = PROJECTS.findIndex((p) => '#' + p.page === location.hash);
+    let target = null;
+    const vt = document.startViewTransition(async () => {
+      location.hash = 'top';
+      sync();                                   // shows the stage; layout() sets st.pitch
+      window.scrollTo(0, 0);
+      if (from >= 0 && st.pitch) {
+        st.y = st.shown = from * st.pitch;
+        st.i = -1;                              // force paintContent for this project
+        layout();                               // .on lands on its cover, no easing
+      }
+      await waitGone('.cs-hero', 1500);            // the runtime unmounts it a frame later
+      target = await until(() =>
+        stageRoot.querySelector('.col-item.on') ||
+        [...stageRoot.querySelectorAll('.col-item[data-i="' + from + '"]')]
+          .find((c) => c.offsetParent !== null), 1500);
+      if (target) target.style.viewTransitionName = 'cover';
+    });
+    vt.finished.finally(() => { if (target) target.style.viewTransitionName = ''; });
+  }, true);
+
   const loop = (ts) => {
     const root = sync();
     if (root && !root.hidden && st.el) {
