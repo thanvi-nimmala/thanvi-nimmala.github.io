@@ -22,7 +22,7 @@
   const hold = /[?&]intro=hold/.test(location.search);
   const reduced = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduced) return;
+  if (reduced) { window.__introClearing = true; return; }
 
   // ---- timeline (ms) -------------------------------------------------------
   const STAGGER = 52;    // gap between one letter resolving and the next
@@ -87,9 +87,17 @@
 
   let t0 = null, done = false;
 
+  // the landing listens for this to start its opening roll under the fading name
+  function clearing() {
+    if (window.__introClearing) return;
+    window.__introClearing = true;
+    window.dispatchEvent(new Event('intro:clearing'));
+  }
+
   function finish() {
     if (done) return;
     done = true;
+    clearing();
     root.remove();
   }
 
@@ -97,6 +105,7 @@
     if (t0 === null) t0 = ts;
     const t = ts - t0;
     frame(Math.min(t, END));
+    if (t >= DECODED + HOLD) clearing();
     if (t >= END) { finish(); return; }
     requestAnimationFrame(step);
   }

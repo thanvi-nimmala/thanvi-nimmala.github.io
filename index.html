@@ -131,16 +131,12 @@ a:hover{color:var(--accent)}
 .stage-idx button{display:block;width:100%;height:var(--row,34px);border:0;background:none;
   padding:0;cursor:pointer;text-align:left;color:var(--ink);
   font:400 17px/var(--row,34px) Archivo;letter-spacing:-.015em}
-.stage-info{position:absolute;z-index:30;text-align:left}
+.stage-info{position:absolute;z-index:30;text-align:right}
 .s-num,.s-title{display:none}                    /* the index names the project now */
 /* .72 not .5: the atmospheric ground is strong enough that .5 fell to 2.7:1 on
    the darkest cover. At .72 the worst case is 4.6:1, just clear of AA. */
 .s-meta{font:400 10px/1.6 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.72)}
 .s-desc{display:none}
-.s-cta{display:inline-block;margin-top:14px;font:500 10px/1 'DM Mono',monospace;letter-spacing:.12em;
-  color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:6px;text-decoration:none}
-.stage-bignum{position:absolute;z-index:30;font:400 12px/1 'DM Mono',monospace;
-  letter-spacing:.14em;color:rgba(var(--ink-rgb),.6)}
 .s-sector{font:400 10px/1 'DM Mono',monospace;letter-spacing:.18em;color:rgba(var(--ink-rgb),.5)}
 .stage-count{position:absolute;bottom:26px;z-index:30;
   font:400 10px/1 'DM Mono',monospace;letter-spacing:.16em;color:rgba(var(--ink-rgb),.45)}
@@ -157,7 +153,6 @@ a:hover{color:var(--accent)}
     aspect-ratio:1676/940;filter:none;opacity:1}
   /* the column loops by repeating the four covers; a stack does not need that */
   .col-item:nth-child(n+5){display:none}
-  .stage-bignum{display:none}
   
   /* Stretch rather than cover: the ground is meant to be the whole cover blurred
    to fog, but `cover` in a portrait-ish viewport cropped ~37% off the sides and
@@ -338,8 +333,7 @@ a:hover{color:var(--accent)}
 .stage[data-view="list"] .stage-list{display:block}
 .stage[data-view="grid"] .stage-col,.stage[data-view="list"] .stage-col,
 .stage[data-view="grid"] .stage-idx,.stage[data-view="list"] .stage-idx,
-.stage[data-view="grid"] .stage-info,.stage[data-view="list"] .stage-info,
-.stage[data-view="grid"] .stage-bignum,.stage[data-view="list"] .stage-bignum{display:none}
+.stage[data-view="grid"] .stage-info,.stage[data-view="list"] .stage-info{display:none}
 /* the atmospheric ground would muddy a grid of covers, so it clears away */
 .stage[data-view="grid"] .stage-bg,.stage[data-view="list"] .stage-bg{opacity:0}
 .stage[data-view="list"] .stage-count{display:none}
@@ -403,7 +397,7 @@ a:hover{color:var(--accent)}
 }
 .pghint{display:flex;justify-content:space-between;gap:20px;margin-top:12px;font:400 10px/1.6 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.45)}
 .pghint b{font-weight:500;color:var(--accent)}
-</style><script src="./image-slot.js?v=2"></script><script src="./bust.js?v=2"></script><script src="./bust-control.js?v=2"></script><script src="./showcase.js?v=47" defer></script><script src="./reveal.js?v=2" defer></script><script src="./intro.js?v=10" defer></script><script src="./pin.js?v=3" defer></script><script src="./pile.js?v=3" defer></script></helmet>
+</style><script src="./image-slot.js?v=2"></script><script src="./bust.js?v=2"></script><script src="./bust-control.js?v=2"></script><script src="./showcase.js?v=52" defer></script><script src="./reveal.js?v=2" defer></script><script src="./intro.js?v=11" defer></script><script src="./pin.js?v=3" defer></script><script src="./pile.js?v=3" defer></script></helmet>
 
 <div style="min-height:100vh;background:var(--paper)">
 

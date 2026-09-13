@@ -1,6 +1,6 @@
 // Landing showcase — an Obys-style focal slot. A column of project covers scrolls
 // vertically through a fixed slot at the centre of the screen; whichever cover is
-// nearest that slot is the active project, and the index, metadata, number and
+// nearest that slot is the active project, and the index, metadata and
 // blurred ground all follow it. The focal cover reads in full colour while the
 // rest fall back to grey, which is what marks it.
 //
@@ -109,8 +109,7 @@
     const info = document.createElement('div');
     info.className = 'stage-info';
     info.innerHTML =
-      '<div class="s-sector"></div><div class="s-meta"></div>' +
-      '<div class="s-desc"></div><a class="s-cta">READ THE CASE STUDY →</a>';
+      '<div class="s-sector"></div><div class="s-meta"></div><div class="s-desc"></div>';
 
     // the ground: the cover blurred to fog, two layers so a swap cross-fades
     const bgs = [0, 1].map(() => {
@@ -123,9 +122,6 @@
 
     const count = document.createElement('div');
     count.className = 'stage-count';
-
-    const bignum = document.createElement('div');
-    bignum.className = 'stage-bignum';
 
     // grid: the four covers at size, in colour — nothing like the thumbnail wall,
     // because four large covers read where fifty small ones did not
@@ -179,13 +175,12 @@
     });
 
 
-    stage.append(bgs[0], bgs[1], veil, col, idx, info, count, bignum, grid, list, views);
+    stage.append(bgs[0], bgs[1], veil, col, idx, info, count, grid, list, views);
     st.el = {
-      stage, col, items, buttons, count, bgs, info, idxEl: idx, track, bignum,
+      stage, col, items, buttons, count, bgs, info, idxEl: idx, track,
       grid, list, views, vBtns,
       sector: info.querySelector('.s-sector'),
-      meta: info.querySelector('.s-meta'), desc: info.querySelector('.s-desc'),
-      cta: info.querySelector('.s-cta')
+      meta: info.querySelector('.s-meta'), desc: info.querySelector('.s-desc')
     };
     stage.__built = true;
 
@@ -196,7 +191,7 @@
 
   // ---- content (changes once per transition) --------------------------------
 
-  // The caption lines (sector, meta, the big number) do not swap — the old
+  // The caption lines (sector and meta) do not swap — the old
   // ones leave in the direction of travel and the new ones arrive from the
   // other side, one after another, resolving from a blur the way the
   // case-study headings do (reveal.js). Scrolling down, text leaves upward.
@@ -233,12 +228,10 @@
     // direction of travel: the next project in order means we scrolled down
     const dir = st.last === undefined || (st.last + 1) % PROJECTS.length === st.i ? 1 : -1;
     st.last = st.i;
-    e.cta.href = '#' + p.page;
     e.desc.textContent = p.desc;
     swapCaption([
       [e.sector, p.sector],
-      [e.meta, p.meta],
-      [e.bignum, String(st.i + 1).padStart(2, '0')]
+      [e.meta, p.meta]
     ], dir);
     e.count.textContent =
       String(st.i + 1).padStart(2, '0') + ' / ' + String(PROJECTS.length).padStart(2, '0');
@@ -285,7 +278,8 @@
     // The focal slot: a fixed rectangle at the centre that covers scroll through.
     const slotW = Math.max(340, Math.min(620, vw * 0.42));
     const slotH = slotW / COVER_RATIO;
-    const cx = vw * 0.54, cy = NAV + (vh - NAV) / 2;
+    // dead centre: the names and the caption mirror each other across the cover
+    const cx = vw * 0.5, cy = NAV + (vh - NAV) / 2;
     const sx = cx - slotW / 2, sy = cy - slotH / 2;
 
     st.pitch = slotH * (1 + GAP_RATIO);
@@ -301,18 +295,18 @@
 
     placeColumn(sy, slotH);
 
-    // the type column on the left, the number out on the focal row
+    // the names on the left gutter, the caption on the right gutter — the same
+    // rails as the masthead and the footer row
     e.idxEl.style.left = GUTTER + 'px';
     e.idxEl.style.top = (cy - (IDX_SLOTS * IDX_ROW) / 2).toFixed(1) + 'px';
     e.idxEl.style.height = (IDX_SLOTS * IDX_ROW) + 'px';
     e.track.style.setProperty('--row', IDX_ROW + 'px');
-    e.info.style.left = GUTTER + 'px';
-    // clear of the index window, which is now centred on the focal slot
-    e.info.style.top =
-      Math.max(cy + (IDX_SLOTS * IDX_ROW) / 2 + 44, vh - 372).toFixed(1) + 'px';
-    e.info.style.width = Math.max(220, Math.min(320, sx - GUTTER - 48)) + 'px';
-    e.bignum.style.right = GUTTER + 'px';
-    e.bignum.style.top = (cy - 8) + 'px';
+    e.info.style.left = '';
+    e.info.style.right = GUTTER + 'px';
+    // never wider than the room between the cover and the gutter, so a narrow
+    // window wraps the lines rather than running them onto the cover
+    e.info.style.width = Math.max(120, Math.min(320, vw - (sx + slotW) - 44 - GUTTER)) + 'px';
+    e.info.style.top = (cy - 22).toFixed(1) + 'px';   // its block sits on the focal row
   }
 
   // Position the looping column for the current scroll offset and work out which
@@ -365,6 +359,7 @@
   // Jump straight to a project when its name is clicked: move the offset to that
   // cover's position by the shortest way round the loop.
   function pick(next) {
+    endRoll();
     if (!st.cycle || next === st.i) return;
     const cur = ((st.y % st.cycle) + st.cycle) % st.cycle;
     let want = next * st.pitch;
@@ -373,6 +368,44 @@
     if (d < -st.cycle / 2) d += st.cycle;
     st.y += d;
   }
+
+  // ---- opening roll -------------------------------------------------------
+
+  // On arrival the column is already moving: it runs through every project twice
+  // at speed and decelerates onto the first one, the way Obys's landing rolls
+  // before it settles. Any input takes over from wherever it is.
+  const ROLL_MS = 2400, ROLL_LOOPS = 2;
+  const rollEase = (p) => 1 - Math.pow(1 - p, 3);   // fast out of the gate, then a settle
+  function roll() {
+    if (st.rolled || st.rolling || !st.cycle || narrow() || noCaptionMotion) return;
+    if (!HOME.includes(location.hash) || st.view !== 'vertical') return;
+    st.rolled = true;
+    st.rolling = true;
+    st.instant = true;                       // captions flick past, no swap motion
+    st.el.info.style.opacity = '0';          // and stay out of it until the settle
+    const total = st.cycle * ROLL_LOOPS, t0 = performance.now();
+    (function step(ts) {
+      if (!st.rolling) return;
+      const p = Math.min(1, (ts - t0) / ROLL_MS);
+      st.y = st.shown = -total * (1 - rollEase(p));   // from two loops back, forward to 0
+      layout();
+      if (p < 1) requestAnimationFrame(step); else endRoll();
+    })(t0);
+  }
+  function endRoll() {
+    if (!st.rolling) return;
+    st.rolling = false;
+    st.instant = false;
+    const info = st.el.info;
+    info.style.opacity = '';
+    info.animate([
+      { opacity: 0, filter: 'blur(' + CAP_BLUR + 'px)', transform: 'translateY(' + CAP_RISE + 'px)' },
+      { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' }
+    ], { duration: CAP_IN, easing: 'cubic-bezier(.2,.7,.2,1)' });
+  }
+  // start as the intro clears, or at once if there is no intro to wait for
+  if (window.__introClearing || !window.__intro) roll();
+  else window.addEventListener('intro:clearing', roll, { once: true });
 
   // ---- loop ----------------------------------------------------------------
 
@@ -520,6 +553,7 @@
   const loop = (ts) => {
     const root = sync();
     if (root && !root.hidden && st.el) {
+      if (!st.rolled && (window.__introClearing || !window.__intro)) roll();
       const resized = window.innerWidth !== lastW || window.innerHeight !== lastH;
       if (resized) { lastW = window.innerWidth; lastH = window.innerHeight; layout(); }
       // ease the column toward wherever the wheel has pushed it
@@ -543,6 +577,7 @@
   window.addEventListener('wheel', (e) => {
     if (!st.el || narrow() || st.view !== 'vertical') return;
     if (!HOME.includes(location.hash)) return;
+    endRoll();
     st.y += e.deltaY * SCROLL_K;
   }, { passive: true });
 
@@ -551,6 +586,7 @@
   window.addEventListener('keydown', (e) => {
     if (!st.el || narrow() || st.view !== 'vertical') return;
     if (!HOME.includes(location.hash)) return;
+    endRoll();
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight') st.y += st.pitch;
     else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') st.y -= st.pitch;
   });
