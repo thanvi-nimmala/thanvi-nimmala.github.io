@@ -11,7 +11,6 @@ layout-options.html
 landing-frame.html
 
 # built but no longer loaded by index.html
-hands.js
 theme.js
 
 .DS_Store
@@ -20,3 +19,5 @@ theme.js
 .claude/
 index.html.bak*
 screenshot-*.png
+hands.js
+grab.js

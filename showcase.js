@@ -196,13 +196,50 @@
 
   // ---- content (changes once per transition) --------------------------------
 
+  // The caption lines (sector, meta, the big number) do not swap — the old
+  // ones leave in the direction of travel and the new ones arrive from the
+  // other side, one after another, resolving from a blur the way the
+  // case-study headings do (reveal.js). Scrolling down, text leaves upward.
+  const CAP_OUT = 200, CAP_IN = 480, CAP_STAGGER = 55, CAP_BLUR = 7, CAP_RISE = 16;
+  const noCaptionMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let capToken = 0;
+  function swapCaption(lines, dir) {
+    const token = ++capToken;
+    const set = () => lines.forEach(([el, text]) => { el.textContent = text; });
+    if (noCaptionMotion || !st.painted || st.instant) { set(); st.painted = true; return; }
+    const ease = 'cubic-bezier(.2,.7,.2,1)';
+    const outs = lines.map(([el], i) => {
+      el.getAnimations().forEach((a) => a.cancel());
+      return el.animate([
+        { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' },
+        { opacity: 0, filter: 'blur(' + CAP_BLUR + 'px)', transform: 'translateY(' + (-CAP_RISE * 0.6 * dir) + 'px)' }
+      ], { duration: CAP_OUT, delay: i * CAP_STAGGER * 0.6, easing: 'ease-in', fill: 'both' }).finished;
+    });
+    Promise.allSettled(outs).then(() => {
+      if (token !== capToken) return;        // a newer swap took over
+      set();
+      lines.forEach(([el], i) => {
+        el.getAnimations().forEach((a) => a.cancel());
+        el.animate([
+          { opacity: 0, filter: 'blur(' + CAP_BLUR + 'px)', transform: 'translateY(' + (CAP_RISE * dir) + 'px)' },
+          { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' }
+        ], { duration: CAP_IN, delay: i * CAP_STAGGER, easing: ease, fill: 'backwards' });
+      });
+    });
+  }
+
   function paintContent() {
     const e = st.el, p = PROJECTS[st.i];
+    // direction of travel: the next project in order means we scrolled down
+    const dir = st.last === undefined || (st.last + 1) % PROJECTS.length === st.i ? 1 : -1;
+    st.last = st.i;
     e.cta.href = '#' + p.page;
-    e.sector.textContent = p.sector;
-    e.meta.textContent = p.meta;
     e.desc.textContent = p.desc;
-    e.bignum.textContent = String(st.i + 1).padStart(2, '0');
+    swapCaption([
+      [e.sector, p.sector],
+      [e.meta, p.meta],
+      [e.bignum, String(st.i + 1).padStart(2, '0')]
+    ], dir);
     e.count.textContent =
       String(st.i + 1).padStart(2, '0') + ' / ' + String(PROJECTS.length).padStart(2, '0');
 
@@ -411,8 +448,11 @@
   // only one element may carry the name at a time, so the old view must be gone
   const waitGone = (sel, ms) => until(() => !document.querySelector(sel), ms);
 
-  function morphTo(visual, hash) {
+  let morphing = false;
+  async function morphTo(visual, hash) {
     if (!canMorph() || !visual) { location.hash = hash; return; }
+    if (morphing) return;
+    morphing = true;
     // a hero from the case study we just left can still be unmounting; two
     // elements with one name abort the transition, so take its name away first
     document.querySelectorAll('.cs-hero').forEach((h) => { h.style.viewTransitionName = 'none'; });
@@ -427,7 +467,7 @@
       // the duplicate — so hand the name over to the hero before that capture.
       visual.style.viewTransitionName = '';
     });
-    vt.finished.finally(() => { visual.style.viewTransitionName = ''; });
+    vt.finished.finally(() => { visual.style.viewTransitionName = ''; morphing = false; });
   }
 
   // landing -> case study: any project link on the stage
@@ -444,7 +484,7 @@
   });
 
   // case study -> landing: WORK in the masthead, "<- ALL WORK", the footer
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', async (e) => {
     const a = e.target.closest('a[href="#top"]');
     if (!a || !document.querySelector('.cs-hero') || !canMorph()) return;
     e.preventDefault();
@@ -452,6 +492,9 @@
     // sync() rewinds the column to the first project whenever the landing returns;
     // for the morph to land on the cover we came from, put that project in the slot
     const from = PROJECTS.findIndex((p) => '#' + p.page === location.hash);
+    if (morphing) return;
+    morphing = true;
+    // no hands on the way out — leaving is a plain morph
     let target = null;
     const vt = document.startViewTransition(async () => {
       location.hash = 'top';
@@ -460,7 +503,9 @@
       if (from >= 0 && st.pitch) {
         st.y = st.shown = from * st.pitch;
         st.i = -1;                              // force paintContent for this project
+        st.instant = true;                      // caption lands with the cover, no swap motion
         layout();                               // .on lands on its cover, no easing
+        st.instant = false;
       }
       await waitGone('.cs-hero', 1500);            // the runtime unmounts it a frame later
       target = await until(() =>
@@ -469,7 +514,7 @@
           .find((c) => c.offsetParent !== null), 1500);
       if (target) target.style.viewTransitionName = 'cover';
     });
-    vt.finished.finally(() => { if (target) target.style.viewTransitionName = ''; });
+    vt.finished.finally(() => { if (target) target.style.viewTransitionName = ''; morphing = false; });
   }, true);
 
   const loop = (ts) => {
