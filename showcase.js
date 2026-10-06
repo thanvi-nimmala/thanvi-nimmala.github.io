@@ -22,7 +22,7 @@
     // better in motion play, the one that is about a composed page holds still.
     { title: 'New Craft Society', blurb: 'a tool that makes design process visible. 100+ beta signups',
       accent: '#456525', year: '2026', page: 'ncs', tags: ['Design tooling', '0\u21921'],
-      media: { kind: 'video', ar: 1.5, src: './deck/card-ncs.mp4?v=2', poster: './deck/card-ncs-poster.webp?v=2' } },
+      media: { kind: 'video', ar: 1.5, src: './deck/card-ncs-home.mp4?v=2', poster: './deck/card-ncs-home-poster.webp?v=2' } },
     { title: 'EcoBites', blurb: 'food delivery pointed at food insecurity in New Jersey',
       accent: '#0d7049', year: '2024', page: 'eco', tags: ['Civic tech', 'Two-sided service'],
       media: { kind: 'video', ar: 1.55, src: './eco/card-ecobites.mp4?v=1', poster: './eco/card-ecobites-poster.webp?v=1' } },
