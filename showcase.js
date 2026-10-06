@@ -1,61 +1,50 @@
-// Landing showcase — an Obys-style focal slot. A column of project covers scrolls
-// vertically through a fixed slot at the centre of the screen; whichever cover is
-// nearest that slot is the active project, and the index, metadata and
-// blurred ground all follow it. The focal cover reads in full colour while the
-// rest fall back to grey, which is what marks it.
+// Landing — a rail of type beside a grid of project cards, after jennwchoi.com.
 //
-// The column loops: the four covers are repeated so scrolling never runs out.
+// The left rail says who she is and where to go and stays put; the work scrolls
+// past it as two staggered columns of cards. Clicking a cover morphs it into the
+// case-study hero (View Transitions), and coming back shrinks it into the card it
+// came from, with the grid scrolled where you left it.
 //
-// This owns its DOM outright, and lives OUTSIDE <x-dc>, for two reasons:
+// This owns its DOM outright, and lives OUTSIDE <x-dc>, because the runtime is
+// React: DOM injected into a React-managed subtree left the reconciler trying to
+// removeChild nodes it no longer owned, which blanked the page on view changes.
+// `#stage-root` is a sibling of <x-dc>, so React never sees it.
 //
-//  1. The runtime is React. Injecting nodes into a React-managed subtree left the
-//     reconciler trying to removeChild nodes it no longer owned, which blanked the
-//     whole page on view changes. `#stage-root` is a sibling of <x-dc>, so React
-//     never sees it.
-//  2. Every setState in the page component re-evaluates the whole ~130KB template.
-//     That is fine at the 55ms clock tick and hopeless at 60fps, which is what the
-//     thread animation needs.
-//
-// index.html renders an empty `#stage-root`; everything below builds and animates
-// it, and shows it only while the home view (`[data-home]`) is mounted.
+// index.html renders an empty `#stage-root`; everything below builds it, and
+// shows it only while the home view is up.
 (() => {
   'use strict';
   if (window.__showcaseInit) return;   // the runtime executes helmet scripts twice
   window.__showcaseInit = true;
 
   const PROJECTS = [
-    { num: '(001)', title: 'New Craft Society', accent: '#456525', year: '2026', sector: 'DESIGN TOOLS, SOFTWARE', role: 'Product design · Research · 0→1', page: 'ncs', cover: './deck/ncs-cover.webp',
-      meta: 'COCREATE — MACOS + WEB — 2026',
-      desc: 'A capture tool that gives your design process memory. I led design 0→1, with 30+ user testing sessions behind it.' },
-    { num: '(002)', title: 'EcoBites', accent: '#653a25', year: '2024', sector: 'FOOD ACCESS, CIVIC', role: 'Product design · Research', page: 'eco', cover: './eco/cover-mockup.webp?v=4',
-      meta: 'ACADEMIC — WEB + iOS',
-      desc: 'A food-delivery model pointed at food insecurity in New Jersey — a client site, and a driver app for the volunteers.' },
-    { num: '(003)', title: 'Catalogue', accent: '#382565', year: '2025', sector: 'COMMERCE, EDITORIAL', role: 'Product design · UI', page: 'cat', cover: './cat/magazines.webp',
-      meta: 'SELF-DIRECTED — WEB + EXTENSION',
-      desc: 'Online shopping as editorial storytelling. Save products from anywhere on the web, then compose them into issues.' },
-    { num: '(004)', title: 'TruePay', accent: '#254a65', year: '2023', sector: 'FINTECH, SECURITY', role: 'Product design · UI', page: 'pay', cover: './pay/cover-card.webp',
-      meta: 'FINTECH CONCEPT — iOS + ANDROID',
-      desc: 'An AI fraud layer that stays invisible when you are safe and explains itself when it stops you.' }
+    // Each card shows the thing itself rather than a cover: the ones that are
+    // better in motion play, the one that is about a composed page holds still.
+    { title: 'New Craft Society', blurb: 'a tool that makes design process visible. 100+ beta signups',
+      accent: '#456525', year: '2026', page: 'ncs', tags: ['Design tooling', '0\u21921'],
+      media: { kind: 'video', ar: 1.5, src: './deck/card-ncs.mp4?v=2', poster: './deck/card-ncs-poster.webp?v=2' } },
+    { title: 'EcoBites', blurb: 'food delivery pointed at food insecurity in New Jersey',
+      accent: '#0d7049', year: '2024', page: 'eco', tags: ['Civic tech', 'Two-sided service'],
+      media: { kind: 'video', ar: 1.55, src: './eco/card-ecobites.mp4?v=1', poster: './eco/card-ecobites-poster.webp?v=1' } },
+    { title: 'Catalogue', blurb: 'online shopping as editorial storytelling',
+      accent: '#382565', year: '2025', page: 'cat', tags: ['Commerce', 'Editorial'],
+      media: { kind: 'image', ar: 0.95, src: './cat/card-catalogue.webp' } },
+    { title: 'TruePay', blurb: 'an AI fraud layer that explains itself',
+      accent: '#254a65', year: '2023', page: 'pay', tags: ['Fintech', 'AI trust'],
+      media: { kind: 'video', ar: 0.653, src: './pay/card-truepay.mp4', poster: './pay/card-truepay-poster.webp' } }
   ];
 
-  const NAV = 72;            // the fixed masthead
-  const GUTTER = 78;         // left margin for the quiet type column
-  const TYPE_COL = 300;      // room the index needs before the cover may start
-  const COVER_RATIO = 1.783; // 1676/940, the aspect every cover is cropped to
-  const REPEATS = 5;         // the cover list is repeated so the column can loop
-  const GAP_RATIO = 0.62;    // vertical gap between covers, as a share of one height
-  const SCROLL_K = 0.9;      // how far a wheel notch moves the column
-  const NARROW = 1024;       // below this the pinch composition has no room
-  const IDX_ROW = 34;        // px per name in the index window
-  const IDX_SLOTS = 3;       // how many names are visible at once
+  const SECTIONS = [
+    { t: 'Work', href: '#top', here: true },
+    { t: 'About', href: '#about' }
+  ];
+  const LINKS = [
+    { t: 'Email', href: 'mailto:thanvi.nimmala@gmail.com' },
+    { t: 'LinkedIn', href: 'https://www.linkedin.com/in/thanvi-nimmala/', ext: true }
+  ];
 
-  // `y` is the column's scroll offset in px; `i` is whichever cover is nearest
-  // the focal slot, derived from it
-  const st = { i: 0, y: 0, shown: 0, el: null, pitch: 0, cycle: 0, view: 'vertical',
-               accent: null };
+  const st = { i: 0, el: null, accent: null, scroll: 0 };
   window.__stage = st;
-
-  const narrow = () => window.innerWidth < NARROW;
 
   // The hash is the authority, not a DOM marker: hashchange fires before the
   // runtime has re-rendered, so reading the DOM there still reports the old view
@@ -65,366 +54,121 @@
 
   // ---- build ---------------------------------------------------------------
 
+  const el = (tag, cls, html) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  };
+
   function build(stage) {
     stage.innerHTML = '';
 
-    // the column: the four covers repeated, so scrolling never runs out
-    const col = document.createElement('div');
-    col.className = 'stage-col';
-    const items = [];
-    for (let r = 0; r < REPEATS; r++) {
-      PROJECTS.forEach((p, n) => {
-        const a = document.createElement('a');
-        a.className = 'col-item';
-        a.href = '#' + p.page;
-        a.dataset.i = n;
-        a.style.backgroundImage = 'url("' + p.cover + '")';
-        col.appendChild(a);
-        items.push(a);
-      });
-    }
+    const clock = el('div', 'lx-clock');
 
-    // The index is a three-row window onto a looping track: the active project
-    // sits in the middle slot with its neighbours faded above and below, and the
-    // whole track slides as the covers scroll. The names are repeated the same
-    // number of times as the covers so it never runs out either way.
-    const idx = document.createElement('div');
-    idx.className = 'stage-idx';
-    const track = document.createElement('div');
-    track.className = 'stage-idx-track';
-    idx.appendChild(track);
-    const buttons = [];
-    for (let r = 0; r < REPEATS; r++) {
-      PROJECTS.forEach((p, n) => {
-        const b = document.createElement('button');
-        b.textContent = p.title;
-        b.dataset.scramble = '';      // opt in to motion.js's hover decode
-        b.dataset.i = n;
-        b.addEventListener('click', () => pick(n));
-        track.appendChild(b);
-        buttons.push(b);
-      });
-    }
+    const rail = el('div', 'lx-rail');
+    rail.append(
+      el('div', 'lx-name', 'Thanvi Nimmala'),
+      el('div', 'lx-line', 'Product designer who prototypes in code'),
+      el('div', 'lx-bio', 'I work 0&#8594;1, most recently as Product Design Lead on ' +
+        'New Craft Society at CoCreate. Currently looking for full-time design work.'),
+      el('div', 'lx-lbl', 'SECTIONS')
+    );
 
-    const info = document.createElement('div');
-    info.className = 'stage-info';
-    info.innerHTML =
-      '<div class="s-sector"></div><div class="s-meta"></div><div class="s-desc"></div>';
-
-    // the ground: the cover blurred to fog, two layers so a swap cross-fades
-    const bgs = [0, 1].map(() => {
-      const d = document.createElement('div');
-      d.className = 'stage-bg';
-      return d;
-    });
-    const veil = document.createElement('div');
-    veil.className = 'stage-veil';
-
-    const count = document.createElement('div');
-    count.className = 'stage-count';
-
-    // grid: the four covers at size, in colour — nothing like the thumbnail wall,
-    // because four large covers read where fifty small ones did not
-    const grid = document.createElement('div');
-    grid.className = 'stage-grid';
-    PROJECTS.forEach((p, n) => {
-      const a = document.createElement('a');
-      a.className = 'grid-item';
-      a.href = '#' + p.page;
-      a.innerHTML = '<span class="gi-cover" style="background-image:url(&quot;' + p.cover +
-        '&quot;)"></span><span class="gi-name"></span><span class="gi-meta"></span>';
-      a.querySelector('.gi-name').textContent = p.title;
-      a.querySelector('.gi-meta').textContent = p.sector;
-      a.addEventListener('click', () => { st.i = n; });
-      grid.appendChild(a);
-    });
-
-    // list: a typographic index. Four rows is thin next to Aino's thirty-nine, so
-    // each row carries more — sector, role and year, under a column header.
-    const list = document.createElement('div');
-    list.className = 'stage-list';
-    const head = document.createElement('div');
-    head.className = 'list-head';
-    head.innerHTML = '<span>NO.</span><span>PROJECT</span><span>SECTOR</span>' +
-      '<span>ROLE</span><span>YEAR</span>';
-    list.appendChild(head);
-    PROJECTS.forEach((p, n) => {
-      const a = document.createElement('a');
-      a.className = 'list-row';
-      a.href = '#' + p.page;
-      a.innerHTML = '<span class="lr-n"></span><span class="lr-t"></span>' +
-        '<span class="lr-s"></span><span class="lr-r"></span><span class="lr-y"></span>';
-      a.querySelector('.lr-n').textContent = String(n + 1).padStart(3, '0');
-      a.querySelector('.lr-t').textContent = p.title;
-      a.querySelector('.lr-s').textContent = p.sector;
-      a.querySelector('.lr-r').textContent = p.role;
-      a.querySelector('.lr-y').textContent = p.year;
-      a.addEventListener('click', () => { st.i = n; });
-      list.appendChild(a);
-    });
-
-    const views = document.createElement('div');
-    views.className = 'stage-views';
-    const vBtns = ['vertical', 'grid', 'list'].map((v) => {
-      const b = document.createElement('button');
-      b.textContent = v.toUpperCase();
-      b.dataset.view = v;
-      b.addEventListener('click', () => setView(v));
-      views.appendChild(b);
-      return b;
-    });
-
-
-    stage.append(bgs[0], bgs[1], veil, col, idx, info, count, grid, list, views);
-    st.el = {
-      stage, col, items, buttons, count, bgs, info, idxEl: idx, track,
-      grid, list, views, vBtns,
-      sector: info.querySelector('.s-sector'),
-      meta: info.querySelector('.s-meta'), desc: info.querySelector('.s-desc')
+    let n = 0;
+    const row = (item, arrow) => {
+      const a = el('a', item.here ? 'on' : '',
+        '<span class="n">' + String(++n).padStart(2, '0') + '.</span>' +
+        '<span class="t"></span><span class="x">' + arrow + '</span>');
+      a.querySelector('.t').textContent = item.t;
+      a.href = item.href;
+      if (item.ext) { a.target = '_blank'; a.rel = 'noopener'; }
+      rail.appendChild(a);
     };
+    SECTIONS.forEach((x) => row(x, '&#8594;'));
+    rail.appendChild(el('div', 'lx-lbl', 'LINKS'));
+    LINKS.forEach((x) => row(x, '&#8599;'));
+    rail.appendChild(el('div', 'lx-sig', '&copy;2026 Designed and coded by Thanvi'));
+
+    // two columns, each as tall as its own cards: 1 and 3 on the left, 2 and 4 on
+    // the right, the way a masonry of mixed heights falls
+    const grid = el('div', 'lx-grid');
+    const cols = [el('div', 'lx-col'), el('div', 'lx-col')];
+    grid.append(cols[0], cols[1]);
+    const cards = PROJECTS.map((p, i) => {
+      const m = p.media;
+      const inner = m.kind === 'video'
+        ? '<video src="' + m.src + '" poster="' + m.poster + '" autoplay muted="true" ' +
+          'loop="true" playsinline preload="metadata"></video>'
+        : '<img src="' + m.src + '" alt="" loading="lazy">';
+      const pills = '<span class="lx-pills">' +
+        p.tags.map((t) => '<span></span>').join('') + '</span>';
+      const a = el('a', 'lx-card',
+        '<span class="gi-cover" style="aspect-ratio:' + m.ar + '">' + inner + pills + '</span>' +
+        '<span class="lx-foot"><span class="lx-title"></span><span class="lx-year"></span></span>');
+      a.href = '#' + p.page;
+      a.dataset.i = i;
+      a.querySelectorAll('.lx-pills span').forEach((el2, n) => { el2.textContent = p.tags[n]; });
+      a.querySelector('.lx-title').textContent = p.title + ': ' + p.blurb;
+      a.querySelector('.lx-year').textContent = p.year;
+      // the page's accent follows whichever project is under the pointer
+      // Safari wants the property as well as the attribute before it will autoplay,
+      // and a card below the fold is left paused until it is scrolled into view
+      const v = a.querySelector('video');
+      if (v) { v.muted = true; playWhenSeen(v); }
+      a.addEventListener('pointerenter', () => { st.i = i; syncAccent(true); });
+      cols[i % 2].appendChild(a);
+      return a;
+    });
+
+    const wrap = el('div', 'lx');
+    wrap.append(rail, grid);
+    stage.append(clock, wrap);
+
+    st.el = { stage, wrap, rail, grid, cards, clock };
     stage.__built = true;
-
-    setView(st.view);
-    paintContent();
-    layout();
+    tickClock();
   }
 
-  // ---- content (changes once per transition) --------------------------------
-
-  // The caption lines (sector and meta) do not swap — the old
-  // ones leave in the direction of travel and the new ones arrive from the
-  // other side, one after another, resolving from a blur the way the
-  // case-study headings do (reveal.js). Scrolling down, text leaves upward.
-  const CAP_OUT = 200, CAP_IN = 480, CAP_STAGGER = 55, CAP_BLUR = 7, CAP_RISE = 16;
-  const noCaptionMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let capToken = 0;
-  function swapCaption(lines, dir) {
-    const token = ++capToken;
-    const set = () => lines.forEach(([el, text]) => { el.textContent = text; });
-    if (noCaptionMotion || !st.painted || st.instant) { set(); st.painted = true; return; }
-    const ease = 'cubic-bezier(.2,.7,.2,1)';
-    const outs = lines.map(([el], i) => {
-      el.getAnimations().forEach((a) => a.cancel());
-      return el.animate([
-        { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' },
-        { opacity: 0, filter: 'blur(' + CAP_BLUR + 'px)', transform: 'translateY(' + (-CAP_RISE * 0.6 * dir) + 'px)' }
-      ], { duration: CAP_OUT, delay: i * CAP_STAGGER * 0.6, easing: 'ease-in', fill: 'both' }).finished;
+  const seen = window.IntersectionObserver && new IntersectionObserver((rows) => {
+    rows.forEach((r) => {
+      if (!r.isIntersecting) return;
+      const go = r.target.play();
+      if (go && go.catch) go.catch(() => {});
     });
-    Promise.allSettled(outs).then(() => {
-      if (token !== capToken) return;        // a newer swap took over
-      set();
-      lines.forEach(([el], i) => {
-        el.getAnimations().forEach((a) => a.cancel());
-        el.animate([
-          { opacity: 0, filter: 'blur(' + CAP_BLUR + 'px)', transform: 'translateY(' + (CAP_RISE * dir) + 'px)' },
-          { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' }
-        ], { duration: CAP_IN, delay: i * CAP_STAGGER, easing: ease, fill: 'backwards' });
-      });
+  }, { rootMargin: '200px' });
+  function playWhenSeen(v) {
+    if (seen) seen.observe(v);
+    const go = v.play();
+    if (go && go.catch) go.catch(() => {});
+  }
+
+  // the local time, top right, as on jennwchoi.com
+  function tickClock() {
+    const c = st.el && st.el.clock;
+    if (!c) return;
+    // motion.js decodes mono text under the pointer; writing the time mid-decode
+    // would fight it, and the next tick catches up anyway
+    if (c.matches(':hover')) return;
+    c.textContent = 'New York, ' + new Date().toLocaleTimeString('en-US', {
+      timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', second: '2-digit'
     });
   }
+  setInterval(tickClock, 1000);
 
-  function paintContent() {
-    const e = st.el, p = PROJECTS[st.i];
-    // direction of travel: the next project in order means we scrolled down
-    const dir = st.last === undefined || (st.last + 1) % PROJECTS.length === st.i ? 1 : -1;
-    st.last = st.i;
-    e.desc.textContent = p.desc;
-    swapCaption([
-      [e.sector, p.sector],
-      [e.meta, p.meta]
-    ], dir);
-    e.count.textContent =
-      String(st.i + 1).padStart(2, '0') + ' / ' + String(PROJECTS.length).padStart(2, '0');
+  // ---- accent ---------------------------------------------------------------
 
-    const showing = e.bgs.findIndex((b) => b.classList.contains('on'));
-    const next = showing === 0 ? 1 : 0;
-    e.bgs[next].style.backgroundImage = 'url("' + p.cover + '")';
-    e.bgs[next].classList.add('on');
-    if (showing >= 0) e.bgs[showing].classList.remove('on');
-  }
-
-  // ---- views -----------------------------------------------------------------
-
-  function setView(v) {
-    st.view = v;
-    const e = st.el;
-    if (!e) return;
-    e.stage.dataset.view = v;
-    e.vBtns.forEach((b) => b.classList.toggle('on', b.dataset.view === v));
-    if (v === 'vertical') layout();     // the column needs re-placing on return
-  }
-
-  // ---- geometry (changes every frame) --------------------------------------
-
-  function layout() {
-    const e = st.el;
-    if (!e) return;
-
-
-    if (narrow()) {
-      // stacked: the CSS lays the covers out in flow, so clear the inline
-      // positioning the wide layout puts on the column and its items
-      e.col.style.cssText = '';
-      e.items.forEach((it) => { it.style.top = ''; it.style.height = ''; });
-      return;
-    }
-
-    // the stage scrolls internally at narrow widths; coming back to the wide
-    // composition it must not stay parked partway down
-    if (e.stage.scrollTop) e.stage.scrollTop = 0;
-
-    const vw = window.innerWidth, vh = window.innerHeight;
-
-    // The focal slot: a fixed rectangle at the centre that covers scroll through.
-    const slotW = Math.max(340, Math.min(620, vw * 0.42));
-    const slotH = slotW / COVER_RATIO;
-    // dead centre: the names and the caption mirror each other across the cover
-    const cx = vw * 0.5, cy = NAV + (vh - NAV) / 2;
-    const sx = cx - slotW / 2, sy = cy - slotH / 2;
-
-    st.pitch = slotH * (1 + GAP_RATIO);
-    st.cycle = st.pitch * PROJECTS.length;
-
-    // lay the column out; each item is one slot-sized cover, pitch apart
-    e.col.style.left = sx.toFixed(1) + 'px';
-    e.col.style.width = slotW.toFixed(1) + 'px';
-    e.items.forEach((it, n) => {
-      it.style.height = slotH.toFixed(1) + 'px';
-      it.style.top = (n * st.pitch).toFixed(1) + 'px';
-    });
-
-    placeColumn(sy, slotH);
-
-    // the names on the left gutter, the caption on the right gutter — the same
-    // rails as the masthead and the footer row
-    e.idxEl.style.left = GUTTER + 'px';
-    e.idxEl.style.top = (cy - (IDX_SLOTS * IDX_ROW) / 2).toFixed(1) + 'px';
-    e.idxEl.style.height = (IDX_SLOTS * IDX_ROW) + 'px';
-    e.track.style.setProperty('--row', IDX_ROW + 'px');
-    e.info.style.left = '';
-    e.info.style.right = GUTTER + 'px';
-    // never wider than the room between the cover and the gutter, so a narrow
-    // window wraps the lines rather than running them onto the cover
-    e.info.style.width = Math.max(120, Math.min(320, vw - (sx + slotW) - 44 - GUTTER)) + 'px';
-    e.info.style.top = (cy - 22).toFixed(1) + 'px';   // its block sits on the focal row
-  }
-
-  // Position the looping column for the current scroll offset and work out which
-  // cover is sitting in the slot. The offset is wrapped so the four covers repeat
-  // forever; the middle repeat is kept under the slot so there is always another
-  // cover above and below.
-  function placeColumn(sy, slotH) {
-    const e = st.el;
-    if (!e || !st.cycle) return;
-    const mid = Math.floor(REPEATS / 2) * st.cycle;
-    const wrapped = ((st.shown % st.cycle) + st.cycle) % st.cycle;
-    e.col.style.top = (sy - mid - wrapped).toFixed(1) + 'px';
-
-    const active = Math.round(wrapped / st.pitch) % PROJECTS.length;
-    placeIndex(wrapped / st.pitch);
-
-    // the focal cover reads in full; the rest fall back to grey, as Obys does
-    e.items.forEach((it) => {
-      const off = Math.abs(parseFloat(it.style.top) - (mid + wrapped));
-      const near = off < st.pitch * 0.5;
-      it.classList.toggle('on', near);
-    });
-
-    if (active !== st.i) { st.i = active; paintContent(); }
-  }
-
-  // Slide the name track so the current project sits in the middle slot, and fade
-  // each name by how far it is from that slot. `frac` is the column's position in
-  // projects — 1.5 means halfway between the second and third — so the names move
-  // continuously with the covers rather than snapping.
-  function placeIndex(frac) {
-    const e = st.el;
-    if (!e || !e.track) return;
-    const mid = Math.floor(REPEATS / 2) * PROJECTS.length;
-    e.track.style.transform =
-      'translateY(' + (-(mid + frac - 1) * IDX_ROW).toFixed(2) + 'px)';
-    for (let i = 0; i < e.buttons.length; i++) {
-      const d = Math.abs(i - (mid + frac));         // distance from the middle slot
-      const b = e.buttons[i];
-      if (d > 2.2) { if (b.style.opacity !== '0') b.style.opacity = '0'; continue; }
-      // 1 in the middle, fading out by one row either side
-      const t = Math.max(0, 1 - d);
-      b.style.opacity = (0.18 + 0.82 * t).toFixed(3);
-      b.style.color = 'var(--ink)';
-    }
-  }
-
-  // ---- scroll ---------------------------------------------------------------
-
-  // Jump straight to a project when its name is clicked: move the offset to that
-  // cover's position by the shortest way round the loop.
-  function pick(next) {
-    endRoll();
-    if (!st.cycle || next === st.i) return;
-    const cur = ((st.y % st.cycle) + st.cycle) % st.cycle;
-    let want = next * st.pitch;
-    let d = want - cur;
-    if (d > st.cycle / 2) d -= st.cycle;
-    if (d < -st.cycle / 2) d += st.cycle;
-    st.y += d;
-  }
-
-  // ---- opening roll -------------------------------------------------------
-
-  // On arrival the column is already moving: it runs through every project twice
-  // at speed and decelerates onto the first one, the way Obys's landing rolls
-  // before it settles. Any input takes over from wherever it is.
-  const ROLL_MS = 2400, ROLL_LOOPS = 2;
-  const rollEase = (p) => 1 - Math.pow(1 - p, 3);   // fast out of the gate, then a settle
-  function roll() {
-    if (st.rolled || st.rolling || !st.cycle || narrow() || noCaptionMotion) return;
-    if (!HOME.includes(location.hash) || st.view !== 'vertical') return;
-    st.rolled = true;
-    st.rolling = true;
-    st.instant = true;                       // captions flick past, no swap motion
-    st.el.info.style.opacity = '0';          // and stay out of it until the settle
-    const total = st.cycle * ROLL_LOOPS, t0 = performance.now();
-    (function step(ts) {
-      if (!st.rolling) return;
-      const p = Math.min(1, (ts - t0) / ROLL_MS);
-      st.y = st.shown = -total * (1 - rollEase(p));   // from two loops back, forward to 0
-      layout();
-      if (p < 1) requestAnimationFrame(step); else endRoll();
-    })(t0);
-  }
-  function endRoll() {
-    if (!st.rolling) return;
-    st.rolling = false;
-    st.instant = false;
-    const info = st.el.info;
-    info.style.opacity = '';
-    info.animate([
-      { opacity: 0, filter: 'blur(' + CAP_BLUR + 'px)', transform: 'translateY(' + CAP_RISE + 'px)' },
-      { opacity: 1, filter: 'blur(0)', transform: 'translateY(0)' }
-    ], { duration: CAP_IN, easing: 'cubic-bezier(.2,.7,.2,1)' });
-  }
-  // start as the intro clears, or at once if there is no intro to wait for
-  if (window.__introClearing || !window.__intro) roll();
-  else window.addEventListener('intro:clearing', roll, { once: true });
-
-  // ---- loop ----------------------------------------------------------------
-
-  let lastW = window.innerWidth, lastH = window.innerHeight;
-
-  // Keep the landing's visibility in step with the routed view. The loop calls
-  // this every frame, and hashchange calls it too so a route change hides the
-  // stage immediately instead of leaving it over the next view for a frame.
-  // The accent follows whichever project you are looking at, because the ground
-  // does too — a fixed hue cannot sit against four different grounds. Hues are
+  // Each project carries its own accent, and the page takes it: the case study
+  // uses it, and on the landing it follows the card under the pointer. Hues are
   // hand-spread to stay at least 53 degrees apart; the raw dominants put EcoBites
   // and Catalogue only 15 apart, which read as the same colour.
   //
   // The scroll-spy rewrites the hash to #s1, #s2 … while you read a case study, so
   // an unrecognised hash leaves the accent where it was rather than resetting it.
-  function syncAccent() {
+  function syncAccent(force) {
     const h = location.hash.replace('#', '');
     const byPage = PROJECTS.find((x) => x.page === h);
-    const p = byPage || (HOME.includes(location.hash) ? PROJECTS[st.i] : null);
+    const p = byPage || (force || HOME.includes(location.hash) ? PROJECTS[st.i] : null);
     if (!p || p.accent === st.accent) return;
     st.accent = p.accent;
     document.documentElement.style.setProperty('--accent', p.accent);
@@ -436,134 +180,36 @@
 
   function sync() {
     syncAccent();
-    // the masthead drops its paper backing on the landing — see .site-nav
     document.documentElement.classList.toggle('on-landing', HOME.includes(location.hash));
     const root = document.getElementById('stage-root');
     if (!root) return null;
     const onHome = HOME.includes(location.hash);
 
     if (onHome && root.hidden) {
-      // entering the landing: show it and rewind the column to the first project
       root.hidden = false;
       if (!root.__built) build(root);
-      st.y = 0; st.shown = 0;
-      layout();
+      root.scrollTop = st.scroll;     // back where the grid was left
     } else if (!onHome && !root.hidden) {
-      root.hidden = true;                       // another view is up
+      root.hidden = true;             // another view is up
+      window.scrollTo(0, 0);          // the landing scrolls inside itself; the page does not
     }
     return root;
   }
 
   window.addEventListener('hashchange', sync);
 
-  // ---- shared-element transition into and out of a case study ---------------
-  // The cover you click and the hero of the case study you land on are the same
-  // image, so the browser is told they are the same element (view-transition-name)
-  // and morphs one into the other — the cover grows out of its slot to become
-  // the hero, and shrinks back into it on the way out. Rendering is paused while
-  // the case study mounts, so the morph starts from the exact frame you clicked.
-  // Browsers without the API, and anyone with reduced motion set, just navigate.
-  const PAGES = new Set(PROJECTS.map((p) => p.page));
-  const noMotion = window.matchMedia &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const canMorph = () => !!document.startViewTransition && !noMotion;
-
-  // resolve once `test` returns something truthy, or give up after `ms`
-  const until = (test, ms) => new Promise((res) => {
-    const t0 = performance.now();
-    (function poll() {
-      const v = test();
-      if (v || performance.now() - t0 > ms) return res(v);
-      setTimeout(poll, 16);
-    })();
-  });
-  const waitFor = (sel, ms) => until(() => document.querySelector(sel), ms);
-  // only one element may carry the name at a time, so the old view must be gone
-  const waitGone = (sel, ms) => until(() => !document.querySelector(sel), ms);
-
-  let morphing = false;
-  async function morphTo(visual, hash) {
-    if (!canMorph() || !visual) { location.hash = hash; return; }
-    if (morphing) return;
-    morphing = true;
-    // a hero from the case study we just left can still be unmounting; two
-    // elements with one name abort the transition, so take its name away first
-    document.querySelectorAll('.cs-hero').forEach((h) => { h.style.viewTransitionName = 'none'; });
-    visual.style.viewTransitionName = 'cover';
-    const vt = document.startViewTransition(async () => {
-      location.hash = hash;
-      sync();
-      window.scrollTo(0, 0);
-      await waitFor('.cs-hero', 1500);
-      // The old snapshot is already taken by now. The cover sits inside the hidden
-      // stage, but Chromium still counts its name in the new state and aborts on
-      // the duplicate — so hand the name over to the hero before that capture.
-      visual.style.viewTransitionName = '';
-    });
-    vt.finished.finally(() => { visual.style.viewTransitionName = ''; morphing = false; });
-  }
-
-  // landing -> case study: any project link on the stage
+  // Clicking a card is a plain hash navigation; all this does is remember where
+  // the grid was so the way back lands in the same place.
   const stageRoot = document.getElementById('stage-root');
   stageRoot.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
-    const hash = a.getAttribute('href');
-    if (!PAGES.has(hash.slice(1))) return;
-    e.preventDefault();
-    const visual = a.classList.contains('col-item') ? a
-      : a.querySelector('.gi-cover') || stageRoot.querySelector('.col-item.on');
-    morphTo(visual, hash);
+    const a = e.target.closest('.lx-card');
+    if (a) { st.scroll = stageRoot.scrollTop; st.i = +a.dataset.i || 0; }
   });
 
-  // case study -> landing: WORK in the masthead, "<- ALL WORK", the footer
-  document.addEventListener('click', async (e) => {
-    const a = e.target.closest('a[href="#top"]');
-    if (!a || !document.querySelector('.cs-hero') || !canMorph()) return;
-    e.preventDefault();
-    e.stopPropagation();   // the runtime's own handler would navigate a second time
-    // sync() rewinds the column to the first project whenever the landing returns;
-    // for the morph to land on the cover we came from, put that project in the slot
-    const from = PROJECTS.findIndex((p) => '#' + p.page === location.hash);
-    if (morphing) return;
-    morphing = true;
-    // no hands on the way out — leaving is a plain morph
-    let target = null;
-    const vt = document.startViewTransition(async () => {
-      location.hash = 'top';
-      sync();                                   // shows the stage; layout() sets st.pitch
-      window.scrollTo(0, 0);
-      if (from >= 0 && st.pitch) {
-        st.y = st.shown = from * st.pitch;
-        st.i = -1;                              // force paintContent for this project
-        st.instant = true;                      // caption lands with the cover, no swap motion
-        layout();                               // .on lands on its cover, no easing
-        st.instant = false;
-      }
-      await waitGone('.cs-hero', 1500);            // the runtime unmounts it a frame later
-      target = await until(() =>
-        stageRoot.querySelector('.col-item.on') ||
-        [...stageRoot.querySelectorAll('.col-item[data-i="' + from + '"]')]
-          .find((c) => c.offsetParent !== null), 1500);
-      if (target) target.style.viewTransitionName = 'cover';
-    });
-    vt.finished.finally(() => { if (target) target.style.viewTransitionName = ''; morphing = false; });
-  }, true);
-
-  const loop = (ts) => {
-    const root = sync();
-    if (root && !root.hidden && st.el) {
-      if (!st.rolled && (window.__introClearing || !window.__intro)) roll();
-      const resized = window.innerWidth !== lastW || window.innerHeight !== lastH;
-      if (resized) { lastW = window.innerWidth; lastH = window.innerHeight; layout(); }
-      // ease the column toward wherever the wheel has pushed it
-      if (st.view === 'vertical' && Math.abs(st.y - st.shown) > 0.2) {
-        st.shown += (st.y - st.shown) * 0.12;
-        layout();
-      }
-    }
-    requestAnimationFrame(loop);
-  };
+  // The runtime rewrites the hash itself (the case-study scroll-spy), and those
+  // writes do not always arrive as a hashchange, so the hash is re-read on a
+  // frame clock. sync() is a few property reads when nothing has moved.
+  const loop = () => { sync(); requestAnimationFrame(loop); };
   requestAnimationFrame(loop);
 
   // Build once up front rather than waiting on the first animation frame — a tab
@@ -571,23 +217,4 @@
   // should not depend on that to exist.
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync);
   else sync();
-
-  // ---- input ---------------------------------------------------------------
-
-  window.addEventListener('wheel', (e) => {
-    if (!st.el || narrow() || st.view !== 'vertical') return;
-    if (!HOME.includes(location.hash)) return;
-    endRoll();
-    st.y += e.deltaY * SCROLL_K;
-  }, { passive: true });
-
-
-  // arrow keys step a whole project, so the landing works without a wheel
-  window.addEventListener('keydown', (e) => {
-    if (!st.el || narrow() || st.view !== 'vertical') return;
-    if (!HOME.includes(location.hash)) return;
-    endRoll();
-    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') st.y += st.pitch;
-    else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') st.y -= st.pitch;
-  });
 })();

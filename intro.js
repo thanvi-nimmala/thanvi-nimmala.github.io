@@ -1,12 +1,13 @@
-// Opening sequence — the name decodes itself.
+// Opening sequence — the name fills from the bottom up.
 //
-// The same character-scramble the site uses on hover (motion.js), but fired on a
-// clock instead of a cursor: every letter starts as a random glyph and resolves
-// left to right. Nothing else on screen, on the same paper the site sits on, so
-// when it clears there is no cut — the landing is simply already there.
+// A full-screen white panel with the name set in the display serif, drawn twice:
+// a faint copy underneath, and an ink copy clipped to a line that rises through
+// it. When the line reaches the top the panel clears and the site is already
+// there underneath.
 //
-// The glyph vocabulary is motion.js's, deliberately: this should read as the
-// site's own motion arriving early, not as a separate loading screen.
+// This is jennwchoi.com's intro mechanic — her logo mark is two stacked masked
+// spans, the ink one a gradient that fills bottom-up as --logo-fill goes 0→100%
+// — translated to type, and clipped rather than masked so it works on text.
 //
 // Plays on every load. Skips entirely under prefers-reduced-motion, and can be
 // dismissed with a click or any key. ?intro=hold builds it paused so it can be
@@ -16,88 +17,46 @@
   if (window.__introInit) return;   // the runtime executes helmet scripts twice
   window.__introInit = true;
 
-  const NAME = 'THANVI NIMMALA';
-  const GLYPHS = '·:;+*≡#%@<>/=!?-';        // motion.js's set
+  const NAME = 'Thanvi Nimmala';
 
   const hold = /[?&]intro=hold/.test(location.search);
   const reduced = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduced) { window.__introClearing = true; return; }
+  if (reduced) return;
 
   // ---- timeline (ms) -------------------------------------------------------
-  const STAGGER = 52;    // gap between one letter resolving and the next
-  const JITTER = 90;     // random slack per letter, so it does not march
-  const GLYPH_MS = 40;   // how often an unresolved letter picks a new glyph
-  const HOLD = 520;      // beat on the resolved name before it clears
+  const FILL = 1150;     // the ink rising through the name
+  const HOLD = 360;      // a beat on the filled name before it clears
   const FADE = 420;
-
-  const letters = Array.from(NAME);
-  // when each letter settles; spaces are never scrambled so they settle at once
-  const settleAt = letters.map((c, i) =>
-    c === ' ' ? 0 : Math.round(i * STAGGER + Math.random() * JITTER));
-  const DECODED = Math.max(...settleAt) + 120;
-  const END = DECODED + HOLD + FADE;
-
-  const clamp = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
-
-  // ---- build ---------------------------------------------------------------
+  const END = FILL + HOLD + FADE;
 
   const root = document.createElement('div');
   root.className = 'intro';
-  const word = document.createElement('div');
-  word.className = 'intro-name';
-  root.appendChild(word);
-  const spans = letters.map((c) => {
-    const s = document.createElement('span');
-    if (c === ' ') s.className = 'sp';
-    word.appendChild(s);
-    return s;
-  });
-  root.appendChild(Object.assign(document.createElement('div'),
-    { className: 'intro-skip', textContent: 'CLICK TO SKIP' }));
+  root.innerHTML = '<div class="intro-wrap"><div class="intro-name intro-base"></div>' +
+    '<div class="intro-name intro-ink"></div></div>';
+  const base = root.querySelector('.intro-base');
+  const ink = root.querySelector('.intro-ink');
+  base.textContent = NAME;
+  ink.textContent = NAME;
   document.body.appendChild(root);
 
-  let lastGlyph = -1, cache = letters.map(() => '');
+  const clamp = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
+  // ease-out, so the fill arrives rather than stops
+  const ease = (p) => 1 - Math.pow(1 - p, 3);
 
   function frame(t) {
-    // refresh the random glyphs on their own slower clock, so unresolved letters
-    // flicker at a readable rate rather than once per animation frame
-    const roll = t - lastGlyph >= GLYPH_MS;
-    if (roll) lastGlyph = t;
-
-    for (let i = 0; i < letters.length; i++) {
-      const c = letters[i];
-      if (c === ' ') { spans[i].textContent = ' '; continue; }
-      if (t >= settleAt[i]) {
-        if (cache[i] !== c) { spans[i].textContent = c; cache[i] = c; }
-        continue;
-      }
-      // `cache[i] === c` catches scrubbing backwards: the letter had settled, so
-      // without this it would stay settled at an earlier time than it should
-      if (roll || !cache[i] || cache[i] === c) {
-        const g = GLYPHS[(Math.random() * GLYPHS.length) | 0];
-        spans[i].textContent = g;
-        cache[i] = g;
-      }
-    }
-    root.style.opacity = (1 - clamp((t - DECODED - HOLD) / FADE)).toFixed(3);
+    const p = ease(clamp(t / FILL));
+    ink.style.clipPath = 'inset(' + ((1 - p) * 100).toFixed(2) + '% 0 0 0)';
+    root.style.opacity = (1 - clamp((t - FILL - HOLD) / FADE)).toFixed(3);
   }
 
   // ---- run -----------------------------------------------------------------
 
   let t0 = null, done = false;
 
-  // the landing listens for this to start its opening roll under the fading name
-  function clearing() {
-    if (window.__introClearing) return;
-    window.__introClearing = true;
-    window.dispatchEvent(new Event('intro:clearing'));
-  }
-
   function finish() {
     if (done) return;
     done = true;
-    clearing();
     root.remove();
   }
 
@@ -105,13 +64,12 @@
     if (t0 === null) t0 = ts;
     const t = ts - t0;
     frame(Math.min(t, END));
-    if (t >= DECODED + HOLD) clearing();
     if (t >= END) { finish(); return; }
     requestAnimationFrame(step);
   }
 
   // exposed so the sequence can be scrubbed and inspected frame by frame
-  window.__intro = { frame, finish: () => finish(), settleAt, DECODED, END, NAME };
+  window.__intro = { frame, finish: () => finish(), FILL, HOLD, END, NAME };
 
   frame(0);
   root.addEventListener('click', finish);
