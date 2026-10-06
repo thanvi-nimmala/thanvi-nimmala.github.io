@@ -178,6 +178,25 @@
       [1, 3, 5].map((i) => parseInt(p.accent.substr(i, 2), 16)).join(','));
   }
 
+  // Chrome records a scroll offset against every history entry — including the
+  // ones a hash change creates — and restores it about a second after the view
+  // swaps, which undoes any reset we do at navigation time. We keep the offset
+  // ourselves (the landing in st.scroll, every other view at its top), so take
+  // the browser out of it.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  // Which view a hash names, or null if it names something inside the current one.
+  // The case-study scroll-spy rewrites the hash to #s3, #e4 and so on as you read,
+  // and an index link points at the same — neither is a change of page.
+  const PAGES = new Set(PROJECTS.map((p) => p.page));
+  function pageOf(hash) {
+    if (HOME.includes(hash)) return 'home';
+    const h = hash.replace('#', '');
+    if (PAGES.has(h)) return h;
+    if (h === 'about') return 'about';
+    return null;
+  }
+
   function sync() {
     syncAccent();
     document.documentElement.classList.toggle('on-landing', HOME.includes(location.hash));
@@ -185,13 +204,21 @@
     if (!root) return null;
     const onHome = HOME.includes(location.hash);
 
+    // Arriving at a view puts you at its top. Browsers keep the scroll offset
+    // across a hash change, so without this you land halfway down a case study
+    // you have never seen, at whatever depth you left the last one.
+    const page = pageOf(location.hash);
+    if (page && page !== st.page) {
+      if (st.page !== undefined) window.scrollTo(0, 0);
+      st.page = page;
+    }
+
     if (onHome && root.hidden) {
       root.hidden = false;
       if (!root.__built) build(root);
       root.scrollTop = st.scroll;     // back where the grid was left
     } else if (!onHome && !root.hidden) {
       root.hidden = true;             // another view is up
-      window.scrollTo(0, 0);          // the landing scrolls inside itself; the page does not
     }
     return root;
   }
