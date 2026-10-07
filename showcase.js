@@ -26,9 +26,10 @@
     { title: 'EcoBites', blurb: 'food delivery pointed at food insecurity in New Jersey',
       accent: '#0d7049', year: '2024', page: 'eco', tags: ['Civic tech', 'Two-sided service'],
       media: { kind: 'video', ar: 1.55, src: './eco/card-ecobites.mp4?v=1', poster: './eco/card-ecobites-poster.webp?v=1' } },
-    { title: 'Catalogue', blurb: 'online shopping as editorial storytelling',
-      accent: '#382565', year: '2025', page: 'cat', tags: ['Commerce', 'Editorial'],
-      media: { kind: 'image', ar: 0.95, src: './cat/card-catalogue.webp' } },
+    { title: 'Cyberfeminist Networks', blurb: 'an exhibition that could only exist on the web',
+      accent: '#8a1f6a', year: '2025', page: 'net', tags: ['Curation', 'Net art'],
+      media: { kind: 'video', ar: 1.5, src: './netart/card-netart.mp4?v=1',
+               poster: './netart/card-netart-poster.webp?v=1' } },
     { title: 'TruePay', blurb: 'an AI fraud layer that explains itself',
       accent: '#254a65', year: '2023', page: 'pay', tags: ['Fintech', 'AI trust'],
       media: { kind: 'video', ar: 0.653, src: './pay/card-truepay.mp4', poster: './pay/card-truepay-poster.webp' } }
