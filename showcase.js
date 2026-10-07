@@ -23,16 +23,16 @@
     { title: 'New Craft Society', blurb: 'a tool that makes design process visible. 100+ beta signups',
       accent: '#456525', year: '2026', page: 'ncs', tags: ['Design tooling', '0\u21921'],
       media: { kind: 'video', ar: 1.5, src: './deck/card-ncs-home.mp4?v=2', poster: './deck/card-ncs-home-poster.webp?v=2' } },
+    { title: 'TruePay', blurb: 'an AI fraud layer that explains itself',
+      accent: '#254a65', year: '2023', page: 'pay', tags: ['Fintech', 'AI trust'],
+      media: { kind: 'video', ar: 0.653, src: './pay/card-truepay.mp4', poster: './pay/card-truepay-poster.webp' } },
     { title: 'EcoBites', blurb: 'food delivery pointed at food insecurity in New Jersey',
       accent: '#0d7049', year: '2024', page: 'eco', tags: ['Civic tech', 'Two-sided service'],
       media: { kind: 'video', ar: 1.55, src: './eco/card-ecobites.mp4?v=1', poster: './eco/card-ecobites-poster.webp?v=1' } },
     { title: 'Cyberfem Networks', blurb: 'an exhibition that could only exist on the web',
       accent: '#8a1f6a', year: '2025', page: 'net', tags: ['Curation', 'Net art'],
       media: { kind: 'video', ar: 1.5, src: './netart/card-netart.mp4?v=4',
-               poster: './netart/card-netart-poster.webp?v=4' } },
-    { title: 'TruePay', blurb: 'an AI fraud layer that explains itself',
-      accent: '#254a65', year: '2023', page: 'pay', tags: ['Fintech', 'AI trust'],
-      media: { kind: 'video', ar: 0.653, src: './pay/card-truepay.mp4', poster: './pay/card-truepay-poster.webp' } }
+               poster: './netart/card-netart-poster.webp?v=4' } }
   ];
 
   const SECTIONS = [
