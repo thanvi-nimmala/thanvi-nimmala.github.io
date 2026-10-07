@@ -28,8 +28,8 @@
       media: { kind: 'video', ar: 1.55, src: './eco/card-ecobites.mp4?v=1', poster: './eco/card-ecobites-poster.webp?v=1' } },
     { title: 'Cyberfeminist Networks', blurb: 'an exhibition that could only exist on the web',
       accent: '#8a1f6a', year: '2025', page: 'net', tags: ['Curation', 'Net art'],
-      media: { kind: 'video', ar: 1.5, src: './netart/card-netart.mp4?v=1',
-               poster: './netart/card-netart-poster.webp?v=1' } },
+      media: { kind: 'video', ar: 1.5, src: './netart/card-netart.mp4?v=2',
+               poster: './netart/card-netart-poster.webp?v=2' } },
     { title: 'TruePay', blurb: 'an AI fraud layer that explains itself',
       accent: '#254a65', year: '2023', page: 'pay', tags: ['Fintech', 'AI trust'],
       media: { kind: 'video', ar: 0.653, src: './pay/card-truepay.mp4', poster: './pay/card-truepay-poster.webp' } }
