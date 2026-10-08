@@ -190,7 +190,7 @@ html.on-landing{background:#fff}
 @media (prefers-reduced-motion:reduce){.snd img,.lx-garden img,.ab-flora img,.ab-flora-l img{transition:none}}
 /* About — Bill Guo's about page (one narrow centred column, a small visual at the
    top, a few short paragraphs, nothing else) in Jenn Choi's type. */
-.ab{max-width:440px;margin:0 auto;padding:92px 0 140px}
+.ab{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:92px 0 140px}
 .ab-lbl{font:500 11px/1.55 'DM Mono',ui-monospace,monospace;color:rgba(0,0,0,.35)}
 /* One photograph, in the margin beside the top of the column, put through the
    same dither as the lilies — see about/dither.py. Going near it brings the
@@ -211,9 +211,18 @@ html.on-landing{background:#fff}
 .ab-links a:hover{color:#1a1815}
 /* the same lily as the work page, the other way round, growing out of the
    bottom right corner of the page. sound.js fills it; see .lx-garden. */
+/* The box is wider than the drawing, with the slack all on the side facing the
+   column, so the bloom reaching that way crosses into the text instead of being
+   sheared off against the edge of its own box. --art is the drawing's width; the
+   box still crops the stalk at the foot. .ab holds a stacking context above
+   these, so the words stay on top of whatever reaches them. */
 .ab-flora{position:absolute;right:0;bottom:0;z-index:0;pointer-events:none;
-  width:clamp(300px,32vw,460px);height:clamp(380px,64vh,700px);overflow:hidden}
-.ab-flora img{position:absolute;top:0;right:-6%;width:112%;height:auto;
+  /* sized so the bloom crosses the column's edge by about the same 30px at any
+     width: the drawing's inner edge lands at 100% - 0.945*art, and the column's
+     at 50% + 220px */
+  --art:clamp(340px,calc(53vw - 201px),680px);
+  width:calc(var(--art) + 70px);height:clamp(380px,64vh,700px);overflow:hidden}
+.ab-flora img{position:absolute;top:0;right:calc(var(--art) * -0.055);width:var(--art);height:auto;
   min-height:100%;object-fit:cover;object-position:top center;
   transform:scale(1);transform-origin:70% 20%;
   transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
@@ -506,7 +515,7 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
 }
 .pghint{display:flex;justify-content:space-between;gap:20px;margin-top:12px;font:400 10px/1.6 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.45)}
 .pghint b{font-weight:500;color:var(--accent)}
-</style><script src="./image-slot.js?v=2"></script><script src="./bust.js?v=2"></script><script src="./bust-control.js?v=2"></script><script src="./showcase.js?v=81" defer></script><script src="./reveal.js?v=2" defer></script><script src="./intro.js?v=12" defer></script><script src="./pin.js?v=3" defer></script><script src="./sound.js?v=28" defer></script></helmet>
+</style><script src="./image-slot.js?v=2"></script><script src="./bust.js?v=2"></script><script src="./bust-control.js?v=2"></script><script src="./showcase.js?v=81" defer></script><script src="./reveal.js?v=2" defer></script><script src="./intro.js?v=12" defer></script><script src="./pin.js?v=3" defer></script><script src="./sound.js?v=29" defer></script></helmet>
 
 <div style="min-height:100vh;background:var(--paper)">
 
