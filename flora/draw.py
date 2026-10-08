@@ -3,15 +3,24 @@ import numpy as np
 from PIL import Image
 from stipple import *
 
+# The same plant faces either way: the work page wants the stalk entering from
+# the left, the about page from the right. Mirroring the control points rather
+# than flipping the finished image keeps the light coming from the upper left in
+# both, which is what the shading is built on.
+MIRROR = False
+def mx(x):  return (CELLS_W - x) if MIRROR else x
+def ma(a):  return (math.pi - a) if MIRROR else a
+
 FRONT = (13.0, 25.0, 14.5, 0.10, -0.70, 0.00)
 BACK  = (38.5, 20.0,  8.4, -0.50, -2.30, 0.22)
 TOP   = (33.5,  7.5)
 
 def head(X, Y, cov, tone, mat, cx, cy, L, turn, face, lift, wf=0.62, sr=1.0, seed=1):
+    cx = mx(cx)
     darken(cov, tone, blob_mask(X, Y, cx, cy, L*1.18), 0.26)
     order = sorted(range(6), key=lambda i: -math.sin(turn + math.pi/2 + i*math.pi/3))
     for n, i in enumerate(order):
-        a = turn + math.pi/2 + i*math.pi/3
+        a = ma(turn + math.pi/2 + i*math.pi/3)
         Wd = L*wf
         darken(cov, tone, tepal_mask(X, Y, cx, cy, a, L*1.02, Wd*1.45, u0=0.10), 0.22)
         put(cov, tone, mat, tepal_mask(X, Y, cx, cy, a, L, Wd, u0=0.06),
@@ -21,18 +30,19 @@ def head(X, Y, cov, tone, mat, cx, cy, L, turn, face, lift, wf=0.62, sr=1.0, see
     # dark anthers on the ends, reaching about half way out rather than past the
     # petals, which is where they actually sit
     for off, r in [(-.78,.46), (-.46,.56), (-.14,.62), (.18,.60), (.5,.52), (.82,.44)]:
-        a = turn + face + off
+        a = ma(turn + face + off)
         ax, ay = cx + math.cos(a)*L*r*sr, cy - math.sin(a)*L*r*sr
         put(cov, tone, mat, seg_mask(X, Y, cx, cy, ax, ay, L*0.022), 0.46 + lift, PETAL)
         put(cov, tone, mat, blob_mask(X, Y, ax, ay, L*0.052, L*0.034), 0.05 + lift, DARK)
 
 def leaf(X, Y, cov, tone, mat, x0, y0, x1, y1, w, lift=0.0):
+    x0, x1 = mx(x0), mx(x1)
     a = math.atan2(-(y1-y0), x1-x0); L = math.hypot(x1-x0, y1-y0)
     put(cov, tone, mat, tepal_mask(X, Y, x0, y0, a, L, w),
         leaf_tone(X, Y, x0, y0, a, L, w, lift), LEAF)
 
 def stem(X, Y, cov, tone, mat, x0, y0, x1, y1, w, lift=0.0):
-    put(cov, tone, mat, seg_mask(X, Y, x0, y0, x1, y1, w), 0.40 + lift, LEAF)
+    put(cov, tone, mat, seg_mask(X, Y, mx(x0), y0, mx(x1), y1, w), 0.40 + lift, LEAF)
 
 def stalk(X, Y, cov, tone, mat):
     # The stalk comes in from the bottom right and leans across, so the plant
@@ -51,6 +61,7 @@ def stalk(X, Y, cov, tone, mat):
     leaf(X, Y, cov, tone, mat, 44.0, 74.0, 53.0, 68.5, 2.7, 0.10)
 
 def bud(X, Y, cov, tone, mat, x, y, ang, L, w, lift):
+    x, ang = mx(x), ma(ang)
     darken(cov, tone, blob_mask(X, Y, x, y, w*0.9, L*0.65), 0.18)
     put(cov, tone, mat, spindle_mask(X, Y, x, y, ang, L, w),
         spindle_tone(X, Y, x, y, ang, L, w, lift), PETAL)
@@ -95,6 +106,9 @@ def to_png(cov, tone, mat, path, scale=2, grain=0.10, seed=7):
     return img.size, int((dots == 1).sum())
 
 if __name__ == '__main__':
-    for name, op in (('lily-open', True), ('lily-buds', False)):
-        c, t, m = scene(op)
-        print(name, to_png(c, t, m, name + '.png'))
+    for side, flip in (('left', True), ('right', False)):
+        MIRROR = flip          # read by mx/ma at call time
+        for state, op in (('open', True), ('buds', False)):
+            name = 'lily-%s-%s' % (side, state)
+            c, t, m = scene(op)
+            print(name, to_png(c, t, m, name + '.png'))

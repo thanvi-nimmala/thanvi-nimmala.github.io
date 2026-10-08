@@ -188,7 +188,7 @@ html.on-landing{background:#fff}
 @media (min-width:901px){.lx-rail{display:flex;flex-direction:column;
   min-height:calc(100vh - 110px)}}
 @media (max-height:730px),(max-width:900px){.lx-garden{display:none}}
-@media (prefers-reduced-motion:reduce){.snd rect,.lx-garden img{transition:none}}
+@media (prefers-reduced-motion:reduce){.snd rect,.lx-garden img,.ab-flora img{transition:none}}
 /* About — Bill Guo's about page (one narrow centred column, a small visual at the
    top, a few short paragraphs, nothing else) in Jenn Choi's type. The visual is
    the draggable photo pile — see pile.js. */
@@ -211,6 +211,18 @@ html.on-landing{background:#fff}
 .ab-links a{font:400 13px/1 'IBM Plex Sans',system-ui,sans-serif;color:rgba(0,0,0,.55);
   text-decoration:none;border-bottom:1px solid rgba(0,0,0,.18);padding-bottom:5px;transition:color .2s}
 .ab-links a:hover{color:#1a1815}
+/* the same lily as the work page, the other way round, growing out of the
+   bottom right corner of the page. sound.js fills it; see .lx-garden. */
+.ab-flora{position:absolute;right:0;bottom:0;z-index:0;pointer-events:none;
+  width:clamp(300px,32vw,460px);height:clamp(380px,64vh,700px);overflow:hidden}
+.ab-flora img{position:absolute;top:0;right:-6%;width:112%;height:auto;
+  transform:scale(1);transform-origin:70% 20%;
+  transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.ab-flora .open{opacity:0;transform:scale(.97)}
+.sound-on .ab-flora .open{opacity:1;transform:scale(1)}
+.sound-on .ab-flora .shut{opacity:0;transform:scale(1.03)}
+/* the column is centred, so below this it would sit under the text */
+@media (max-width:1100px),(max-height:620px){.ab-flora{display:none}}
 /* no margins to scatter into: the photos go back to a pile above the text, and
    stay draggable within the page */
 @media (max-width:1100px){
@@ -489,7 +501,7 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
 }
 .pghint{display:flex;justify-content:space-between;gap:20px;margin-top:12px;font:400 10px/1.6 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.45)}
 .pghint b{font-weight:500;color:var(--accent)}
-</style><script src="./image-slot.js?v=2"></script><script src="./bust.js?v=2"></script><script src="./bust-control.js?v=2"></script><script src="./showcase.js?v=81" defer></script><script src="./reveal.js?v=2" defer></script><script src="./intro.js?v=12" defer></script><script src="./pin.js?v=3" defer></script><script src="./pile.js?v=4" defer></script><script src="./sound.js?v=21" defer></script></helmet>
+</style><script src="./image-slot.js?v=2"></script><script src="./bust.js?v=2"></script><script src="./bust-control.js?v=2"></script><script src="./showcase.js?v=81" defer></script><script src="./reveal.js?v=2" defer></script><script src="./intro.js?v=12" defer></script><script src="./pin.js?v=3" defer></script><script src="./pile.js?v=4" defer></script><script src="./sound.js?v=23" defer></script></helmet>
 
 <div style="min-height:100vh;background:var(--paper)">
 
@@ -507,7 +519,7 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
 </sc-if>
 
 <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
-<div class="jc"><div class="jc-top"><a href="#top" onClick="{{ goHome }}">&#8592; All work</a><span>{{ clock }}</span></div><div class="ab-pile"><div class="pile-card c1" data-w="198px" data-rot="-7"><img src="./about/selfie.webp" alt="Thanvi" width="900" height="1191"></div><div class="pile-card c2" data-w="186px" data-rot="5"><img src="./about/steps.webp" alt="Thanvi on the chapel steps at graduation" width="900" height="1349"></div><div class="pile-card c3" data-w="210px" data-rot="-4"><img src="./about/library.webp" alt="Thanvi in the library stacks, graduation stole on" width="900" height="1351"></div></div><div class="ab"><div class="ab-lbl ab-warpable">About Thanvi Nimmala</div><p class="ab-p ab-warpable">I&rsquo;m a product designer based in the NYC metropolitan area. I like making design feel fun and useful, and I build the thing rather than a picture of it.</p><p class="ab-p ab-warpable">I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, and a minor in Digital Communication, Information &amp; Media.</p><p class="ab-p ab-warpable">Since then I have been Product Design Lead on New Craft Society at CoCreate, where I took a capture tool from nothing to a public beta. I work end to end &mdash; research, flows, interface, design systems &mdash; and prototype in React and SwiftUI, so a decision can be tried instead of argued about.</p><p class="ab-p ab-warpable">I&rsquo;m currently looking for full-time design work.</p><p class="ab-p ab-warpable">Outside of design I am usually painting, reading, or chasing a good playlist.</p><div class="ab-links"><a href="mailto:thanvi.nimmala@gmail.com">Email &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn &#8599;</a></div></div></div>
+<div class="jc"><div class="jc-top"><a href="#top" onClick="{{ goHome }}">&#8592; All work</a><span>{{ clock }}</span></div><div class="ab-pile"><div class="pile-card c1" data-w="198px" data-rot="-7"><img src="./about/selfie.webp" alt="Thanvi" width="900" height="1191"></div><div class="pile-card c2" data-w="186px" data-rot="5"><img src="./about/steps.webp" alt="Thanvi on the chapel steps at graduation" width="900" height="1349"></div><div class="pile-card c3" data-w="210px" data-rot="-4"><img src="./about/library.webp" alt="Thanvi in the library stacks, graduation stole on" width="900" height="1351"></div></div><div class="ab"><div class="ab-lbl ab-warpable">About Thanvi Nimmala</div><p class="ab-p ab-warpable">I&rsquo;m a product designer based in the NYC metropolitan area. I like making design feel fun and useful, and I build the thing rather than a picture of it.</p><p class="ab-p ab-warpable">I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, and a minor in Digital Communication, Information &amp; Media.</p><p class="ab-p ab-warpable">Since then I have been Product Design Lead on New Craft Society at CoCreate, where I took a capture tool from nothing to a public beta. I work end to end &mdash; research, flows, interface, design systems &mdash; and prototype in React and SwiftUI, so a decision can be tried instead of argued about.</p><p class="ab-p ab-warpable">I&rsquo;m currently looking for full-time design work.</p><p class="ab-p ab-warpable">Outside of design I am usually painting, reading, or chasing a good playlist.</p><div class="ab-links"><a href="mailto:thanvi.nimmala@gmail.com">Email &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn &#8599;</a></div></div><div class="ab-flora"></div></div>
 </sc-if>
 
 <sc-if value="{{ isNcs }}" hint-placeholder-val="{{ false }}">

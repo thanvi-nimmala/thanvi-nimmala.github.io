@@ -309,34 +309,56 @@
   // the stem. flora/draw.py is the source. Swapping the two is a cross-fade, and
   // the dots of one state resolve into the other. Sizes are CSS, since the rail
   // is sticky and the lily has to shrink with the viewport.
-  const FLORA = [
-    ['shut', './flora/lily-buds.png', 'Lily buds'],
-    ['open', './flora/lily-open.png', 'Lilies in flower']
+  // Two plantings, facing opposite ways: the work page's rail wants the stalk
+  // entering from the left, the about page's bottom right corner from the right.
+  // The art is mirrored in the generator rather than flipped in CSS, so the light
+  // still falls from the upper left in both.
+  const BEDS = [
+    // where it goes,  the box,      which way the stalk leans
+    ['.lx-rail',       'lx-garden',  'left'],
+    ['.ab-flora',      null,         'right']     // this one is in the markup
   ];
-  // showcase.js builds the rail on its own schedule, so watch for it — and stop
-  // watching the moment it is planted, since the clock and the text decode mutate
-  // the page every frame and this would be asked on all of them.
-  let watch = null;
-  function plant() {
-    const rail = document.querySelector('.lx-rail');
-    if (!rail || rail.querySelector('.lx-garden')) return;
-    if (watch) { watch.disconnect(); watch = null; }
-    const bed = document.createElement('div');
-    bed.className = 'lx-garden';
-    bed.setAttribute('aria-hidden', 'true');
-    FLORA.forEach(([cls, src, alt]) => {
+  const STATES = [['shut', 'buds', 'Lily buds'], ['open', 'open', 'Lilies in flower']];
+
+  function fill(box, side) {
+    box.setAttribute('aria-hidden', 'true');
+    STATES.forEach(([cls, state, alt]) => {
       const img = document.createElement('img');
       img.className = cls;
-      img.src = src;
+      img.src = './flora/lily-' + side + '-' + state + '.png';
       img.alt = alt;
       img.width = 400; img.height = 600;     // reserve the space before it loads
       img.decoding = 'async';
-      bed.appendChild(img);
+      box.appendChild(img);
     });
-    rail.appendChild(bed);
   }
-  watch = new MutationObserver(plant);
-  watch.observe(document.body, { childList: true, subtree: true });
+
+  // The runtime rebuilds its own DOM on every view change, so a bed planted on
+  // the about page is gone the next time you come back to it: this keeps
+  // watching rather than planting once. Mutations are coalesced onto a frame,
+  // because the clock and the text decode touch the DOM constantly and this
+  // would otherwise be asked on every one of them.
+  function plant() {
+    BEDS.forEach(([host, cls, side]) => {
+      const el = document.querySelector(host);
+      if (!el) return;
+      if (!cls) {                        // the box is already in the markup
+        if (!el.firstChild) fill(el, side);
+        return;
+      }
+      if (el.querySelector('.' + cls)) return;
+      const box = document.createElement('div');
+      box.className = cls;
+      fill(box, side);
+      el.appendChild(box);
+    });
+  }
+  let queued = false;
+  new MutationObserver(() => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; plant(); });
+  }).observe(document.body, { childList: true, subtree: true });
 
   const btn = document.createElement('button');
   btn.className = 'snd';
