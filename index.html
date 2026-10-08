@@ -86,7 +86,13 @@ html.on-landing{background:#fff}
 .on-landing .site-nav{display:none!important}
 .lx-clock{position:absolute;top:28px;right:20px;font-size:13px;line-height:30px;color:var(--jc-grey)}
 
-.lx{display:grid;grid-template-columns:312px minmax(0,1fr);gap:32px;padding:70px 20px 90px}
+/* The space after the last card belongs to the grid column, not to .lx: a
+   sticky box is confined to its grid area, so bottom padding here would release
+   the rail that far above the end of the scroll and show the stem's cut edge
+   hanging in mid-page. On the grid it extends the area the rail may stick in,
+   and the stem stays running off the bottom of the screen. */
+.lx{display:grid;grid-template-columns:312px minmax(0,1fr);gap:32px;padding:70px 20px 0}
+.lx-grid{padding-bottom:90px}
 .lx-rail{position:sticky;top:70px;align-self:start}
 .lx-name{font:300 34px/1.05 'Crimson Pro',Georgia,serif;letter-spacing:-.34px}
 .lx-line{margin-top:22px;font-size:14px;line-height:1.35;color:var(--jc-grey)}
@@ -133,7 +139,8 @@ html.on-landing{background:#fff}
 .lx-card:hover,.lx-card:focus-visible{color:#456525}
 
 @media (max-width:900px){
-  .lx{grid-template-columns:minmax(0,1fr);gap:44px;padding:64px 20px 72px}
+  .lx{grid-template-columns:minmax(0,1fr);gap:44px;padding:64px 20px 0}
+  .lx-grid{padding-bottom:72px}
   .lx-rail{position:static}
   .lx-grid{grid-template-columns:minmax(0,1fr)}
   .lx-col{gap:44px}
@@ -170,7 +177,9 @@ html.on-landing{background:#fff}
    off by it, so the stalk runs out of the bottom of the page rather than ending
    in mid-air. The rail stretches to the viewport to make that leftover exist. */
 .lx-garden{position:relative;flex:1;min-height:0;margin-top:20px;
-  overflow:hidden;pointer-events:none}
+  overflow:hidden;pointer-events:none;
+  -webkit-mask-image:linear-gradient(#000 calc(100% - 26px),transparent);
+  mask-image:linear-gradient(#000 calc(100% - 26px),transparent)}
 .lx-garden img{position:absolute;top:0;left:0;width:100%;height:auto;
   /* the stalk is drawn far longer than any window needs, so it is always the
      crop that ends it; on a window taller even than that, the drawing covers
