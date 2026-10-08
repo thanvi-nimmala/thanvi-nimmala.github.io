@@ -87,6 +87,41 @@ def scene(open_):
         bud(X, Y, cov, tone, mat, 14.4, 21.0, math.pi/2+0.24, 15.0, 6.2, 0.0)
     return downsample(cov), downsample(tone), mat[::SS, ::SS]
 
+# ---- a second bunch -------------------------------------------------------
+# A younger stem, not the same plant moved: one flower open and two still shut,
+# where the first spray has two open and one shut. Shorter blooms, a straighter
+# stalk, and the leaves paired up it rather than alternating wide.
+B_FLOWER = (19.0, 25.0, 12.2, 0.16, -0.58, 0.00)
+B_HIGH   = (36.5, 15.0)        # the tall bud at the top
+B_LOW    = (31.5, 42.0)        # the small one coming later, down the stem
+
+def stalk_b(X, Y, cov, tone, mat):
+    stem(X, Y, cov, tone, mat, 42.0, 113.0, 39.5, 92.0, 1.9)
+    stem(X, Y, cov, tone, mat, 39.5, 92.0, 35.0, 68.0, 1.8)
+    stem(X, Y, cov, tone, mat, 35.0, 68.0, 29.0, 48.0, 1.5)
+    stem(X, Y, cov, tone, mat, 29.0, 48.0, 21.0, 31.0, 1.2)
+    stem(X, Y, cov, tone, mat, 29.5, 49.0, 35.8, 19.0, 1.1, 0.08)
+    stem(X, Y, cov, tone, mat, 29.2, 48.5, 31.2, 45.5, 1.0, 0.12)
+    for (ax, ay, bx, by, w, lift) in [
+            (32.0, 56.0, 20.5, 51.0, 3.3, 0.00), (32.4, 57.5, 43.5, 52.5, 2.8, 0.12),
+            (36.0, 74.0, 24.5, 69.5, 3.2, 0.00), (36.4, 75.5, 47.5, 71.0, 2.7, 0.12),
+            (40.0, 94.0, 28.5, 90.0, 3.1, 0.00), (40.4, 95.5, 51.5, 91.5, 2.6, 0.12),
+            (41.5, 106.0, 30.5, 102.5, 2.9, 0.00)]:
+        leaf(X, Y, cov, tone, mat, ax, ay, bx, by, w, lift)
+
+def scene_b(open_):
+    X, Y, cov, tone, mat = canvas()
+    stalk_b(X, Y, cov, tone, mat)
+    bud(X, Y, cov, tone, mat, B_HIGH[0], B_HIGH[1], math.pi/2 - 0.16, 10.6, 4.6, 0.22)
+    bud(X, Y, cov, tone, mat, B_LOW[0], B_LOW[1], math.pi/2 - 0.52, 7.0, 3.2, 0.30)
+    if open_:
+        head(X, Y, cov, tone, mat, B_FLOWER[0], B_FLOWER[1], B_FLOWER[2],
+             B_FLOWER[3], B_FLOWER[4], B_FLOWER[5], seed=9)
+    else:
+        stem(X, Y, cov, tone, mat, 21.0, 31.0, 20.0, 25.5, 1.1)
+        bud(X, Y, cov, tone, mat, 20.2, 22.0, math.pi/2 + 0.32, 13.0, 5.6, 0.0)
+    return downsample(cov), downsample(tone), mat[::SS, ::SS]
+
 # tinting: the dots are coloured by what they are and how dark it is there
 INK = {
     PETAL: ((0x5c, 0x12, 0x43), (0xd4, 0x6b, 0xa8)),
@@ -112,9 +147,11 @@ def to_png(cov, tone, mat, path, scale=2, grain=0.10, seed=7):
     return img.size, int((dots == 1).sum())
 
 if __name__ == '__main__':
-    for side, flip in (('left', True), ('right', False)):
+    for art, build, side, flip in (('lily-left',  scene,   'left',  True),
+                                   ('lily-right', scene,   'right', False),
+                                   ('sprig-left', scene_b, 'left',  True)):
         MIRROR = flip          # read by mx/ma at call time
         for state, op in (('open', True), ('buds', False)):
-            name = 'lily-%s-%s' % (side, state)
-            c, t, m = scene(op)
+            name = '%s-%s' % (art, state)
+            c, t, m = build(op)
             print(name, to_png(c, t, m, name + '.png'))

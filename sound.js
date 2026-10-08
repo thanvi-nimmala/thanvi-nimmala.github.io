@@ -187,27 +187,32 @@
   //
   // Swapping the two states is a cross-fade driven by one class on <html>, so
   // nothing has to be wired between the switch and the flowers it opens.
-  // Two plantings, facing opposite ways: the work page's rail wants the stalk
-  // entering from the left, the about page's bottom right corner from the right.
-  // The art is mirrored in the generator rather than flipped in CSS, so the light
-  // still falls from the upper left in both.
+  // Three plantings. The work page's rail wants the stalk entering from the
+  // left, the about page's bottom right corner from the right, and its bottom
+  // left a second, younger bunch — one flower open where the other has two. The
+  // art is mirrored in the generator rather than flipped in CSS, so the light
+  // still falls from the upper left in all of them.
   const BEDS = [
-    // where it goes,  the box,      which way the stalk leans
-    ['.lx-rail',       'lx-garden',  'left'],
-    ['.ab-flora',      null,         'right']     // this one is in the markup
+    // where it goes,   the box,      which drawing
+    ['.lx-rail',        'lx-garden',  'lily-left'],
+    ['.ab-flora',       null,         'lily-right'],   // these two are in the
+    ['.ab-flora-l',     null,         'sprig-left']    // markup already
   ];
-  const SIZES = { left: [400, 862], right: [400, 862], btn: [96, 96] };
+  const SIZES = {
+    'lily-left': [400, 862], 'lily-right': [400, 862],
+    'sprig-left': [400, 862], 'lily-btn': [96, 96]
+  };
   const STATES = [['shut', 'buds'], ['open', 'open']];
 
   // The lilies are decoration, and on the switch the label is the switch's own,
   // so they are silent to a screen reader either way.
-  function fill(box, side) {
+  function fill(box, art) {
     STATES.forEach(([cls, state]) => {
       const img = document.createElement('img');
       img.className = cls;
-      img.src = './flora/lily-' + side + '-' + state + '.png';
+      img.src = './flora/' + art + '-' + state + '.png';
       img.alt = '';
-      const [w, h] = SIZES[side];
+      const [w, h] = SIZES[art];
       img.width = w; img.height = h;         // reserve the space before it loads
       img.decoding = 'async';
       box.appendChild(img);
@@ -220,18 +225,18 @@
   // because the clock and the text decode touch the DOM constantly and this
   // would otherwise be asked on every one of them.
   function plant() {
-    BEDS.forEach(([host, cls, side]) => {
+    BEDS.forEach(([host, cls, art]) => {
       const el = document.querySelector(host);
       if (!el) return;
       if (!cls) {                        // the box is already in the markup
-        if (!el.firstChild) { el.setAttribute('aria-hidden', 'true'); fill(el, side); }
+        if (!el.firstChild) { el.setAttribute('aria-hidden', 'true'); fill(el, art); }
         return;
       }
       if (el.querySelector('.' + cls)) return;
       const box = document.createElement('div');
       box.className = cls;
       box.setAttribute('aria-hidden', 'true');
-      fill(box, side);
+      fill(box, art);
       el.appendChild(box);
     });
   }
@@ -245,7 +250,7 @@
   const btn = document.createElement('button');
   btn.className = 'snd';
   btn.type = 'button';
-  fill(btn, 'btn');                        // the same lily, seen head on
+  fill(btn, 'lily-btn');                   // the same lily, seen head on
   const label = document.createElement('span');
   label.className = 'snd-sr';
   btn.appendChild(label);
