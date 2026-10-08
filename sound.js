@@ -183,132 +183,19 @@
     if (on && e.target.closest && e.target.closest('.pile-card')) S.drop();
   }, { passive: true });
 
-  // ---- the switch -----------------------------------------------------------
-  // A lily: buds while the sound is off, open while it is on. Drawn as square
-  // cells with no anti-aliasing, so it carries the same halftone the sound does.
-  // Each cell fades on its own clock, timed by how far it is from the root of the
-  // drawing, so the stem opens from the ground up and closes back down.
+  // ---- the lilies -----------------------------------------------------------
+  // A lily: buds while the sound is off, open while it is on, in three places —
+  // the switch, the work page's rail and the about page's bottom right corner.
   //
-  // The art is generated rather than hand-plotted — six tepals struck from the
-  // throat, each one shaded from a dark midrib out and casting a shadow on the
-  // ones already laid down, the stamens clustered on the side the flower faces,
-  // and the long pointed spindles lilies carry before they open. The second
-  // flower and the unopened one are lifted paler, so the stem has front and back.
-  // Two drawings per plant, the same grid, so the layers register cell for cell.
+  // None of it is drawn here. The art is a set of images under flora/, a lily
+  // rendered in continuous tone — veins, speckles, a dark throat, the stamens
+  // clustered at the throat, the long pointed spindles lilies carry before they
+  // open — and then run through Floyd-Steinberg, so it is a field of dots that
+  // thickens where the flower is dark, tinted by what it is: magenta through the
+  // tepals, green down the stem. flora/draw.py and flora/button.py are the source.
   //
-  // Injected rather than written into the markup, so it exists on every view
-  // without the runtime having to know about it.
-  const parse = (rows) => rows.map((r) => r.split(''));
-  // 1 the palest cell through 5 the solid one, . nothing. Five weights rather
-  // than two is what gives the drawing its depth: the throat and the shadow one
-  // petal throws on the next sit at 5, a lit petal face around 2, and the ordered
-  // dither in the generator breaks the steps between them into a halftone.
-  const WEIGHT = { 1: 0.14, 2: 0.34, 3: 0.56, 4: 0.78, 5: 1 };
-
-  const HEAD_BUD = parse([
-    '..........................',
-    '..........................',
-    '...........42.............',
-    '..........324.............',
-    '.........252352...........',
-    '.........412252...........',
-    '.........422335...........',
-    '.........512234...........',
-    '.........5223352..........',
-    '.........5122342..........',
-    '.........4223353..........',
-    '.........4422342..........',
-    '.........2523352..........',
-    '..........42234...........',
-    '..........24342...........',
-    '............32............',
-    '............42............',
-    '............32............',
-    '............42............',
-    '............32............',
-    '............42............',
-    '............33............',
-    '............43............',
-    '............33............',
-    '............33............',
-    '............23............'
-  ]);
-
-  const HEAD_OPEN = parse([
-    '..........................',
-    '..........................',
-    '..........................',
-    '..........42..............',
-    '.........2553.............',
-    '........224252............',
-    '........32522222224.......',
-    '.....232.3255.22243.......',
-    '...3522222242.34524.......',
-    '...225423..3.244223.......',
-    '....522452354232532.......',
-    '....2522225543............',
-    '.........25454445443343...',
-    '.....222242444443333354...',
-    '....222453.343534452.22...',
-    '.....24522.5442422442.....',
-    '....24225.33543253224452..',
-    '....34453.33434.241..244..',
-    '..........324243.252..2...',
-    '..........1344.4..141.....',
-    '............53.24..2532...',
-    '............351.42..353...',
-    '............452.452.232...',
-    '................251.......',
-    '..........................',
-    '..........................'
-  ]);
-
-  const NS = 'http://www.w3.org/2000/svg';
-
-  // One plant, drawn twice over: a closed layer and an open layer in the same
-  // svg, cross-faded by a class on <html>. Keeping both lets CSS do the whole
-  // switch, so a lily on the far side of the page needs no wiring of its own.
-  function plantSvg(closed, open, { stagger = 14, lead = 0, from = 'base' } = {}) {
-    const H = closed.length, W = closed[0].length;
-    const svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 ' + W * 2 + ' ' + H * 2);
-    svg.setAttribute('shape-rendering', 'crispEdges');
-    svg.setAttribute('aria-hidden', 'true');
-    // a spray opens from the foot of the stalk upward; a single head from the
-    // middle out, the way a flower actually opens
-    const ox = (W - 1) / 2, oy = from === 'base' ? H - 1 : (H - 1) / 2;
-    [['bud', closed], ['bloom', open]].forEach(([cls, map]) => {
-      const g = document.createElementNS(NS, 'g');
-      g.setAttribute('class', cls);
-      for (let r = 0; r < H; r++) {
-        for (let c = 0; c < W; c++) {
-          const ch = map[r][c];
-          if (ch === '.') continue;
-          const el = document.createElementNS(NS, 'rect');
-          el.setAttribute('x', c * 2); el.setAttribute('y', r * 2);
-          el.setAttribute('width', 2); el.setAttribute('height', 2);
-          el.style.setProperty('--w', WEIGHT[ch] || 1);
-          const d = Math.hypot((c - ox) * 0.7, r - oy);
-          el.style.transitionDelay = (lead + d * stagger).toFixed(0) + 'ms';
-          g.appendChild(el);
-        }
-      }
-      svg.appendChild(g);
-    });
-    return svg;
-  }
-
-  // The work page's rail runs out of type well before it runs out of column, so
-  // the space under the links is planted: one lily, centred, big enough to be
-  // the thing you look at rather than a flourish in a corner.
-  //
-  // That one is not drawn here. It is a pair of images under flora/, a lily
-  // rendered in continuous tone — veins, speckles, a dark throat — and then run
-  // through Floyd-Steinberg, so it is a field of dots that thickens where the
-  // flower is dark, tinted by what it is: magenta through the tepals, green down
-  // the stem. flora/draw.py is the source. Swapping the two is a cross-fade, and
-  // the dots of one state resolve into the other. Sizes are CSS, since the rail
-  // is sticky and the lily has to shrink with the viewport.
+  // Swapping the two states is a cross-fade driven by one class on <html>, so
+  // nothing has to be wired between the switch and the flowers it opens.
   // Two plantings, facing opposite ways: the work page's rail wants the stalk
   // entering from the left, the about page's bottom right corner from the right.
   // The art is mirrored in the generator rather than flipped in CSS, so the light
@@ -318,16 +205,19 @@
     ['.lx-rail',       'lx-garden',  'left'],
     ['.ab-flora',      null,         'right']     // this one is in the markup
   ];
-  const STATES = [['shut', 'buds', 'Lily buds'], ['open', 'open', 'Lilies in flower']];
+  const SIZES = { left: [400, 862], right: [400, 862], btn: [96, 96] };
+  const STATES = [['shut', 'buds'], ['open', 'open']];
 
+  // The lilies are decoration, and on the switch the label is the switch's own,
+  // so they are silent to a screen reader either way.
   function fill(box, side) {
-    box.setAttribute('aria-hidden', 'true');
-    STATES.forEach(([cls, state, alt]) => {
+    STATES.forEach(([cls, state]) => {
       const img = document.createElement('img');
       img.className = cls;
       img.src = './flora/lily-' + side + '-' + state + '.png';
-      img.alt = alt;
-      img.width = 400; img.height = 862;     // reserve the space before it loads
+      img.alt = '';
+      const [w, h] = SIZES[side];
+      img.width = w; img.height = h;         // reserve the space before it loads
       img.decoding = 'async';
       box.appendChild(img);
     });
@@ -343,12 +233,13 @@
       const el = document.querySelector(host);
       if (!el) return;
       if (!cls) {                        // the box is already in the markup
-        if (!el.firstChild) fill(el, side);
+        if (!el.firstChild) { el.setAttribute('aria-hidden', 'true'); fill(el, side); }
         return;
       }
       if (el.querySelector('.' + cls)) return;
       const box = document.createElement('div');
       box.className = cls;
+      box.setAttribute('aria-hidden', 'true');
       fill(box, side);
       el.appendChild(box);
     });
@@ -363,7 +254,7 @@
   const btn = document.createElement('button');
   btn.className = 'snd';
   btn.type = 'button';
-  btn.appendChild(plantSvg(HEAD_BUD, HEAD_OPEN, { stagger: 20, from: 'middle' }));
+  fill(btn, 'btn');                        // the same lily, seen head on
   const label = document.createElement('span');
   label.className = 'snd-sr';
   btn.appendChild(label);
