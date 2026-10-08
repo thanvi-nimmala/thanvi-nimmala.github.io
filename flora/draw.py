@@ -45,12 +45,14 @@ def stem(X, Y, cov, tone, mat, x0, y0, x1, y1, w, lift=0.0):
     put(cov, tone, mat, seg_mask(X, Y, mx(x0), y0, mx(x1), y1, w), 0.40 + lift, LEAF)
 
 def stalk(X, Y, cov, tone, mat):
-    # The stalk comes in from the bottom right and leans across, so the plant
-    # rises out of the corner rather than standing in the middle of the box; the
-    # bottom of this canvas is cropped by the rail, which is what puts the root
-    # of it off the page. The two stems behind run clear of the front flower's
-    # face — a stem showing through the gap between two tepals reads as in front.
-    stem(X, Y, cov, tone, mat, 48.5, 79.0, 33.0, 55.0, 1.7)
+    # The stalk leans hard where the flowers are and straightens as it drops, the
+    # way a stem actually carries weight, so the plant rises out of the corner
+    # rather than standing in the middle of the box. It runs well past anything
+    # that will be shown: the column crops it, and a taller window simply gets
+    # more stem, which is what keeps it reaching the bottom of the screen.
+    stem(X, Y, cov, tone, mat, 46.0, 113.0, 44.0, 95.0, 2.0)
+    stem(X, Y, cov, tone, mat, 44.0, 95.0, 40.0, 75.0, 1.9)
+    stem(X, Y, cov, tone, mat, 40.0, 75.0, 33.0, 55.0, 1.7)
     stem(X, Y, cov, tone, mat, 33.0, 55.0, 24.5, 37.5, 1.4)
     stem(X, Y, cov, tone, mat, 25.0, 39.0, 15.0, 29.0, 1.2)
     stem(X, Y, cov, tone, mat, 25.6, 40.0, 36.5, 23.0, 1.1, 0.10)
@@ -59,6 +61,10 @@ def stalk(X, Y, cov, tone, mat):
     leaf(X, Y, cov, tone, mat, 35.5, 60.0, 49.5, 54.0, 3.1, 0.10)
     leaf(X, Y, cov, tone, mat, 41.0, 69.0, 26.0, 64.0, 3.4)
     leaf(X, Y, cov, tone, mat, 44.0, 74.0, 53.0, 68.5, 2.7, 0.10)
+    leaf(X, Y, cov, tone, mat, 41.5, 81.0, 28.0, 76.0, 3.5)
+    leaf(X, Y, cov, tone, mat, 43.0, 88.0, 54.0, 83.0, 2.9, 0.10)
+    leaf(X, Y, cov, tone, mat, 44.8, 99.0, 32.0, 94.5, 3.3)
+    leaf(X, Y, cov, tone, mat, 45.6, 107.0, 55.0, 102.0, 2.8, 0.10)
 
 def bud(X, Y, cov, tone, mat, x, y, ang, L, w, lift):
     x, ang = mx(x), ma(ang)

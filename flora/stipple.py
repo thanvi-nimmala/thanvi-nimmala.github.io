@@ -13,7 +13,7 @@ drawing made of dots rather than a halftone of a photograph.
 import math
 import numpy as np
 
-CELLS_W, CELLS_H = 52.0, 78.0
+CELLS_W, CELLS_H = 52.0, 112.0
 DOTS_W = 400                      # the dither grid: one cell of this is one dot
 SS = 2                            # supersampling while drawing
 S = DOTS_W / CELLS_W

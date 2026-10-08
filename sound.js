@@ -327,7 +327,7 @@
       img.className = cls;
       img.src = './flora/lily-' + side + '-' + state + '.png';
       img.alt = alt;
-      img.width = 400; img.height = 600;     // reserve the space before it loads
+      img.width = 400; img.height = 862;     // reserve the space before it loads
       img.decoding = 'async';
       box.appendChild(img);
     });
