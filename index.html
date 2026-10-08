@@ -209,9 +209,16 @@ html.on-landing{background:#fff}
 .ab-pile{position:absolute;inset:0;z-index:2;pointer-events:none;
   user-select:none;-webkit-user-select:none;touch-action:none}
 .ab-pile .pile-card{pointer-events:auto}
-.ab-pile .c1{left:7%;top:180px}
-.ab-pile .c2{left:77%;top:140px}
-.ab-pile .c3{left:9%;top:560px}
+/* One photograph, put through the same dither as the lilies — see
+   about/dither.py. It sits flat and square rather than as a print on the pile,
+   and going near it brings the picture itself back. */
+.ab-pile .pile-card{border-radius:0;background:#f8ecf3;box-shadow:none}
+.ab-pile .pile-card img{position:absolute;inset:0;transition:opacity .35s ease}
+.ab-pile .real{opacity:0}
+.ab-pile .pile-card:hover .real,.ab-pile .pile-card.grabbing .real{opacity:1}
+.ab-pile .pile-card:hover .dots,.ab-pile .pile-card.grabbing .dots{opacity:0}
+/* parked in the margin beside the top of the column, and draggable from there */
+.ab-pile .c1{left:calc(50% - 440px);top:132px}
 .ab-warpable{position:relative;z-index:1;will-change:filter}
 .ab-p{margin:0 0 26px;font:300 16px/1.5 'IBM Plex Sans',system-ui,sans-serif;
   color:rgba(0,0,0,.72);letter-spacing:-.3px}
@@ -236,14 +243,11 @@ html.on-landing{background:#fff}
 /* no margins to scatter into: the photos go back to a pile above the text, and
    stay draggable within the page */
 @media (max-width:1100px){
-  .ab-pile{position:relative;inset:auto;height:360px;max-width:440px;margin:0 auto 46px}
-  .ab-pile .c1{left:0;top:30px}
-  .ab-pile .c2{left:34%;top:0}
-  .ab-pile .c3{left:46%;top:140px}
+  .ab-pile{position:relative;inset:auto;height:200px;max-width:440px;margin:0 auto 38px}
+  .ab-pile .c1{left:0;top:0}
 }
 @media (max-width:520px){.ab{max-width:none;padding:72px 0 90px}
-  .ab-pile{height:320px}
-  .ab-pile .c1{left:0;top:40px}.ab-pile .c2{left:30%;top:0}.ab-pile .c3{left:40%;top:120px}
+  .ab-pile{height:190px}
 }
 /* NCS case study — the section framework Bill Guo uses on billguo.me (overview,
    solutions, research, process, engineering, validation, reflection, up next)
@@ -531,7 +535,7 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
 </sc-if>
 
 <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
-<div class="jc"><div class="jc-top"><a href="#top" onClick="{{ goHome }}">&#8592; All work</a><span>{{ clock }}</span></div><div class="ab-pile"><div class="pile-card c1" data-w="198px" data-rot="-7"><img src="./about/selfie.webp" alt="Thanvi" width="900" height="1191"></div><div class="pile-card c2" data-w="186px" data-rot="5"><img src="./about/steps.webp" alt="Thanvi on the chapel steps at graduation" width="900" height="1349"></div><div class="pile-card c3" data-w="210px" data-rot="-4"><img src="./about/library.webp" alt="Thanvi in the library stacks, graduation stole on" width="900" height="1351"></div></div><div class="ab"><div class="ab-lbl ab-warpable">About Thanvi Nimmala</div><p class="ab-p ab-warpable">I&rsquo;m a product designer based in the NYC metropolitan area. I like making design feel fun and useful, and I build the thing rather than a picture of it.</p><p class="ab-p ab-warpable">I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, and a minor in Digital Communication, Information &amp; Media.</p><p class="ab-p ab-warpable">Since then I have been Product Design Lead on New Craft Society at CoCreate, where I took a capture tool from nothing to a public beta. I work end to end &mdash; research, flows, interface, design systems &mdash; and prototype in React and SwiftUI, so a decision can be tried instead of argued about.</p><p class="ab-p ab-warpable">I&rsquo;m currently looking for full-time design work.</p><p class="ab-p ab-warpable">Outside of design I am usually painting, reading, or chasing a good playlist.</p><div class="ab-links"><a href="mailto:thanvi.nimmala@gmail.com">Email &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn &#8599;</a></div></div><div class="ab-flora"></div></div>
+<div class="jc"><div class="jc-top"><a href="#top" onClick="{{ goHome }}">&#8592; All work</a><span>{{ clock }}</span></div><div class="ab-pile"><div class="pile-card c1" data-w="150px" data-rot="0"><img class="dots" src="./about/selfie-dots.png" alt="Thanvi" width="600" height="794"><img class="real" src="./about/selfie.webp" alt="" width="900" height="1191"></div></div><div class="ab"><div class="ab-lbl ab-warpable">About Thanvi Nimmala</div><p class="ab-p ab-warpable">I&rsquo;m a product designer based in the NYC metropolitan area. I like making design feel fun and useful, and I build the thing rather than a picture of it.</p><p class="ab-p ab-warpable">I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, and a minor in Digital Communication, Information &amp; Media.</p><p class="ab-p ab-warpable">Since then I have been Product Design Lead on New Craft Society at CoCreate, where I took a capture tool from nothing to a public beta. I work end to end &mdash; research, flows, interface, design systems &mdash; and prototype in React and SwiftUI, so a decision can be tried instead of argued about.</p><p class="ab-p ab-warpable">I&rsquo;m currently looking for full-time design work.</p><p class="ab-p ab-warpable">Outside of design I am usually painting, reading, or chasing a good playlist.</p><div class="ab-links"><a href="mailto:thanvi.nimmala@gmail.com">Email &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn &#8599;</a></div></div><div class="ab-flora"></div></div>
 </sc-if>
 
 <sc-if value="{{ isNcs }}" hint-placeholder-val="{{ false }}">
