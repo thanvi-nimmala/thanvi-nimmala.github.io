@@ -147,9 +147,7 @@
     enter: () => { bloom(587.33, { dur: 3.4, level: 0.6 }); bloom(880.00, { dur: 3.0, level: 0.42, at: 0.09 }); bloom(1174.66, { dur: 2.6, level: 0.26, at: 0.19 }); },
     back: () => { bloom(880.00, { dur: 2.2, level: 0.4 }); bloom(587.33, { dur: 3.0, level: 0.5, at: 0.09 }); },
     // one dot of the halftone, alone
-    tick: () => { if (on && wake()) dither(ac.currentTime, 0.1, 1.5); },
-    lift: () => bloom(1318.51, { dur: 0.9, level: 0.3, attack: 0.006 }),
-    drop: () => bloom(293.66, { dur: 1.8, level: 0.5, attack: 0.008 })
+    tick: () => { if (on && wake()) dither(ac.currentTime, 0.1, 1.5); }
   };
   window.__sound = S;
 
@@ -175,13 +173,6 @@
     if (e.target.closest('.lx-card') || e.target.closest('.jc-next a')) S.enter();
     else if (e.target.closest('a[href="#top"]')) S.back();
   }, true);
-
-  document.addEventListener('pointerdown', (e) => {
-    if (on && e.target.closest && e.target.closest('.pile-card')) S.lift();
-  }, { passive: true });
-  document.addEventListener('pointerup', (e) => {
-    if (on && e.target.closest && e.target.closest('.pile-card')) S.drop();
-  }, { passive: true });
 
   // ---- the lilies -----------------------------------------------------------
   // A lily: buds while the sound is off, open while it is on, in three places —
