@@ -195,8 +195,8 @@ html.on-landing{background:#fff}
 /* One photograph, in the margin beside the top of the column, put through the
    same dither as the lilies — see about/dither.py. Going near it brings the
    picture itself back. */
-.ab-photo{position:absolute;left:calc(50% - 440px);top:132px;width:150px;
-  aspect-ratio:4/5;overflow:hidden;background:#f8ecf3}
+.ab-photo{position:absolute;left:0;top:150px;width:230px;
+  aspect-ratio:4/5;overflow:hidden;background:#f0eeeb}
 .ab-photo img{position:absolute;inset:0;display:block;width:100%;height:100%;
   object-fit:cover;transition:opacity .35s ease}
 .ab-photo .real{opacity:0}
@@ -513,7 +513,7 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
 </sc-if>
 
 <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
-<div class="jc"><div class="jc-top"><a href="#top" onClick="{{ goHome }}">&#8592; All work</a><span>{{ clock }}</span></div><div class="ab-photo"><img class="dots" src="./about/selfie-dots.png" alt="Thanvi" width="600" height="794"><img class="real" src="./about/selfie.webp" alt="" width="900" height="1191"></div><div class="ab"><div class="ab-lbl">About Thanvi Nimmala</div><p class="ab-p">I&rsquo;m a product designer based in the NYC metropolitan area. I like making design feel fun and useful, and I build the thing rather than a picture of it.</p><p class="ab-p">I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, and a minor in Digital Communication, Information &amp; Media.</p><p class="ab-p">Since then I have been Product Design Lead on New Craft Society at CoCreate, where I took a capture tool from nothing to a public beta. I work end to end &mdash; research, flows, interface, design systems &mdash; and prototype in React and SwiftUI, so a decision can be tried instead of argued about.</p><p class="ab-p">I&rsquo;m currently looking for full-time design work.</p><p class="ab-p">Outside of design I am usually painting, reading, or chasing a good playlist.</p><div class="ab-links"><a href="mailto:thanvi.nimmala@gmail.com">Email &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn &#8599;</a></div></div><div class="ab-flora"></div></div>
+<div class="jc"><div class="jc-top"><a href="#top" onClick="{{ goHome }}">&#8592; All work</a><span>{{ clock }}</span></div><div class="ab-photo"><img class="dots" src="./about/selfie-dots.png?v=2" alt="Thanvi" width="600" height="794"><img class="real" src="./about/selfie.webp" alt="" width="900" height="1191"></div><div class="ab"><div class="ab-lbl">About Thanvi Nimmala</div><p class="ab-p">I&rsquo;m a product designer based in the NYC metropolitan area. I like making design feel fun and useful, and I build the thing rather than a picture of it.</p><p class="ab-p">I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, and a minor in Digital Communication, Information &amp; Media.</p><p class="ab-p">Since then I have been Product Design Lead on New Craft Society at CoCreate, where I took a capture tool from nothing to a public beta. I work end to end &mdash; research, flows, interface, design systems &mdash; and prototype in React and SwiftUI, so a decision can be tried instead of argued about.</p><p class="ab-p">I&rsquo;m currently looking for full-time design work.</p><p class="ab-p">Outside of design I am usually painting, reading, or chasing a good playlist.</p><div class="ab-links"><a href="mailto:thanvi.nimmala@gmail.com">Email &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn &#8599;</a></div></div><div class="ab-flora"></div></div>
 </sc-if>
 
 <sc-if value="{{ isNcs }}" hint-placeholder-val="{{ false }}">

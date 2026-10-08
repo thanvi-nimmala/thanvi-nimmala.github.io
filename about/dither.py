@@ -2,14 +2,17 @@
 
 Greyscale, a little blur to take the sensor noise out, then the levels pulled
 so the picture is light enough to survive being reduced to dots — a dark frame
-dithers into a solid mass. Floyd-Steinberg after that, and the dots are tinted
-rather than black, so it sits in the same magenta as everything else.
+dithers into a solid mass. Floyd-Steinberg after that.
+
+The dots are the page's ink rather than its magenta: the dither is what ties
+this to the lilies, not the colour, and keeping the photograph neutral leaves
+the flower as the one coloured thing on the page.
 """
 import numpy as np
 from PIL import Image, ImageFilter
 
 def dither(src, out, grid_w, black=0.00, white=0.86, gamma=0.62,
-           blur=1.2, grain=0.055, scale=2, ink=(0x8a, 0x1f, 0x6a), seed=11):
+           blur=1.2, grain=0.055, scale=2, ink=(0x1a, 0x18, 0x15), seed=11):
     im = Image.open(src).convert('L')
     if blur:
         im = im.filter(ImageFilter.GaussianBlur(blur * im.width / 900))
@@ -43,7 +46,7 @@ def dither(src, out, grid_w, black=0.00, white=0.86, gamma=0.62,
     img.save(out)
     return img.size, int(dots.sum())
 
-# 300 dots across a picture shown at 150px puts a dot at half a CSS pixel, which
-# is the size they come out at in the lilies.
+# 300 dots across a picture shown at 230px puts a dot near three quarters of a
+# CSS pixel, the size they come out at in the lilies.
 if __name__ == '__main__':
     print(dither('selfie.webp', 'selfie-dots.png', 300))
