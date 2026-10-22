@@ -17,26 +17,34 @@
   if (window.__showcaseInit) return;   // the runtime executes helmet scripts twice
   window.__showcaseInit = true;
 
-  const PROJECTS = [
+  // Two shelves. Work is the hired-designer case: a brief, a team, a result.
+  // Play is the work that answers to nobody — made because it was interesting.
+  // They share the rail and the grid; only the list changes.
+  const WORK = [
     // Each card shows the thing itself rather than a cover: the ones that are
     // better in motion play, the one that is about a composed page holds still.
     { title: 'New Craft Society', blurb: 'a tool that makes design process visible. 100+ beta signups',
       accent: '#456525', year: '2026', page: 'ncs', tags: ['Design tooling', '0\u21921'],
       media: { kind: 'video', ar: 1.5, src: './deck/card-ncs-home.mp4?v=2', poster: './deck/card-ncs-home-poster.webp?v=2' } },
-    { title: 'Keystone', blurb: 'a payments app that tells you why it stopped you',
+    { title: 'Keystone', blurb: 'an AI-powered fraud model that tells you why it stopped you',
       accent: '#5b7f9a', year: '2023', page: 'pay', tags: ['Fintech', 'AI trust'],
       media: { kind: 'video', ar: 0.653, src: './pay/card-keystone.mp4?v=3', poster: './pay/card-keystone-poster.webp?v=3' } },
     { title: 'EcoBites', blurb: 'food delivery pointed at food insecurity in New Jersey',
       accent: '#0d7049', year: '2024', page: 'eco', tags: ['Civic tech', 'Two-sided service'],
-      media: { kind: 'video', ar: 1.55, src: './eco/card-ecobites.mp4?v=1', poster: './eco/card-ecobites-poster.webp?v=1' } },
+      media: { kind: 'video', ar: 1.55, src: './eco/card-ecobites.mp4?v=1', poster: './eco/card-ecobites-poster.webp?v=1' } }
+  ];
+  const PLAY = [
     { title: 'Cyberfem Networks', blurb: 'an exhibition that could only exist on the web',
       accent: '#8a1f6a', year: '2025', page: 'net', tags: ['Curation', 'Net art'],
       media: { kind: 'video', ar: 1.5, src: './netart/card-netart.mp4?v=4',
                poster: './netart/card-netart-poster.webp?v=4' } }
   ];
+  const ALL = WORK.concat(PLAY);
+  const SHELF = { work: WORK, play: PLAY };
 
   const SECTIONS = [
-    { t: 'Work', href: '#top', here: true },
+    { t: 'Work', href: '#top', view: 'work' },
+    { t: 'Play', href: '#play', view: 'play' },
     { t: 'About', href: '#about' }
   ];
   const LINKS = [
@@ -44,7 +52,7 @@
     { t: 'LinkedIn', href: 'https://www.linkedin.com/in/thanvi-nimmala/', ext: true }
   ];
 
-  const st = { i: 0, el: null, accent: null, scroll: 0 };
+  const st = { hover: null, el: null, accent: null, scroll: { work: 0, play: 0 } };
   window.__stage = st;
 
   // The hash is the authority, not a DOM marker: hashchange fires before the
@@ -52,6 +60,9 @@
   // and the landing would sit over the next one until the next frame. These are
   // the same values the page component treats as home.
   const HOME = ['', '#', '#top', '#work'];
+  const PLAY_HASH = ['#play'];
+  // which shelf a hash puts on the stage, or null for a view the runtime owns
+  const shelfOf = (h) => HOME.includes(h) ? 'work' : PLAY_HASH.includes(h) ? 'play' : null;
 
   // ---- build ---------------------------------------------------------------
 
@@ -62,8 +73,9 @@
     return n;
   };
 
-  function build(stage) {
+  function build(stage, view) {
     stage.innerHTML = '';
+    const projects = SHELF[view];
 
     const clock = el('div', 'lx-clock');
 
@@ -78,7 +90,7 @@
 
     let n = 0;
     const row = (item, arrow) => {
-      const a = el('a', item.here ? 'on' : '',
+      const a = el('a', item.view === view ? 'on' : '',
         '<span class="n">' + String(++n).padStart(2, '0') + '.</span>' +
         '<span class="t"></span><span class="x">' + arrow + '</span>');
       a.querySelector('.t').textContent = item.t;
@@ -96,7 +108,7 @@
     const grid = el('div', 'lx-grid');
     const cols = [el('div', 'lx-col'), el('div', 'lx-col')];
     grid.append(cols[0], cols[1]);
-    const cards = PROJECTS.map((p, i) => {
+    const cards = projects.map((p, i) => {
       const m = p.media;
       const inner = m.kind === 'video'
         ? '<video src="' + m.src + '" poster="' + m.poster + '" autoplay muted="true" ' +
@@ -117,7 +129,7 @@
       // and a card below the fold is left paused until it is scrolled into view
       const v = a.querySelector('video');
       if (v) { v.muted = true; playWhenSeen(v); }
-      a.addEventListener('pointerenter', () => { st.i = i; syncAccent(true); });
+      a.addEventListener('pointerenter', () => { st.hover = p; syncAccent(true); });
       cols[i % 2].appendChild(a);
       return a;
     });
@@ -127,7 +139,8 @@
     stage.append(clock, wrap);
 
     st.el = { stage, wrap, rail, grid, cards, clock };
-    stage.__built = true;
+    st.hover = projects[0];        // the shelf's own colour before anything is hovered
+    stage.__view = view;
     tickClock();
   }
 
@@ -168,8 +181,8 @@
   // an unrecognised hash leaves the accent where it was rather than resetting it.
   function syncAccent(force) {
     const h = location.hash.replace('#', '');
-    const byPage = PROJECTS.find((x) => x.page === h);
-    const p = byPage || (force || HOME.includes(location.hash) ? PROJECTS[st.i] : null);
+    const byPage = ALL.find((x) => x.page === h);
+    const p = byPage || (force || shelfOf(location.hash) ? st.hover : null);
     if (!p || p.accent === st.accent) return;
     st.accent = p.accent;
     document.documentElement.style.setProperty('--accent', p.accent);
@@ -189,9 +202,10 @@
   // Which view a hash names, or null if it names something inside the current one.
   // The case-study scroll-spy rewrites the hash to #s3, #e4 and so on as you read,
   // and an index link points at the same — neither is a change of page.
-  const PAGES = new Set(PROJECTS.map((p) => p.page));
+  const PAGES = new Set(ALL.map((p) => p.page));
   function pageOf(hash) {
-    if (HOME.includes(hash)) return 'home';
+    const shelf = shelfOf(hash);
+    if (shelf) return shelf;
     const h = hash.replace('#', '');
     if (PAGES.has(h)) return h;
     if (h === 'about') return 'about';
@@ -200,10 +214,10 @@
 
   function sync() {
     syncAccent();
-    document.documentElement.classList.toggle('on-landing', HOME.includes(location.hash));
+    const shelf = shelfOf(location.hash);
+    document.documentElement.classList.toggle('on-landing', !!shelf);
     const root = document.getElementById('stage-root');
     if (!root) return null;
-    const onHome = HOME.includes(location.hash);
 
     // Arriving at a view puts you at its top. Browsers keep the scroll offset
     // across a hash change, so without this you land halfway down a case study
@@ -214,12 +228,14 @@
       st.page = page;
     }
 
-    if (onHome && root.hidden) {
+    if (shelf) {
+      // the shelves share one stage, so switching between them rebuilds the grid
+      const arriving = root.hidden || root.__view !== shelf;
+      if (root.__view !== shelf) build(root, shelf);
       root.hidden = false;
-      if (!root.__built) build(root);
-      root.scrollTop = st.scroll;     // back where the grid was left
-    } else if (!onHome && !root.hidden) {
-      root.hidden = true;             // another view is up
+      if (arriving) root.scrollTop = st.scroll[shelf];   // back where it was left
+    } else if (!root.hidden) {
+      root.hidden = true;               // another view is up
     }
     return root;
   }
@@ -231,7 +247,7 @@
   const stageRoot = document.getElementById('stage-root');
   stageRoot.addEventListener('click', (e) => {
     const a = e.target.closest('.lx-card');
-    if (a) { st.scroll = stageRoot.scrollTop; st.i = +a.dataset.i || 0; }
+    if (a && stageRoot.__view) st.scroll[stageRoot.__view] = stageRoot.scrollTop;
   });
 
   // The runtime rewrites the hash itself (the case-study scroll-spy), and those
