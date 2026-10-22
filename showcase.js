@@ -23,7 +23,7 @@
     { title: 'New Craft Society', blurb: 'a tool that makes design process visible. 100+ beta signups',
       accent: '#456525', year: '2026', page: 'ncs', tags: ['Design tooling', '0\u21921'],
       media: { kind: 'video', ar: 1.5, src: './deck/card-ncs-home.mp4?v=2', poster: './deck/card-ncs-home-poster.webp?v=2' } },
-    { title: 'Keystone', blurb: 'a fraud model that shows its working',
+    { title: 'Keystone', blurb: 'a payments app that tells you why it stopped you',
       accent: '#5b7f9a', year: '2023', page: 'pay', tags: ['Fintech', 'AI trust'],
       media: { kind: 'video', ar: 0.653, src: './pay/card-keystone.mp4?v=3', poster: './pay/card-keystone-poster.webp?v=3' } },
     { title: 'EcoBites', blurb: 'food delivery pointed at food insecurity in New Jersey',
