@@ -25,7 +25,7 @@
       media: { kind: 'video', ar: 1.5, src: './deck/card-ncs-home.mp4?v=2', poster: './deck/card-ncs-home-poster.webp?v=2' } },
     { title: 'Cairn', blurb: 'a fraud model that shows its working',
       accent: '#5b7f9a', year: '2023', page: 'pay', tags: ['Fintech', 'AI trust'],
-      media: { kind: 'video', ar: 0.653, src: './pay/card-cairn.mp4?v=1', poster: './pay/card-cairn-poster.webp?v=1' } },
+      media: { kind: 'video', ar: 0.653, src: './pay/card-cairn.mp4?v=2', poster: './pay/card-cairn-poster.webp?v=2' } },
     { title: 'EcoBites', blurb: 'food delivery pointed at food insecurity in New Jersey',
       accent: '#0d7049', year: '2024', page: 'eco', tags: ['Civic tech', 'Two-sided service'],
       media: { kind: 'video', ar: 1.55, src: './eco/card-ecobites.mp4?v=1', poster: './eco/card-ecobites-poster.webp?v=1' } },
