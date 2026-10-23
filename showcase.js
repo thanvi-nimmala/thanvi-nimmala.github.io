@@ -44,8 +44,8 @@
 
   const SECTIONS = [
     { t: 'Work', href: '#top', view: 'work' },
-    { t: 'Play', href: '#play', view: 'play' },
-    { t: 'About', href: '#about' }
+    { t: 'About', href: '#about' },
+    { t: 'Play', href: '#play', view: 'play' }
   ];
   const LINKS = [
     { t: 'Email', href: 'mailto:thanvi.nimmala@gmail.com' },

@@ -146,12 +146,13 @@ def to_png(cov, tone, mat, path, scale=2, grain=0.10, seed=7):
     img.save(path)
     return img.size, int((dots == 1).sum())
 
+# Only the open state ships. Both scenes still draw their closed version — the
+# spindle buds lilies carry before they open — because that is half of what the
+# plant is; pass False to build() to get them back.
 if __name__ == '__main__':
-    for art, build, side, flip in (('lily-left',  scene,   'left',  True),
-                                   ('lily-right', scene,   'right', False),
-                                   ('sprig-left', scene_b, 'left',  True)):
+    for art, build, flip in (('lily-left',  scene,   True),
+                             ('lily-right', scene,   False),
+                             ('sprig-left', scene_b, True)):
         MIRROR = flip          # read by mx/ma at call time
-        for state, op in (('open', True), ('buds', False)):
-            name = '%s-%s' % (art, state)
-            c, t, m = build(op)
-            print(name, to_png(c, t, m, name + '.png'))
+        c, t, m = build(True)
+        print(art, to_png(c, t, m, art + '-open.png'))
