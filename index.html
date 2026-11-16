@@ -340,8 +340,12 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
 .jc-mx{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 14px;margin:24px 0 0}
 .mx-y{grid-area:1/1;writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;
   font:500 11px/1 'DM Mono',ui-monospace,monospace;color:rgba(0,0,0,.35);letter-spacing:.04em;text-transform:uppercase}
-.mx-plot{grid-area:1/2;position:relative;aspect-ratio:16/10;
-  border-left:1px solid rgba(0,0,0,.2);border-bottom:1px solid rgba(0,0,0,.2)}
+/* the two axes are gradients rather than borders, because a background-size
+   can be drawn out from the origin and a border cannot */
+.mx-plot{grid-area:1/2;position:relative;aspect-ratio:16/10;background-repeat:no-repeat;
+  background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),
+                   linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2));
+  background-position:left top,left bottom;background-size:1px 100%,100% 1px}
 .mx-plot::before,.mx-plot::after{content:'';position:absolute;border-color:rgba(0,0,0,.1);border-style:dashed}
 .mx-plot::before{left:50%;top:0;bottom:0;border-left-width:1px}
 .mx-plot::after{top:50%;left:0;right:0;border-top-width:1px}
@@ -392,6 +396,12 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
    flow.js, because the runtime resyncs class and style on every re-render and
    would strip anything this file hung off the element itself. */
 @keyframes fl-line{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes mx-axes{from{background-size:1px 0%,0% 1px}to{background-size:1px 100%,100% 1px}}
+@keyframes mx-vl{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes mx-hl{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+/* the chips keep their centring translate through the pop */
+@keyframes mx-pop{from{opacity:0;transform:translate(-50%,50%) scale(.82)}
+                  to{opacity:1;transform:translate(-50%,50%) scale(1)}}
 @keyframes fl-dot{from{opacity:0;transform:scale(.35)}to{opacity:1;transform:scale(1)}}
 @keyframes fl-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 /* The block, redrawn rather than screenshotted: on the original slide it sits in
@@ -606,7 +616,7 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
 }
 .pghint{display:flex;justify-content:space-between;gap:20px;margin-top:12px;font:400 10px/1.6 'DM Mono',monospace;letter-spacing:.14em;color:rgba(var(--ink-rgb),.45)}
 .pghint b{font-weight:500;color:var(--accent)}
-</style><script src="./image-slot.js?v=2"></script><script src="./bust.js?v=2"></script><script src="./bust-control.js?v=2"></script><script src="./showcase.js?v=85" defer></script><script src="./reveal.js?v=2" defer></script><script src="./intro.js?v=12" defer></script><script src="./pin.js?v=3" defer></script><script src="./flow.js?v=1" defer></script>
+</style><script src="./image-slot.js?v=2"></script><script src="./bust.js?v=2"></script><script src="./bust-control.js?v=2"></script><script src="./showcase.js?v=85" defer></script><script src="./reveal.js?v=2" defer></script><script src="./intro.js?v=12" defer></script><script src="./pin.js?v=3" defer></script><script src="./diagrams.js?v=1" defer></script>
 <script src="./flora.js?v=1" defer></script></helmet>
 
 <div style="min-height:100vh;background:var(--paper)">
