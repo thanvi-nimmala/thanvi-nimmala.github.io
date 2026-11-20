@@ -172,7 +172,8 @@ html.on-landing{background:#fff}
 /* One photograph, in the margin beside the top of the column, put through the
    same dither as the lilies — see about/dither.py. Going near it brings the
    picture itself back. */
-.ab-photo{position:absolute;left:0;top:150px;width:230px;
+/* in the flow at the top of the column rather than pinned to the left edge */
+.ab-photo{position:relative;width:240px;margin:0 auto 40px;
   aspect-ratio:4/5;overflow:hidden;background:#f0eeeb}
 .ab-photo img{position:absolute;inset:0;display:block;width:100%;height:100%;
   object-fit:cover;transition:opacity .35s ease}
@@ -182,7 +183,13 @@ html.on-landing{background:#fff}
 .ab-p{margin:0 0 26px;font:300 16px/1.5 'IBM Plex Sans',system-ui,sans-serif;
   color:rgba(0,0,0,.72);letter-spacing:-.3px}
 .ab-p:last-of-type{margin-bottom:0}
-.ab-links{display:flex;gap:26px;margin-top:40px}
+/* a rule and a label, to separate the process from the bio above it */
+.ab-sec{margin-top:56px;padding-top:30px;border-top:1px solid rgba(0,0,0,.14)}
+.ab-sec .ab-lbl{margin-bottom:4px}
+.ab-note{margin-top:24px;font:300 14px/1.5 'IBM Plex Sans',system-ui,sans-serif;color:rgba(0,0,0,.5)}
+.ab-note a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+.ab-note a:hover,.ab-note a:focus-visible{border-bottom-color:var(--accent)}
+.ab-links{display:flex;flex-wrap:wrap;gap:26px;margin-top:48px}
 .ab-links a{font:400 13px/1 'IBM Plex Sans',system-ui,sans-serif;color:rgba(0,0,0,.55);
   text-decoration:none;border-bottom:1px solid rgba(0,0,0,.18);padding-bottom:5px;transition:color .2s}
 .ab-links a:hover{color:#1a1815}
@@ -211,7 +218,7 @@ html.on-landing{background:#fff}
 @media (max-width:1100px),(max-height:620px){.ab-flora,.ab-flora-l{display:none}}
 /* no margin to sit in, so the photograph goes above the text */
 @media (max-width:1100px){
-  .ab-photo{position:relative;left:auto;top:auto;margin:0 auto}
+  .ab-photo{width:220px;margin:0 auto 32px}
 }
 @media (max-width:520px){.ab{max-width:none;padding:72px 0 90px}}
 /* NCS case study — the section framework Bill Guo uses on billguo.me (overview,
@@ -672,7 +679,7 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
 </sc-if>
 
 <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
-<div class="jc"><div class="jc-top"><a href="#top" onClick="{{ goHome }}">&#8592; All work</a><span>{{ clock }}</span></div><div class="ab-photo"><img class="dots" src="./about/selfie-dots.png?v=2" alt="Thanvi" width="600" height="794"><img class="real" src="./about/selfie.webp" alt="" width="900" height="1191"></div><div class="ab"><div class="ab-lbl">About Thanvi Nimmala</div><p class="ab-p">I&rsquo;m a product designer based in the NYC metropolitan area. I like making design feel fun and useful, and I build the thing rather than a picture of it.</p><p class="ab-p">I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, and a minor in Digital Communication, Information &amp; Media.</p><p class="ab-p">Since then I have been Product Design Lead on New Craft Society at CoCreate, where I took a capture tool from nothing to a public beta. I work end to end &mdash; research, flows, interface, design systems &mdash; and prototype in React and SwiftUI, so a decision can be tried instead of argued about.</p><p class="ab-p">I&rsquo;m currently looking for full-time design work.</p><p class="ab-p">Outside of design I am usually painting, reading, or chasing a good playlist.</p><div class="ab-links"><a href="mailto:thanvi.nimmala@gmail.com">Email &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn &#8599;</a><a href="#resume" onClick="{{ goResume }}">R&eacute;sum&eacute; &#8594;</a></div></div><div class="ab-flora"></div><div class="ab-flora-l"></div></div>
+<div class="jc"><div class="jc-top"><a href="#top" onClick="{{ goHome }}">&#8592; All work</a><span>{{ clock }}</span></div><div class="ab"><div class="ab-photo"><img class="dots" src="./about/selfie-dots.png?v=2" alt="Thanvi" width="600" height="794"><img class="real" src="./about/selfie.webp" alt="" width="900" height="1191"></div><div class="ab-lbl">About Thanvi Nimmala</div><p class="ab-p">I&rsquo;m a product designer based in the NYC metropolitan area. I like making design feel fun and useful, and I build the thing rather than a picture of it.</p><p class="ab-p">I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, and a minor in Digital Communication, Information &amp; Media.</p><p class="ab-p">Since then I have been Product Design Lead on New Craft Society at CoCreate, where I took a capture tool from nothing to a public beta. I work end to end &mdash; research, flows, interface, design systems &mdash; and prototype in React and SwiftUI, so a decision can be tried instead of argued about.</p><p class="ab-p">I&rsquo;m currently looking for full-time design work.</p><p class="ab-p">Outside of design I am usually painting, reading, or chasing a good playlist.</p><div class="ab-sec"><div class="ab-lbl">How I work</div><div class="jc-list"><div class="jc-row"><div class="jc-k">01</div><div><div class="jc-t">Ask before assuming</div><div class="jc-d">Thirty interviews before a screen. The most useful sentence anyone gave me about New Craft Society was that they did not think they needed it.</div></div></div><div class="jc-row"><div class="jc-k">02</div><div><div class="jc-t">Turn what you heard into a bar</div><div class="jc-d">Findings become principles a design can be scored against, so the next decision is argued from the research rather than from taste.</div></div></div><div class="jc-row"><div class="jc-k">03</div><div><div class="jc-t">Build it rather than draw it</div><div class="jc-d">I prototype in React and SwiftUI. Four capture cards running as software in days, judged as the thing itself instead of as a picture of it.</div></div></div><div class="jc-row"><div class="jc-k">04</div><div><div class="jc-t">Cut what has not earned its place</div><div class="jc-d">Every feature plotted against user value and build cost. Auto capture started as a P0 and came out of that exercise cut.</div></div></div></div><div class="ab-note">All four of those happened on one project. <a href="#ncs" onClick="{{ openNcs }}">The New Craft Society case study</a> shows them happening.</div></div><div class="ab-links"><a href="mailto:thanvi.nimmala@gmail.com">Email &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn &#8599;</a><a href="#resume" onClick="{{ goResume }}">R&eacute;sum&eacute; &#8594;</a></div></div><div class="ab-flora"></div><div class="ab-flora-l"></div></div>
 </sc-if>
 
 <sc-if value="{{ isResume }}" hint-placeholder-val="{{ false }}">
