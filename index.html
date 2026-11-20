@@ -175,11 +175,7 @@ html.on-landing{background:#fff}
 /* in the flow at the top of the column rather than pinned to the left edge */
 .ab-photo{position:relative;width:240px;margin:0 auto 40px;
   aspect-ratio:4/5;overflow:hidden;background:#f0eeeb}
-.ab-photo img{position:absolute;inset:0;display:block;width:100%;height:100%;
-  object-fit:cover;transition:opacity .35s ease}
-.ab-photo .real{opacity:0}
-.ab-photo:hover .real{opacity:1}
-.ab-photo:hover .dots{opacity:0}
+.ab-photo img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
 .ab-p{margin:0 0 26px;font:300 16px/1.5 'IBM Plex Sans',system-ui,sans-serif;
   color:rgba(0,0,0,.72);letter-spacing:-.3px}
 .ab-p:last-of-type{margin-bottom:0}
@@ -204,7 +200,7 @@ html.on-landing{background:#fff}
   /* sized so the bloom crosses the column's edge by about the same 30px at any
      width: the drawing's inner edge lands at 100% - 0.945*art, and the column's
      at 50% + 220px */
-  --art:clamp(340px,calc(53vw - 201px),680px);
+  --art:clamp(340px,calc(53vw - 218px),620px);
   width:calc(var(--art) + 70px);height:clamp(380px,64vh,700px);overflow:hidden}
 .ab-flora img{position:absolute;top:0;right:calc(var(--art) * -0.055);width:var(--art);height:auto;
   min-height:100%;object-fit:cover;object-position:top center}
@@ -467,6 +463,19 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
 .rz-sk dt{font:500 11px/1.75 'DM Mono',ui-monospace,monospace;color:rgba(0,0,0,.4);
   letter-spacing:.04em;text-transform:uppercase}
 .rz-sk dd{margin:0;font:300 15px/1.55 'IBM Plex Sans',sans-serif;color:rgba(0,0,0,.62)}
+/* About holds the viewport: the lilies are in the bottom corners from the
+   moment the page opens rather than at the end of a long scroll, and the
+   column between them is the only thing that moves. Below the width or
+   height where the lilies are hidden it goes back to scrolling as a page. */
+@media (min-width:1101px) and (min-height:621px){
+  .jc-about{display:flex;flex-direction:column;height:100vh;min-height:0;overflow:hidden;padding-bottom:0}
+  .jc-about .jc-top{flex:none}
+  .jc-about .ab{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:44px 0 56px;
+    scrollbar-width:none;
+    -webkit-mask-image:linear-gradient(transparent 0,#000 22px,#000 calc(100% - 40px),transparent 100%);
+    mask-image:linear-gradient(transparent 0,#000 22px,#000 calc(100% - 40px),transparent 100%)}
+  .jc-about .ab::-webkit-scrollbar{display:none}
+}
 @media (max-width:860px){
   .jc-cols{grid-template-columns:minmax(0,1fr);gap:0;padding-top:40px}
   .jc-nav{display:none}
@@ -679,7 +688,7 @@ body:has(.jc) .site-nav,body:has(.jc) .site-foot{display:none!important}
 </sc-if>
 
 <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
-<div class="jc"><div class="jc-top"><a href="#top" onClick="{{ goHome }}">&#8592; All work</a><span>{{ clock }}</span></div><div class="ab"><div class="ab-photo"><img class="dots" src="./about/selfie-dots.png?v=2" alt="Thanvi" width="600" height="794"><img class="real" src="./about/selfie.webp" alt="" width="900" height="1191"></div><div class="ab-lbl">About Thanvi Nimmala</div><p class="ab-p">I&rsquo;m a product designer based in the NYC metropolitan area. I like making design feel fun and useful, and I build the thing rather than a picture of it.</p><p class="ab-p">I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, and a minor in Digital Communication, Information &amp; Media.</p><p class="ab-p">Since then I have been Product Design Lead on New Craft Society at CoCreate, where I took a capture tool from nothing to a public beta. I work end to end &mdash; research, flows, interface, design systems &mdash; and prototype in React and SwiftUI, so a decision can be tried instead of argued about.</p><p class="ab-p">I&rsquo;m currently looking for full-time design work.</p><p class="ab-p">Outside of design I am usually painting, reading, or chasing a good playlist.</p><div class="ab-sec"><div class="ab-lbl">How I work</div><div class="jc-list"><div class="jc-row"><div class="jc-k">01</div><div><div class="jc-t">Ask before assuming</div><div class="jc-d">Talk to the people who will use it before drawing anything. The most useful thing you hear is usually the objection, not the compliment.</div></div></div><div class="jc-row"><div class="jc-k">02</div><div><div class="jc-t">Turn what you heard into a bar</div><div class="jc-d">Findings become principles a design can be scored against, so the next decision is argued from the research rather than from taste.</div></div></div><div class="jc-row"><div class="jc-k">03</div><div><div class="jc-t">Build it rather than draw it</div><div class="jc-d">Prototype in code. A version can be tried as software in days, and judged as the thing itself instead of as a picture of it.</div></div></div><div class="jc-row"><div class="jc-k">04</div><div><div class="jc-t">Cut what has not earned its place</div><div class="jc-d">Plot the work against user value and build cost. Whatever costs the most and proves the least comes out, however far along it is.</div></div></div></div><div class="ab-note">The <a href="#top" onClick="{{ goHome }}">case studies</a> show all four happening.</div></div><div class="ab-links"><a href="mailto:thanvi.nimmala@gmail.com">Email &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn &#8599;</a><a href="#resume" onClick="{{ goResume }}">R&eacute;sum&eacute; &#8594;</a></div></div><div class="ab-flora"></div><div class="ab-flora-l"></div></div>
+<div class="jc jc-about"><div class="jc-top"><a href="#top" onClick="{{ goHome }}">&#8592; All work</a><span>{{ clock }}</span></div><div class="ab"><div class="ab-photo"><img src="./about/selfie.webp" alt="Thanvi Nimmala" width="900" height="1191"></div><div class="ab-lbl">About Thanvi Nimmala</div><p class="ab-p">I&rsquo;m a product designer based in the NYC metropolitan area. I like making design feel fun and useful, and I build the thing rather than a picture of it.</p><p class="ab-p">I graduated in 2026 with a B.A. in Information Technology &amp; Informatics, and a minor in Digital Communication, Information &amp; Media.</p><p class="ab-p">Since then I have been Product Design Lead on New Craft Society at CoCreate, where I took a capture tool from nothing to a public beta. I work end to end &mdash; research, flows, interface, design systems &mdash; and prototype in React and SwiftUI, so a decision can be tried instead of argued about.</p><p class="ab-p">I&rsquo;m currently looking for full-time design work.</p><p class="ab-p">Outside of design I am usually painting, reading, or chasing a good playlist.</p><div class="ab-sec"><div class="ab-lbl">How I work</div><div class="jc-list"><div class="jc-row"><div class="jc-k">01</div><div><div class="jc-t">Ask before assuming</div><div class="jc-d">Talk to the people who will use it before drawing anything. The most useful thing you hear is usually the objection, not the compliment.</div></div></div><div class="jc-row"><div class="jc-k">02</div><div><div class="jc-t">Turn what you heard into a bar</div><div class="jc-d">Findings become principles a design can be scored against, so the next decision is argued from the research rather than from taste.</div></div></div><div class="jc-row"><div class="jc-k">03</div><div><div class="jc-t">Build it rather than draw it</div><div class="jc-d">Prototype in code. A version can be tried as software in days, and judged as the thing itself instead of as a picture of it.</div></div></div><div class="jc-row"><div class="jc-k">04</div><div><div class="jc-t">Cut what has not earned its place</div><div class="jc-d">Plot the work against user value and build cost. Whatever costs the most and proves the least comes out, however far along it is.</div></div></div></div><div class="ab-note">The <a href="#top" onClick="{{ goHome }}">case studies</a> show all four happening.</div></div><div class="ab-links"><a href="mailto:thanvi.nimmala@gmail.com">Email &#8599;</a><a href="https://www.linkedin.com/in/thanvi-nimmala/" target="_blank" rel="noopener">LinkedIn &#8599;</a><a href="#resume" onClick="{{ goResume }}">R&eacute;sum&eacute; &#8594;</a></div></div><div class="ab-flora"></div><div class="ab-flora-l"></div></div>
 </sc-if>
 
 <sc-if value="{{ isResume }}" hint-placeholder-val="{{ false }}">
