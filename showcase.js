@@ -52,7 +52,8 @@
   ];
   const LINKS = [
     { t: 'Email', href: 'mailto:thanvi.nimmala@gmail.com' },
-    { t: 'LinkedIn', href: 'https://www.linkedin.com/in/thanvi-nimmala/', ext: true }
+    { t: 'LinkedIn', href: 'https://www.linkedin.com/in/thanvi-nimmala/', ext: true },
+    { t: 'R\u00e9sum\u00e9', href: './Thanvi_Nimmala_Resume.pdf', ext: true }
   ];
 
   const st = { hover: null, el: null, accent: null, scroll: { work: 0, play: 0 } };
